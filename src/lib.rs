@@ -1,5 +1,7 @@
 #![no_std]
 
+pub(self) mod base64;
+
 #[derive(Debug, Clone, Copy)]
 pub struct Id64(u64);
 
