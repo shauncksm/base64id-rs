@@ -71,6 +71,24 @@ fn decode_quantum(input: [u8; 4]) -> [u8; 3] {
     [d1, d2, d3]
 }
 
+fn decode_partial_16(input: [u8; 3]) -> [u8; 2] {
+    let d1 = (
+        input[0] << 2
+    ) | (
+        input[1] >> 4 &
+        0b00000011
+    );
+
+    let d2 = (
+        input[1] << 4
+    ) | (
+        input[2] >> 2 &
+        0b00001111
+    );
+
+    [d1, d2]
+}
+
 #[cfg(test)]
 mod tests {
     use crate::base64;
@@ -99,5 +117,11 @@ mod tests {
         let input = QUANTUM_BASE64;
         let output = base64::decode_quantum(input);
         assert_eq!(output, QUANTUM_BINARY);
+    }
+
+    #[test]
+    fn decode_partial_16_validation() {
+        let output = base64::decode_partial_16(PARTIAL_16_BASE64);
+        assert_eq!(output, PARTIAL_16_BINARY);
     }
 }
