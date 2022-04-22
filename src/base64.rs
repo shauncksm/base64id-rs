@@ -7,7 +7,29 @@
 //             Base64 - 4 Chars            //
 // ####################################### //
 
-const _ALPHABET_BASE64URL: &'static str = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
+const ALPHABET_BASE64URL: &'static str = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
+
+fn encode_u64(input: u64) -> [char; 11] {
+    let b = input.to_be_bytes();
+    
+    let p1 = encode_quantum([ b[0], b[1], b[2] ]);
+    let p2 = encode_quantum([ b[3], b[4], b[5] ]);
+    let p3 = encode_partial_16([ b[6], b[7] ]);
+
+    let product = [
+        p1[0], p1[1], p1[2], p1[3],
+        p2[0], p2[1], p2[2], p1[3],
+        p3[0], p3[1], p3[2]
+    ];
+
+    let alphabet = ALPHABET_BASE64URL.as_bytes();
+
+    product.map(|d| {
+        char::from(
+            alphabet[usize::from(d)]
+        )
+    })
+}
 
 fn encode_quantum(input: [u8; 3]) -> [u8; 4] {
     let c1 = input[0] >> 2;
@@ -91,7 +113,10 @@ fn decode_partial_16(input: [u8; 3]) -> [u8; 2] {
 
 #[cfg(test)]
 mod tests {
+    extern crate std;
+    
     use crate::base64;
+    use std::string::String;
 
     const QUANTUM_BINARY: [u8; 3] = [0b00000100, 0b00010000, 0b01000001];
     const QUANTUM_BASE64: [u8; 4] = [1, 1, 1, 1];
@@ -99,6 +124,17 @@ mod tests {
     const PARTIAL_16_BINARY: [u8; 2] = [0b00000100, 0b00010001];
     const PARTIAL_16_BASE64: [u8; 3] = [1, 1, 4];
     
+    #[test]
+    fn encode_u64_validation() {
+        let input: u64 = u64::MAX;
+        let output = base64::encode_u64(input);
+
+        assert_eq!(
+            output.into_iter().collect::<String>(),
+            String::from("__________8")
+        );
+    }
+
     #[test]
     fn encode_quantum_validation() {
         let input = QUANTUM_BINARY;
