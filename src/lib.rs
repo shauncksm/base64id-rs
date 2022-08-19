@@ -1,5 +1,7 @@
 #![no_std]
 
+use core::fmt;
+
 pub(self) mod base64;
 
 #[derive(Debug, Clone, Copy)]
@@ -14,6 +16,27 @@ impl Id64 {
 impl From<u64> for Id64 {
     fn from(id: u64) -> Self {
         Self(id)
+    }
+}
+
+impl fmt::Display for Id64 {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let c = base64::encode_u64(self.0);
+        write!(
+            f,
+            "{}{}{}{}{}{}{}{}{}{}{}",
+            c[0],
+            c[1],
+            c[2],
+            c[3],
+            c[4],
+            c[5],
+            c[6],
+            c[7],
+            c[8],
+            c[9],
+            c[10]
+        )
     }
 }
 
