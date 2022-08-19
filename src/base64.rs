@@ -9,7 +9,7 @@
 
 const ALPHABET_BASE64URL: &'static str = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
 
-fn encode_u64(input: u64) -> [char; 11] {
+pub fn encode_u64(input: u64) -> [char; 11] {
     let b = input.to_be_bytes();
     
     let p1 = encode_quantum([ b[0], b[1], b[2] ]);
@@ -31,7 +31,7 @@ fn encode_u64(input: u64) -> [char; 11] {
     })
 }
 
-fn decode_u64(input: [char; 11]) -> u64 {
+pub fn decode_u64(input: [char; 11]) -> u64 {
     let c: [u8; 11] = input.map(|d| {
         ALPHABET_BASE64URL.find(d)
             .expect("char not a base64url character")
