@@ -31,23 +31,28 @@ pub fn encode_u64(input: u64) -> [char; 11] {
     })
 }
 
-pub fn decode_u64(input: [char; 11]) -> u64 {
-    let c: [u8; 11] = input.map(|d| {
-        ALPHABET_BASE64URL.find(d)
-            .expect("char not a base64url character")
-            .try_into()
-            .expect("impossible! failed to convert usize from successful find(d) to u8")
-    });
+pub fn decode_u64(input: [char; 11]) -> Result<u64, &'static str> {
+    let mut c: [u8; 11] = [0; 11];
+
+    for i in 0..=10 {
+        let idx = ALPHABET_BASE64URL.find(input[i])
+            .ok_or("char contains a non base64url character")?;
+
+        c[i] = u8::try_from(idx)
+            .map_err(|_| "infallible. failed to convert usize between 0 - 63 to u8")?;
+    }
 
     let p1 = decode_quantum([c[0], c[1], c[2], c[3] ]);
     let p2 = decode_quantum([c[4], c[5], c[6], c[7] ]);
     let p3 = decode_partial_16([c[8], c[9], c[10] ]);
 
-    u64::from_be_bytes([
-        p1[0], p1[1], p1[2],
-        p2[0], p2[1], p2[2],
-        p3[0], p3[1]
-    ])
+    Ok(
+        u64::from_be_bytes([
+            p1[0], p1[1], p1[2],
+            p2[0], p2[1], p2[2],
+            p3[0], p3[1]
+        ])
+    )
 }
 
 fn encode_quantum(input: [u8; 3]) -> [u8; 4] {
@@ -157,7 +162,8 @@ mod tests {
     #[test]
     fn decode_u64_validation() {
         let input: [char; 11] = ['_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '8'];
-        let output = base64::decode_u64(input);
+        let output = base64::decode_u64(input)
+            .expect("failed to decode input");
 
         assert_eq!(
             output,
