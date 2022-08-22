@@ -140,35 +140,31 @@ mod tests {
     extern crate std;
     
     use crate::base64;
-    use std::string::String;
 
     const QUANTUM_BINARY: [u8; 3] = [0b00000100, 0b00010000, 0b01000001];
     const QUANTUM_BASE64: [u8; 4] = [1, 1, 1, 1];
 
     const PARTIAL_16_BINARY: [u8; 2] = [0b00000100, 0b00010001];
     const PARTIAL_16_BASE64: [u8; 3] = [1, 1, 4];
+
+    const U64_MAX_INT: u64 = u64::MAX;
+    const U64_MAX_BASE64: [char; 11] = ['_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '8'];
     
     #[test]
     fn encode_u64_validation() {
-        let input: u64 = u64::MAX;
+        let input: u64 = U64_MAX_INT;
         let output = base64::encode_u64(input);
 
-        assert_eq!(
-            output.into_iter().collect::<String>(),
-            String::from("__________8")
-        );
+        assert_eq!(output, U64_MAX_BASE64);
     }
 
     #[test]
     fn decode_u64_validation() {
-        let input: [char; 11] = ['_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '8'];
+        let input: [char; 11] = U64_MAX_BASE64;
         let output = base64::decode_u64(input)
             .expect("failed to decode input");
 
-        assert_eq!(
-            output,
-            u64::MAX
-        );
+        assert_eq!(output, U64_MAX_INT);
     }
 
     #[test]
