@@ -4,7 +4,7 @@ use core::fmt;
 
 pub(self) mod base64;
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct Id64(u64);
 
 impl Id64 {
