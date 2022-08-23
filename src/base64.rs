@@ -11,7 +11,7 @@ const ALPHABET_BASE64URL: &'static str = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijkl
 
 pub fn encode_u64(input: u64) -> [char; 11] {
     let b = input.to_be_bytes();
-    
+
     let p1 = encode_quantum([ b[0], b[1], b[2] ]);
     let p2 = encode_quantum([ b[3], b[4], b[5] ]);
     let p3 = encode_partial_16([ b[6], b[7] ]);
