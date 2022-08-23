@@ -141,55 +141,142 @@ mod tests {
     
     use crate::base64;
 
-    const QUANTUM_BINARY: [u8; 3] = [0b00000100, 0b00010000, 0b01000001];
-    const QUANTUM_BASE64: [u8; 4] = [1, 1, 1, 1];
+    const QUANTUM_BINARY: [[u8; 3]; 12] = [
+        [0b00000100, 0b00010000, 0b01000001],
+        [0b10010011, 0b10100110, 0b01001110],
+        [0b11111010, 0b01111101, 0b00011001],
+        [0b10001101, 0b01110110, 0b00011111],
+        [0b00011011, 0b11010010, 0b10011010],
+        [0b11011111, 0b11001011, 0b01001101],
+        [0b01100001, 0b01000010, 0b10100101],
+        [0b01010011, 0b01101011, 0b01000101],
+        [0b00011100, 0b11000011, 0b11100001],
+        [0b01000010, 0b11111110, 0b01001100],
+        [0b00000100, 0b10110001, 0b00111110],
+        [0b11001100, 0b10101011, 0b00011100],
+    ];
 
-    const PARTIAL_16_BINARY: [u8; 2] = [0b00000100, 0b00010001];
-    const PARTIAL_16_BASE64: [u8; 3] = [1, 1, 4];
+    const QUANTUM_BASE64: [[u8; 4]; 12] = [
+        [1, 1, 1, 1],
+        [36, 58, 25, 14],
+        [62, 39, 52, 25],
+        [35, 23, 24, 31],
+        [6, 61, 10, 26],
+        [55, 60, 45, 13],
+        [24, 20, 10, 37],
+        [20, 54, 45, 5],
+        [7, 12, 15, 33],
+        [16, 47, 57, 12],
+        [1, 11, 4, 62],
+        [51, 10, 44, 28],
+    ];
 
-    const U64_MAX_INT: u64 = u64::MAX;
-    const U64_MAX_BASE64: [char; 11] = ['_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '8'];
+    const PARTIAL_16_BINARY: [[u8; 2]; 12] = [
+        [0b00000100, 0b00010001],
+        [0b11010000, 0b10001110],
+        [0b10110000, 0b00001100],
+        [0b11011111, 0b10100010],
+        [0b01100100, 0b00110101],
+        [0b10001000, 0b01001001],
+        [0b00001101, 0b00110100],
+        [0b10010110, 0b00110010],
+        [0b00001100, 0b00001110],
+        [0b00010100, 0b11101110],
+        [0b00010111, 0b01110111],
+        [0b00100010, 0b11110101],
+    ];
+
+    const PARTIAL_16_BASE64: [[u8; 3]; 12] = [
+        [1, 1, 4],
+        [52, 8, 56],
+        [44, 0, 48],
+        [55, 58, 8],
+        [25, 3, 20],
+        [34, 4, 36],
+        [3, 19, 16],
+        [37, 35, 8],
+        [3, 0, 56],
+        [5, 14, 56],
+        [5, 55, 28],
+        [8, 47, 20],
+    ];
+
+    const U64_INT: [u64; 12] = [
+        u64::MAX,
+        u64::MIN,
+        14854615441804557868,
+        2685194398265091357,
+        3161873750843059683,
+        10803570549866541035,
+        8763564039737214670,
+        17137545079498398768,
+        17243084105736903942,
+        4264493385337507395,
+        16856446005642022447,
+        6135322894040689502,
+    ];
+    
+    const U64_BASE64: [[char; 11]; 12] = [
+        ['_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '8'],
+        ['A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A'],
+        ['z', 'i', 'Y', 'y', 'C', 'o', 'v', 'K', '_', 'i', 'w'],
+        ['J', 'U', 'O', '6', 'F', 'B', 'V', '1', 'p', 'R', '0'],
+        ['K', '-', 'E', '7', 'b', 'I', '-', 'h', '7', 'e', 'M'],
+        ['l', 'e', '3', '-', 'L', 'O', 'K', 'q', 'r', '-', 's'],
+        ['e', 'Z', '5', 'v', 'E', 'B', 'L', 's', 'h', 's', '4'],
+        ['7', 'd', 'T', 'K', 'c', '4', 'G', '-', '3', 'D', 'A'],
+        ['7', '0', 'u', '9', 'o', 'u', 'q', 'h', '3', 'Q', 'Y'],
+        ['O', 'y', '6', 'G', 'I', '8', 'Q', 'L', 'j', 'k', 'M'],
+        ['6', 'e', '4', 'g', 'V', 'T', 'X', 'Y', 'T', 'i', '8'],
+        ['V', 'S', 'U', 'L', 'q', 'n', 'G', 'd', '6', '1', '4'],
+    ];
     
     #[test]
     fn encode_u64_validation() {
-        let input: u64 = U64_MAX_INT;
-        let output = base64::encode_u64(input);
-
-        assert_eq!(output, U64_MAX_BASE64);
+        for i in 0..=11 {
+            let output = base64::encode_u64(U64_INT[i]);
+            assert_eq!(output, U64_BASE64[i]);
+        }
     }
 
     #[test]
     fn decode_u64_validation() {
-        let input: [char; 11] = U64_MAX_BASE64;
-        let output = base64::decode_u64(input)
-            .expect("failed to decode input");
-
-        assert_eq!(output, U64_MAX_INT);
+        for i in 0..=11 {
+            let output = base64::decode_u64(U64_BASE64[i])
+                .expect("failed to decode input");
+            assert_eq!(output, U64_INT[i]);
+        }
     }
 
     #[test]
     fn encode_quantum_validation() {
-        let input = QUANTUM_BINARY;
-        let output = base64::encode_quantum(input);
-        assert_eq!(output, QUANTUM_BASE64);
+        for i in 0..=11 {
+            let output = base64::encode_quantum(QUANTUM_BINARY[i]);
+            assert_eq!(output, QUANTUM_BASE64[i]);
+        }
     }
 
     #[test]
     fn encode_partial_16_validation() {
-        let output = base64::encode_partial_16(PARTIAL_16_BINARY);
-        assert_eq!(output, PARTIAL_16_BASE64);
+        for i in 0..=11 {
+            let output = base64::encode_partial_16(PARTIAL_16_BINARY[i]);
+            assert_eq!(output, PARTIAL_16_BASE64[i]);
+        }
     }
 
     #[test]
     fn decode_quantum_validation() {
-        let input = QUANTUM_BASE64;
-        let output = base64::decode_quantum(input);
-        assert_eq!(output, QUANTUM_BINARY);
+        for i in 0..=11 {
+            let output = base64::decode_quantum(QUANTUM_BASE64[i]);
+            assert_eq!(output, QUANTUM_BINARY[i]);
+        }
     }
 
     #[test]
     fn decode_partial_16_validation() {
-        let output = base64::decode_partial_16(PARTIAL_16_BASE64);
-        assert_eq!(output, PARTIAL_16_BINARY);
+        for i in 0..=11 {
+            let output = base64::decode_partial_16(PARTIAL_16_BASE64[i]);
+            assert_eq!(output, PARTIAL_16_BINARY[i]);
+        }
     }
 }
