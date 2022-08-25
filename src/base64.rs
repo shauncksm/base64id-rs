@@ -7,7 +7,7 @@
 //             Base64 - 4 Chars            //
 // ####################################### //
 
-const ALPHABET_BASE64URL: &'static str = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
+const ALPHABET_BASE64URL: &str = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
 
 pub fn encode_u64(input: u64) -> [char; 11] {
     let b = input.to_be_bytes();
