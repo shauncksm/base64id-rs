@@ -19,6 +19,18 @@ impl From<u64> for Id64 {
     }
 }
 
+impl From<Id64> for i64 {
+    fn from(id: Id64) -> Self {
+        i64::from_be_bytes(id.0.to_be_bytes())
+    }
+}
+
+impl From<i64> for Id64 {
+    fn from(id: i64) -> Self {
+        Self(u64::from_be_bytes(id.to_be_bytes()))
+    }
+}
+
 impl TryFrom<[char; 11]> for Id64 {
     type Error = &'static str;
 
@@ -60,5 +72,12 @@ mod tests {
         let number: u64 = 25519;
         let id = Id64::from(number);
         assert_eq!(number, u64::from(id));
+    }
+    
+    #[test]
+    fn create_id64_from_i64() {
+        let number: i64 = -25519;
+        let id = Id64::from(number);
+        assert_eq!(number, i64::from(id));
     }
 }
