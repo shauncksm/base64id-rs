@@ -7,9 +7,9 @@ pub(self) mod base64;
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct Id64(u64);
 
-impl Id64 {
-    pub fn into_inner(self) -> u64 {
-        self.0
+impl From<Id64> for u64 {
+    fn from(id: Id64) -> Self {
+        id.0
     }
 }
 
@@ -59,6 +59,6 @@ mod tests {
     fn create_id64_from_u64() {
         let number: u64 = 25519;
         let id = Id64::from(number);
-        assert_eq!(number, id.into_inner());
+        assert_eq!(number, u64::from(id));
     }
 }
