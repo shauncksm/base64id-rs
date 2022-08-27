@@ -1,6 +1,6 @@
 #![no_std]
 
-use core::fmt;
+use core::{fmt, str::FromStr};
 
 pub(self) mod base64;
 
@@ -43,6 +43,30 @@ impl TryFrom<[char; 11]> for Id64 {
     }
 }
 
+impl FromStr for Id64 {
+    type Err = &'static str;
+    
+    fn from_str(id: &str) -> Result<Self, Self::Err> {
+        const BAD_LEN: &str = "invalid length. expected 11 characters";
+
+        let mut array = ['A'; 11];
+        let mut id_iter = id.chars();
+
+        for c in array.iter_mut() {
+            *c = match id_iter.next() {
+                Some(d) => d,
+                None => return Err(BAD_LEN),
+            };
+        }
+
+        if id_iter.next().is_some() {
+            return Err(BAD_LEN);
+        }
+
+        Ok(Id64::try_from(array)?)
+    }
+}
+
 impl fmt::Display for Id64 {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let c = base64::encode_u64(self.0);
@@ -79,5 +103,13 @@ mod tests {
         let number: i64 = -25519;
         let id = Id64::from(number);
         assert_eq!(number, i64::from(id));
+    }
+
+    #[test]
+    fn create_id64_from_str() {
+        use core::str::FromStr;
+
+        let id = Id64::from_str("AAAAAAAAAAA").unwrap();
+        assert_eq!(Id64::from(0u64), id);
     }
 }
