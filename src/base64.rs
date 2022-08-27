@@ -7,6 +7,8 @@
 //             Base64 - 4 Chars            //
 // ####################################### //
 
+use crate::Error;
+
 const ALPHABET_BASE64URL: &str = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
 
 pub fn encode_u64(input: u64) -> [char; 11] {
@@ -31,15 +33,14 @@ pub fn encode_u64(input: u64) -> [char; 11] {
     })
 }
 
-pub fn decode_u64(input: [char; 11]) -> Result<u64, &'static str> {
+pub fn decode_u64(input: [char; 11]) -> Result<u64, Error> {
     let mut c: [u8; 11] = [0; 11];
 
     for i in 0..=10 {
         let idx = ALPHABET_BASE64URL.find(input[i])
-            .ok_or("char contains a non base64url character")?;
+            .ok_or(Error::InvalidCharacter)?;
 
-        c[i] = u8::try_from(idx)
-            .map_err(|_| "infallible. failed to convert usize between 0 - 63 to u8")?;
+        c[i] = u8::try_from(idx).expect("infallible. failed to convert usize between 0 - 63 to u8");
     }
 
     let p1 = decode_quantum([c[0], c[1], c[2], c[3] ]);

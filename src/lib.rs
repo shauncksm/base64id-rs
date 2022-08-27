@@ -3,6 +3,9 @@
 use core::{fmt, str::FromStr};
 
 pub(self) mod base64;
+pub(self) mod error;
+
+pub use error::Error;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct Id64(u64);
@@ -32,7 +35,7 @@ impl From<i64> for Id64 {
 }
 
 impl TryFrom<[char; 11]> for Id64 {
-    type Error = &'static str;
+    type Error = Error;
 
     fn try_from(input: [char; 11]) -> Result<Self, Self::Error> {
         Ok(
@@ -44,23 +47,21 @@ impl TryFrom<[char; 11]> for Id64 {
 }
 
 impl FromStr for Id64 {
-    type Err = &'static str;
+    type Err = Error;
     
     fn from_str(id: &str) -> Result<Self, Self::Err> {
-        const BAD_LEN: &str = "invalid length. expected 11 characters";
-
         let mut array = ['A'; 11];
         let mut id_iter = id.chars();
 
         for c in array.iter_mut() {
             *c = match id_iter.next() {
                 Some(d) => d,
-                None => return Err(BAD_LEN),
+                None => return Err(Error::InvalidLength),
             };
         }
 
         if id_iter.next().is_some() {
-            return Err(BAD_LEN);
+            return Err(Error::InvalidLength);
         }
 
         Ok(Id64::try_from(array)?)
