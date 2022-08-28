@@ -14,7 +14,7 @@ impl fmt::Display for Error {
         use Error::*;
         
         match self {
-            InvalidLength => write!(f, "bad length. expected 11 characters"),
+            InvalidLength => write!(f, "invalid length. expected 11 characters"),
             InvalidCharacter => write!(f, "invalid character(s). expected only base64url characters"),
         }
     }
