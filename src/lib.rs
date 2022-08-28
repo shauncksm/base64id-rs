@@ -1,4 +1,29 @@
+//! This crate allows for 64 bit integers to be represented as [base64url](https://datatracker.ietf.org/doc/html/rfc4648#section-5) encoded strings.
+//! This is useful for exchanging unique identifiers in a web based contexts; eg. sending an SQL primary key to a client with as few character as possible.
+//! 
+//! This crate is `#![no_std]`.
+//! *Future plans include the use of cargo feature flags to enable `std` as needed.*
+//! 
+//! ## Example
+//! Here are some examples of encoded and raw random `i64` integers.
+//! ```txt
+//! Id64        i64
+//! ----------- --------------------
+//! zQpPkyvSY4c -3672035052653223033
+//! fRN6Rpu717I 9012681722977572786
+//! Hvbo3OHRk8s 2231226700787717067
+//! hhKuR_uLu5g -8785768298860266600
+//! e502o-aw89M 8907335715586634707
+//! CEopSRThix8 597335294439688991
+//! RSSE_NwKa1U 4982253309336906581
+//! C4xz60HkBPA 832167485416670448
+//! H0rwQK6dVoE 2254878724050474625
+//! 3g4P8dXEqjU -2446000016267630027
+//! ```
+//! You can generate your own sample values using `cargo run --example random_sample`.
+
 #![no_std]
+#![warn(missing_docs)]
 
 use core::{fmt, str::FromStr};
 
@@ -7,6 +32,7 @@ pub(self) mod error;
 
 pub use error::Error;
 
+/// 64 bit container with methods for base64url encoding
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct Id64(u64);
 

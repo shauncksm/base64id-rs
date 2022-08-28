@@ -1,8 +1,11 @@
 use core::fmt;
 
+/// Error type for base64url decoding
 #[derive(Debug, PartialEq, Eq)]
 pub enum Error {
+    /// returned when input data does not contain exactly 11 characters
     InvalidLength,
+    /// returned when input data conatins a character that is not within the base64url alphabet
     InvalidCharacter,
 }
 
