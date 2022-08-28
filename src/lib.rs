@@ -33,7 +33,7 @@ pub(self) mod error;
 pub use error::Error;
 
 /// 64 bit container with methods for base64url encoding
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Default, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct Id64(u64);
 
 impl From<Id64> for u64 {
