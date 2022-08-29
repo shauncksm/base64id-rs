@@ -86,7 +86,7 @@ impl FromStr for Id64 {
             return Err(Error::InvalidLength);
         }
 
-        Ok(Id64::try_from(array)?)
+        Id64::try_from(array)
     }
 }
 
