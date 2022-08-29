@@ -1,5 +1,5 @@
 //! Print a minimal table with random Id64 and corosponding i64 pairs
-//! 
+//!
 //! Run example with `cargo run --example random_sample`
 
 use rand::random;

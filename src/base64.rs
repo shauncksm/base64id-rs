@@ -11,51 +11,49 @@ use crate::Error;
 
 const ALPHABET_BASE64URL: &str = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
 
+#[rustfmt::skip]
 pub fn encode_u64(input: u64) -> [char; 11] {
     let b = input.to_be_bytes();
 
-    let p1 = encode_quantum([ b[0], b[1], b[2] ]);
-    let p2 = encode_quantum([ b[3], b[4], b[5] ]);
-    let p3 = encode_partial_16([ b[6], b[7] ]);
+    let p1 = encode_quantum([b[0], b[1], b[2]]);
+    let p2 = encode_quantum([b[3], b[4], b[5]]);
+    let p3 = encode_partial_16([b[6], b[7]]);
 
     let product = [
         p1[0], p1[1], p1[2], p1[3],
         p2[0], p2[1], p2[2], p2[3],
-        p3[0], p3[1], p3[2]
+        p3[0], p3[1], p3[2],
     ];
 
     let alphabet = ALPHABET_BASE64URL.as_bytes();
 
-    product.map(|d| {
-        char::from(
-            alphabet[usize::from(d)]
-        )
-    })
+    product.map(|d| char::from(alphabet[usize::from(d)]))
 }
 
+#[rustfmt::skip]
 pub fn decode_u64(input: [char; 11]) -> Result<u64, Error> {
     let mut c: [u8; 11] = [0; 11];
 
     for i in 0..=10 {
-        let idx = ALPHABET_BASE64URL.find(input[i])
+        let idx = ALPHABET_BASE64URL
+            .find(input[i])
             .ok_or(Error::InvalidCharacter)?;
 
         c[i] = u8::try_from(idx).expect("infallible. failed to convert usize between 0 - 63 to u8");
     }
 
-    let p1 = decode_quantum([c[0], c[1], c[2], c[3] ]);
-    let p2 = decode_quantum([c[4], c[5], c[6], c[7] ]);
-    let p3 = decode_partial_16([c[8], c[9], c[10] ]);
+    let p1 = decode_quantum([c[0], c[1], c[2], c[3]]);
+    let p2 = decode_quantum([c[4], c[5], c[6], c[7]]);
+    let p3 = decode_partial_16([c[8], c[9], c[10]]);
 
-    Ok(
-        u64::from_be_bytes([
-            p1[0], p1[1], p1[2],
-            p2[0], p2[1], p2[2],
-            p3[0], p3[1]
-        ])
-    )
+    Ok(u64::from_be_bytes([
+        p1[0], p1[1], p1[2],
+        p2[0], p2[1], p2[2],
+        p3[0], p3[1],
+    ]))
 }
 
+#[rustfmt::skip]
 fn encode_quantum(input: [u8; 3]) -> [u8; 4] {
     let c1 = input[0] >> 2;
 
@@ -78,6 +76,7 @@ fn encode_quantum(input: [u8; 3]) -> [u8; 4] {
     [c1, c2, c3, c4]
 }
 
+#[rustfmt::skip]
 fn encode_partial_16(input: [u8; 2]) -> [u8; 3] {
     let c1 = input[0] >> 2;
 
@@ -93,6 +92,7 @@ fn encode_partial_16(input: [u8; 2]) -> [u8; 3] {
     [c1, c2, c3]
 }
 
+#[rustfmt::skip]
 fn decode_quantum(input: [u8; 4]) -> [u8; 3] {
     let d1 = (
         input[0] << 2
@@ -118,6 +118,7 @@ fn decode_quantum(input: [u8; 4]) -> [u8; 3] {
     [d1, d2, d3]
 }
 
+#[rustfmt::skip]
 fn decode_partial_16(input: [u8; 3]) -> [u8; 2] {
     let d1 = (
         input[0] << 2
@@ -139,7 +140,7 @@ fn decode_partial_16(input: [u8; 3]) -> [u8; 2] {
 #[cfg(test)]
 mod tests {
     extern crate std;
-    
+
     use crate::base64;
 
     const QUANTUM_BINARY: [[u8; 3]; 12] = [
@@ -216,7 +217,7 @@ mod tests {
         16856446005642022447,
         6135322894040689502,
     ];
-    
+
     const U64_BASE64: [[char; 11]; 12] = [
         ['_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '8'],
         ['A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A'],
@@ -231,7 +232,7 @@ mod tests {
         ['6', 'e', '4', 'g', 'V', 'T', 'X', 'Y', 'T', 'i', '8'],
         ['V', 'S', 'U', 'L', 'q', 'n', 'G', 'd', '6', '1', '4'],
     ];
-    
+
     #[test]
     fn encode_u64_validation() {
         for i in 0..=11 {
@@ -243,8 +244,7 @@ mod tests {
     #[test]
     fn decode_u64_validation() {
         for i in 0..=11 {
-            let output = base64::decode_u64(U64_BASE64[i])
-                .expect("failed to decode input");
+            let output = base64::decode_u64(U64_BASE64[i]).expect("failed to decode input");
             assert_eq!(output, U64_INT[i]);
         }
     }

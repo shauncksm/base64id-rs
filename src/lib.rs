@@ -1,9 +1,9 @@
 //! This crate allows for 64 bit integers to be represented as [base64url](https://datatracker.ietf.org/doc/html/rfc4648#section-5) encoded strings.
 //! This is useful for exchanging unique identifiers in a web based contexts; eg. sending an SQL primary key to a client with as few character as possible.
-//! 
+//!
 //! This crate is `#![no_std]`.
 //! *Future plans include the use of cargo feature flags to enable `std` as needed.*
-//! 
+//!
 //! ## Example
 //! Here are some examples of encoded and raw random `i64` integers.
 //! ```txt
@@ -64,17 +64,13 @@ impl TryFrom<[char; 11]> for Id64 {
     type Error = Error;
 
     fn try_from(input: [char; 11]) -> Result<Self, Self::Error> {
-        Ok(
-            Self(
-                base64::decode_u64(input)?
-            )
-        )
+        Ok(Self(base64::decode_u64(input)?))
     }
 }
 
 impl FromStr for Id64 {
     type Err = Error;
-    
+
     fn from_str(id: &str) -> Result<Self, Self::Err> {
         let mut array = ['A'; 11];
         let mut id_iter = id.chars();
@@ -100,17 +96,7 @@ impl fmt::Display for Id64 {
         write!(
             f,
             "{}{}{}{}{}{}{}{}{}{}{}",
-            c[0],
-            c[1],
-            c[2],
-            c[3],
-            c[4],
-            c[5],
-            c[6],
-            c[7],
-            c[8],
-            c[9],
-            c[10]
+            c[0], c[1], c[2], c[3], c[4], c[5], c[6], c[7], c[8], c[9], c[10]
         )
     }
 }
@@ -124,7 +110,7 @@ mod tests {
         let id = Id64::from(number);
         assert_eq!(number, u64::from(id));
     }
-    
+
     #[test]
     fn create_id64_from_i64() {
         let number: i64 = -25519;

@@ -12,10 +12,13 @@ pub enum Error {
 impl fmt::Display for Error {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         use Error::*;
-        
+
         match self {
             InvalidLength => write!(f, "invalid length. expected 11 characters"),
-            InvalidCharacter => write!(f, "invalid character(s). expected only base64url characters"),
+            InvalidCharacter => write!(
+                f,
+                "invalid character(s). expected only base64url characters"
+            ),
         }
     }
 }
