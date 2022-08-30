@@ -9,7 +9,11 @@ categories = ["data-structures", "encoding", "web-programming"]
 license = "MIT OR Apache-2.0"
 publish = false
 
+[features]
+rand = ["dep:rand"]
+
 [dependencies]
+rand = { version = "0.8.5", optional = true, default-features = false}
 
 [dev-dependencies]
 criterion = { version = "0.3.6", features = [ "html_reports" ] }
