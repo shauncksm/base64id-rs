@@ -34,6 +34,7 @@ pub use error::Error;
 
 #[cfg(feature = "rand")]
 pub(self) mod rand;
+
 #[cfg(feature = "serde")]
 pub(self) mod serde;
 
@@ -123,6 +124,8 @@ impl fmt::Display for Id64 {
 #[cfg(test)]
 mod tests {
     use crate::Id64;
+    use core::str::FromStr;
+
     #[test]
     fn create_id64_from_u64() {
         let number: u64 = 25519;
@@ -139,8 +142,6 @@ mod tests {
 
     #[test]
     fn create_id64_from_str() {
-        use core::str::FromStr;
-
         let id = Id64::from_str("AAAAAAAAAAA").unwrap();
         assert_eq!(Id64::from(0u64), id);
     }
