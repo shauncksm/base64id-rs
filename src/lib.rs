@@ -34,6 +34,8 @@ pub use error::Error;
 
 #[cfg(feature = "rand")]
 pub(self) mod rand;
+#[cfg(feature = "serde")]
+pub(self) mod serde;
 
 /// 64 bit container with methods for base64url encoding
 #[derive(Debug, Default, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]

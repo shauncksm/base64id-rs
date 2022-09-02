@@ -11,13 +11,17 @@ publish = false
 
 [features]
 rand = ["dep:rand"]
+serde = ["dep:serde"]
 
 [dependencies]
 rand = { version = "0.8.5", optional = true, default-features = false}
+serde = { version = "1.0.144", optional = true, default-features = false }
 
 [dev-dependencies]
 criterion = { version = "0.3.6", features = [ "html_reports" ] }
 rand = { version = "0.8.5" }
+serde = { version = "1.0.144", features = [ "derive" ] }
+serde_json = { version = "1.0.85" }
 
 [[bench]]
 name = "id64"
