@@ -41,6 +41,14 @@ pub(self) mod serde;
 #[derive(Debug, Default, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct Id64(i64);
 
+impl Id64 {
+    /// Binary equivalent to `u64::MIN`; All bits set to `0`.
+    pub const MIN: Id64 = Id64(0);
+
+    /// Binary equivalent to `u64::MAX`; All bits set to `1`.
+    pub const MAX: Id64 = Id64(-1);
+}
+
 impl From<Id64> for i64 {
     fn from(id: Id64) -> Self {
         id.0
@@ -129,5 +137,15 @@ mod tests {
 
         let id = Id64::from_str("AAAAAAAAAAA").unwrap();
         assert_eq!(Id64::from(0u64), id);
+    }
+
+    #[test]
+    fn id64_min_const() {
+        assert_eq!(u64::MIN.to_be_bytes(), u64::from(Id64::MIN).to_be_bytes());
+    }
+
+    #[test]
+    fn id64_max_const() {
+        assert_eq!(u64::MAX.to_be_bytes(), u64::from(Id64::MAX).to_be_bytes());
     }
 }
