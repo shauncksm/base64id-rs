@@ -12,16 +12,20 @@ publish = false
 [features]
 rand = ["dep:rand"]
 serde = ["dep:serde"]
+sqlx = ["dep:sqlx"]
 
 [dependencies]
 rand = { version = "0.8.5", optional = true, default-features = false}
 serde = { version = "1.0.144", optional = true, default-features = false }
+sqlx = { version = "0.6.1", optional = true, default-features = false, features = [ "macros", "runtime-async-std-rustls" ] }
 
 [dev-dependencies]
 criterion = { version = "0.3.6", features = [ "html_reports" ] }
 rand = "0.8.5"
 serde = { version = "1.0.144", features = [ "derive" ] }
 serde_json = "1.0.85"
+sqlx = { version = "0.6.1", default-features = false, features = [ "macros", "sqlite", "runtime-async-std-rustls" ] }
+async-std = "1.12.0"
 
 [[bench]]
 name = "id64"

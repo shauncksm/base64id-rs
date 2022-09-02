@@ -37,8 +37,14 @@ pub(self) mod rand;
 #[cfg(feature = "serde")]
 pub(self) mod serde;
 
+#[cfg(feature = "sqlx")]
+extern crate std;
+#[cfg(feature = "sqlx")]
+use sqlx::{FromRow, Type};
+
 /// 64 bit container with methods for base64url encoding
 #[derive(Debug, Default, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
+#[cfg_attr(feature = "sqlx", derive(Type, FromRow), sqlx(transparent))]
 pub struct Id64(i64);
 
 impl Id64 {
