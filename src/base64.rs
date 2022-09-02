@@ -12,7 +12,7 @@ use crate::Error;
 const ALPHABET_BASE64URL: &str = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
 
 #[rustfmt::skip]
-pub fn encode_u64(input: u64) -> [char; 11] {
+pub fn encode_u64(input: i64) -> [char; 11] {
     let b = input.to_be_bytes();
 
     let p1 = encode_quantum([b[0], b[1], b[2]]);
@@ -31,7 +31,7 @@ pub fn encode_u64(input: u64) -> [char; 11] {
 }
 
 #[rustfmt::skip]
-pub fn decode_u64(input: [char; 11]) -> Result<u64, Error> {
+pub fn decode_u64(input: [char; 11]) -> Result<i64, Error> {
     let mut c: [u8; 11] = [0; 11];
 
     for i in 0..=10 {
@@ -46,7 +46,7 @@ pub fn decode_u64(input: [char; 11]) -> Result<u64, Error> {
     let p2 = decode_quantum([c[4], c[5], c[6], c[7]]);
     let p3 = decode_partial_16([c[8], c[9], c[10]]);
 
-    Ok(u64::from_be_bytes([
+    Ok(i64::from_be_bytes([
         p1[0], p1[1], p1[2],
         p2[0], p2[1], p2[2],
         p3[0], p3[1],
@@ -203,49 +203,49 @@ mod tests {
         [8, 47, 20],
     ];
 
-    const U64_INT: [u64; 12] = [
-        u64::MAX,
-        u64::MIN,
-        14854615441804557868,
+    const I64_INT: [i64; 12] = [
+        i64::from_be_bytes(u64::MAX.to_be_bytes()),
+        0,
+        6926187988806058650,
         2685194398265091357,
         3161873750843059683,
-        10803570549866541035,
+        -100214607134046418,
         8763564039737214670,
-        17137545079498398768,
-        17243084105736903942,
+        -1707663070116128918,
+        -3237707832123248052,
         4264493385337507395,
-        16856446005642022447,
+        -8390618481221224288,
         6135322894040689502,
     ];
 
-    const U64_BASE64: [[char; 11]; 12] = [
+    const I64_BASE64: [[char; 11]; 12] = [
         ['_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '8'],
         ['A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A'],
-        ['z', 'i', 'Y', 'y', 'C', 'o', 'v', 'K', '_', 'i', 'w'],
+        ['Y', 'B', '7', 'D', 'R', '4', 'B', 'c', 'w', 'p', 'o'],
         ['J', 'U', 'O', '6', 'F', 'B', 'V', '1', 'p', 'R', '0'],
         ['K', '-', 'E', '7', 'b', 'I', '-', 'h', '7', 'e', 'M'],
-        ['l', 'e', '3', '-', 'L', 'O', 'K', 'q', 'r', '-', 's'],
+        ['_', 'p', 'v', '3', 'W', 'I', 'R', '4', 'R', 'y', '4'],
         ['e', 'Z', '5', 'v', 'E', 'B', 'L', 's', 'h', 's', '4'],
-        ['7', 'd', 'T', 'K', 'c', '4', 'G', '-', '3', 'D', 'A'],
-        ['7', '0', 'u', '9', 'o', 'u', 'q', 'h', '3', 'Q', 'Y'],
+        ['6', 'E', '0', 'p', 'f', 'D', '2', 's', '1', '2', 'o'],
+        ['0', 'x', 'F', 'Z', '4', 'X', 'v', 'L', 'M', 'k', 'w'],
         ['O', 'y', '6', 'G', 'I', '8', 'Q', 'L', 'j', 'k', 'M'],
-        ['6', 'e', '4', 'g', 'V', 'T', 'X', 'Y', 'T', 'i', '8'],
+        ['i', '4', '6', 'I', '8', 'l', 'z', '7', 'O', 'K', 'A'],
         ['V', 'S', 'U', 'L', 'q', 'n', 'G', 'd', '6', '1', '4'],
     ];
 
     #[test]
     fn encode_u64_validation() {
         for i in 0..=11 {
-            let output = base64::encode_u64(U64_INT[i]);
-            assert_eq!(output, U64_BASE64[i]);
+            let output = base64::encode_u64(I64_INT[i]);
+            assert_eq!(output, I64_BASE64[i]);
         }
     }
 
     #[test]
     fn decode_u64_validation() {
         for i in 0..=11 {
-            let output = base64::decode_u64(U64_BASE64[i]).expect("failed to decode input");
-            assert_eq!(output, U64_INT[i]);
+            let output = base64::decode_u64(I64_BASE64[i]).expect("failed to decode input");
+            assert_eq!(output, I64_INT[i]);
         }
     }
 
