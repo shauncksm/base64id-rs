@@ -46,6 +46,10 @@ impl<'de> Visitor<'de> for Id64Visitor {
                 Unexpected::Other("1 or more non-base64url characters"),
                 &EXP,
             ),
+            Error::OutOfBoundsCharacter => E::invalid_value(
+                Unexpected::Other("the last character was out of bounds"),
+                &EXP,
+            ),
         })
     }
 }

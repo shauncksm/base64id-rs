@@ -7,6 +7,10 @@ pub enum Error {
     InvalidLength,
     /// returned when input data conatins a character that is not within the base64url alphabet
     InvalidCharacter,
+    /// returned when the last character of a string is out of bounds
+    ///
+    /// The 11th character of a Id64 string must not have a base64 index number who's first and/or second bit is set to 1
+    OutOfBoundsCharacter,
 }
 
 impl fmt::Display for Error {
@@ -19,6 +23,9 @@ impl fmt::Display for Error {
                 f,
                 "invalid character(s). expected only base64url characters"
             ),
+            OutOfBoundsCharacter => {
+                write!(f, "invalid character. last character was out of bounds")
+            }
         }
     }
 }
@@ -39,4 +46,6 @@ mod tests {
         let id = Id64::from_str("AAAAAAAAAA=").unwrap_err();
         debug_assert_eq!(id, super::Error::InvalidCharacter);
     }
+
+    // Refer to crate::base64::tests::decode_partial_16_out_of_bounds_detection for OutOfBoundsCharacter variant test
 }

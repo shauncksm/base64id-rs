@@ -44,7 +44,7 @@ pub fn decode_u64(input: [char; 11]) -> Result<i64, Error> {
 
     let p1 = decode_quantum([c[0], c[1], c[2], c[3]]);
     let p2 = decode_quantum([c[4], c[5], c[6], c[7]]);
-    let p3 = decode_partial_16([c[8], c[9], c[10]]);
+    let p3 = decode_partial_16([c[8], c[9], c[10]])?;
 
     Ok(i64::from_be_bytes([
         p1[0], p1[1], p1[2],
@@ -119,7 +119,11 @@ fn decode_quantum(input: [u8; 4]) -> [u8; 3] {
 }
 
 #[rustfmt::skip]
-fn decode_partial_16(input: [u8; 3]) -> [u8; 2] {
+fn decode_partial_16(input: [u8; 3]) -> Result<[u8; 2], Error> {
+    if input[2] & 0b00000011 != 0 {
+        return Err(Error::OutOfBoundsCharacter);
+    }
+    
     let d1 = (
         input[0] << 2
     ) | (
@@ -134,14 +138,14 @@ fn decode_partial_16(input: [u8; 3]) -> [u8; 2] {
         0b00001111
     );
 
-    [d1, d2]
+    Ok([d1, d2])
 }
 
 #[cfg(test)]
 mod tests {
     extern crate std;
 
-    use crate::base64;
+    use crate::{base64, Error};
 
     const QUANTUM_BINARY: [[u8; 3]; 12] = [
         [0b00000100, 0b00010000, 0b01000001],
@@ -201,6 +205,16 @@ mod tests {
         [5, 14, 56],
         [5, 55, 28],
         [8, 47, 20],
+    ];
+
+    /// All base64 u8 values who's first two bits contain a 1
+    const PARTIAL_16_BASE64_OUTOFBOUNDS: [u8; 48] = [
+        0b000001, 0b000010, 0b000011, 0b000101, 0b000110, 0b000111, 0b001001, 0b001010, 0b001011,
+        0b001101, 0b001110, 0b001111, 0b010001, 0b010010, 0b010011, 0b010101, 0b010110, 0b010111,
+        0b011001, 0b011010, 0b011011, 0b011101, 0b011110, 0b011111, 0b100001, 0b100010, 0b100011,
+        0b100101, 0b100110, 0b100111, 0b101001, 0b101010, 0b101011, 0b101101, 0b101110, 0b101111,
+        0b110001, 0b110010, 0b110011, 0b110101, 0b110110, 0b110111, 0b111001, 0b111010, 0b111011,
+        0b111101, 0b111110, 0b111111,
     ];
 
     const I64_INT: [i64; 12] = [
@@ -276,8 +290,35 @@ mod tests {
     #[test]
     fn decode_partial_16_validation() {
         for i in 0..=11 {
-            let output = base64::decode_partial_16(PARTIAL_16_BASE64[i]);
+            let output = base64::decode_partial_16(PARTIAL_16_BASE64[i])
+                .expect("decode_partial_16 returned an unexpected Err");
+
             assert_eq!(output, PARTIAL_16_BINARY[i]);
+        }
+    }
+
+    /// decode_partial_16() should return an Error::OutOfBoundsCharacter
+    /// when an out of bounds character is encountered
+    ///
+    /// Such characters include any character who's base64 index number, expressed as a u8, has it's first and/or second bit set to 1.
+    ///
+    /// Such u8 values can be detected with the following test:
+    /// ```
+    /// // base64url character 'B'. Binary 0b00000001
+    /// // First bit is a 1. This is out of bounds.
+    /// let int = 1u8;
+    ///
+    /// if int & 0b00000011 != 0 {
+    ///     panic!("It's out of bounds!")
+    /// }
+    /// ```
+    #[test]
+    fn decode_partial_16_out_of_bounds_detection() {
+        for i in PARTIAL_16_BASE64_OUTOFBOUNDS {
+            let output = base64::decode_partial_16([0, 0, i])
+                .expect_err("decode_partial_16 did not return an Err");
+
+            assert_eq!(output, Error::OutOfBoundsCharacter);
         }
     }
 }
