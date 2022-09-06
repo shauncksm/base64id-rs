@@ -7,13 +7,14 @@ use rand::random;
 use base64id::Id64;
 
 fn main() {
-    println!("Id64        i64");
-    println!("----------- --------------------");
+    println!("base64url    i64                   u64");
+    println!("-----------  --------------------  --------------------");
 
     for _ in 0..10 {
-        let int: i64 = random();
-        let id = Id64::from(int);
+        let i64: i64 = random();
+        let id = Id64::from(i64);
+        let u64 = u64::from(id);
 
-        println!("{id} {int}");
+        println!("{id}  {i64:>20}  {u64:>20}");
     }
 }
