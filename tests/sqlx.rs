@@ -3,7 +3,7 @@
 use async_std::task;
 use sqlx::{sqlite::SqliteConnection, Connection, Sqlite};
 
-use rid64::Id64;
+use base64id::Id64;
 
 #[test]
 #[cfg(feature = "sqlx")]

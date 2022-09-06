@@ -2,7 +2,7 @@
 
 use serde::{Deserialize, Serialize};
 
-use rid64::Id64;
+use base64id::Id64;
 
 const INT: i64 = 2063772195469131459;
 const JSON: &str = r#"{"id":"HKP94KBD_sM"}"#;

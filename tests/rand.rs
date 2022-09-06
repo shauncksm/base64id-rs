@@ -1,6 +1,6 @@
 #![cfg(feature = "rand")]
 
-use rid64::Id64;
+use base64id::Id64;
 
 use rand::random;
 

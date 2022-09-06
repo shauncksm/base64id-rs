@@ -4,7 +4,7 @@
 
 use rand::random;
 
-use rid64::Id64;
+use base64id::Id64;
 
 fn main() {
     println!("Id64        i64");

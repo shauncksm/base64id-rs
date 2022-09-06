@@ -1,10 +1,10 @@
 [package]
-name = "rid64"
+name = "base64id"
 authors = ["Shaun Priestley <shaun@cksm.cc>"]
 version = "1.0.0-alpha.1"
 edition = "2021"
 description = "A library for efficiently representing and transmitting 64 bit random ID's"
-repository = "https://github.com/shauncksm/rid64"
+repository = "https://github.com/shauncksm/base64id-rs"
 categories = ["data-structures", "encoding", "web-programming"]
 license = "MIT OR Apache-2.0"
 publish = false
