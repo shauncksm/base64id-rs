@@ -30,3 +30,11 @@ async-std = "1.12.0"
 [[bench]]
 name = "id64"
 harness = false
+
+[[example]]
+name = "github_usage_1"
+path = "examples/github/usage_1.rs"
+
+[[example]]
+name = "github_usage_2"
+path = "examples/github/usage_2.rs"
