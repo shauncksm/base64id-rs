@@ -38,3 +38,15 @@ path = "examples/github/usage_1.rs"
 [[example]]
 name = "github_usage_2"
 path = "examples/github/usage_2.rs"
+
+[[example]]
+name = "github_usage_rand"
+path = "examples/github/usage_rand.rs"
+
+[[example]]
+name = "github_usage_serde"
+path = "examples/github/usage_serde.rs"
+
+[[example]]
+name = "github_usage_sqlx"
+path = "examples/github/usage_sqlx.rs"
