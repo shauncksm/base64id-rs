@@ -38,6 +38,14 @@ fn main() -> Result<(), Error> {
 }
 ```
 
+## Motivation
+I've used this concept a number of times in personal and work projects as I find it very useful.
+The problem is I've had to reimplement the functionality everytime.
+
+The motivation for this library was to design and implement the core concept once, while paying attention to metrics such as performance, correctness, and compatability. To that end:
+- the library is `no_std` by default; with no heap allocation required, all execution is done on the stack
+- all base64 bit manipulation code is unit tested with fixed random values
+
 ## License
 Licensed under either of
 
