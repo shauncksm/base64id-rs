@@ -1,5 +1,6 @@
 # base64id-rs
-A Rust library for representing 64 bit integers as [base64url](https://datatracker.ietf.org/doc/html/rfc4648#section-5) encoded strings.
+A pure rust library for representing 64 bit integers as [base64url](https://datatracker.ietf.org/doc/html/rfc4648#section-5) encoded strings.
+This can be useful in web based applications ([like this](https://www.youtube.com/watch?v=gocwRvLhDf8)) for sending database record ID's to clients while reducing string lenth.
 
 ```txt
 base64url    i64                   u64
@@ -12,6 +13,9 @@ jHamKFSl5oM  -8325284168998721917  10121459904710829699
 
 ## Usage
 
+All work is done using the `Id64` struct.
+
+### Encoding
 You can convert an `i64` or `u64` into a `Id64` as follows
 ```rs
 use base64id::Id64;
@@ -20,10 +24,11 @@ fn main() {
     let id_i64 = Id64::from(1i64);
     let id_u64 = Id64::from(1u64);
 
-    println!("{id_i64} {id_u64}");
+    println!("{id_i64} {id_u64}"); // AAAAAAAAAAE AAAAAAAAAAE
 }
 ```
 
+### Decoding
 You can also use `FromStr` to convert strings into an `Id64`
 ```rs
 use base64id::{Error, Id64};
@@ -32,7 +37,7 @@ use std::str::FromStr;
 fn main() -> Result<(), Error> {
     let id_str = Id64::from_str("PDFehCFVGqA")?;
 
-    println!("{id_str}");
+    println!("{}", i64::from(id_str)); // 4337351837722417824
 
     Ok(())
 }
