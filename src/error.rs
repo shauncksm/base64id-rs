@@ -2,6 +2,7 @@ use core::fmt;
 
 /// Error type for base64url decoding
 #[derive(Debug, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum Error {
     /// returned when input data does not contain exactly 11 characters
     InvalidLength,
