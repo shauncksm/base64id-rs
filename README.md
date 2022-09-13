@@ -62,6 +62,19 @@ fn main() -> Result<(), Error> {
 
 Support for Serde, Rand and SQLx may be enabled though the use of optional cargo feature flags.
 
+### Rand
+You can use the `rand` feature flag for working with the `rand` crate
+```rs
+use base64id::Id64;
+use rand::random;
+
+fn main() {
+    let id: Id64 = random();
+
+    println!("{id}"); // 11 random base64url characters
+}
+```
+
 ### Serde
 You can use the `serde` feature flag to drive `Serialize` and `Deserialize` on `Id64`
 ```rs
@@ -80,20 +93,6 @@ fn main() {
 
     println!("{}", serde_json::to_string(&record).unwrap()); // {"id":"AAAAAAAAAAA"}
 }
-```
-
-### Rand
-You can use the `rand` feature flag for working with the `rand` crate
-```rs
-use base64id::Id64;
-use rand::random;
-
-fn main() {
-    let id: Id64 = random();
-
-    println!("{id}"); // 11 random base64url characters
-}
-
 ```
 
 ### SQLx
