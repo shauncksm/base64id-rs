@@ -19,6 +19,13 @@ The motivation for this library was to design and implement the core concept onc
 - the library is `no_std` by default; with no heap allocation required, all execution is done on the stack
 - all base64 bit manipulation code is unit tested with fixed random values
 
+## Installation
+Add the following to your `Cargo.toml` file
+```toml
+[dependencies]
+base64id = { version = "1.0", features = ["rand"] }
+```
+
 ## Usage
 
 All work is done using the `Id64` struct.
