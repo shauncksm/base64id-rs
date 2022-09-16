@@ -5,20 +5,20 @@
 //! *Future plans include the use of cargo feature flags to enable `std` as needed.*
 //!
 //! ## Example
-//! Here are some examples of encoded and raw random `i64` integers.
+//! Here are some examples of random base64url encoded strings, with corosponding `i64` and `u64` integers.
 //! ```txt
-//! Id64        i64
-//! ----------- --------------------
-//! zQpPkyvSY4c -3672035052653223033
-//! fRN6Rpu717I 9012681722977572786
-//! Hvbo3OHRk8s 2231226700787717067
-//! hhKuR_uLu5g -8785768298860266600
-//! e502o-aw89M 8907335715586634707
-//! CEopSRThix8 597335294439688991
-//! RSSE_NwKa1U 4982253309336906581
-//! C4xz60HkBPA 832167485416670448
-//! H0rwQK6dVoE 2254878724050474625
-//! 3g4P8dXEqjU -2446000016267630027
+//! base64url    i64                   u64
+//! -----------  --------------------  --------------------
+//! 76ADBodgro0  -1179939775795122547  17266804297914429069
+//! LVJPJ0P_dGA   3265759709860164704   3265759709860164704
+//! ySbu11G3F3k  -3952209014414698631  14494535059294852985
+//! ltgSMEOLrCg  -7577286374549902296  10869457699159649320
+//! L1jRB4CFTzA   3411706547884347184   3411706547884347184
+//! DTPCFbSO_80    951317344784678861    951317344784678861
+//! b-CmzQnloEY   8061626732557738054   8061626732557738054
+//! U7KMg46RH7I   6031037347662995378   6031037347662995378
+//! epcgOxRHh1c   8833564632225908567   8833564632225908567
+//! 8OviPWfZnJU  -1086526131716645739  17360217941992905877
 //! ```
 //! You can generate your own sample values using `cargo run --example random_sample`.
 
