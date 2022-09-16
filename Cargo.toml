@@ -13,6 +13,7 @@ publish = false
 rand = ["dep:rand"]
 serde = ["dep:serde"]
 sqlx = ["dep:sqlx"]
+std = []
 
 [dependencies]
 rand = { version = "0.8.5", optional = true, default-features = false}

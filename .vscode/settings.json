@@ -6,6 +6,7 @@
     "rust-analyzer.cargo.features": [
         "rand",
         "serde",
-        "sqlx"
+        "sqlx",
+        "std"
     ]
 }

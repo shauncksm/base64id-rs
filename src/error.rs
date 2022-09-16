@@ -19,6 +19,11 @@ pub enum Error {
     OutOfBoundsCharacter,
 }
 
+#[cfg(feature = "std")]
+extern crate std;
+#[cfg(feature = "std")]
+impl std::error::Error for Error {}
+
 impl fmt::Display for Error {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         use Error::*;
