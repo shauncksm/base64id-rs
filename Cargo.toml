@@ -42,11 +42,14 @@ path = "examples/github/usage_2.rs"
 [[example]]
 name = "github_usage_rand"
 path = "examples/github/usage_rand.rs"
+required-features = ["rand"]
 
 [[example]]
 name = "github_usage_serde"
 path = "examples/github/usage_serde.rs"
+required-features = ["serde"]
 
 [[example]]
 name = "github_usage_sqlx"
 path = "examples/github/usage_sqlx.rs"
+required-features = ["sqlx"]
