@@ -55,6 +55,13 @@ impl Id64 {
 
     /// Binary equivalent to `u64::MAX`; All bits set to `1`.
     pub const MAX: Id64 = Id64(-1);
+
+    /// Create a new `Id64` with an inner value of `0i64`
+    ///
+    /// This is an alias of `Id64::default()`
+    pub fn new() -> Id64 {
+        Id64::default()
+    }
 }
 
 impl From<Id64> for i64 {
@@ -155,5 +162,10 @@ mod tests {
     #[test]
     fn id64_max_const() {
         assert_eq!(u64::MAX.to_be_bytes(), u64::from(Id64::MAX).to_be_bytes());
+    }
+
+    #[test]
+    fn id64_new() {
+        assert_eq!(Id64(0i64), Id64::new());
     }
 }
