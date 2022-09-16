@@ -1,5 +1,3 @@
-#![cfg(feature = "serde")]
-
 use serde::{Deserialize, Serialize};
 
 use base64id::Id64;

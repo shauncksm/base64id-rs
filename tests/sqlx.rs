@@ -1,5 +1,3 @@
-#![cfg(feature = "sqlx")]
-
 use async_std::task;
 use sqlx::{sqlite::SqliteConnection, Connection, Sqlite};
 

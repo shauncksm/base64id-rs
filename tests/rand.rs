@@ -1,5 +1,3 @@
-#![cfg(feature = "rand")]
-
 use base64id::Id64;
 
 use rand::random;
