@@ -25,6 +25,9 @@
 #![no_std]
 #![warn(missing_docs)]
 
+#[cfg(feature = "std")]
+extern crate std;
+
 use core::{fmt, str::FromStr};
 
 pub(self) mod base64;
@@ -38,8 +41,6 @@ pub(self) mod rand;
 #[cfg(feature = "serde")]
 pub(self) mod serde;
 
-#[cfg(feature = "sqlx")]
-extern crate std;
 #[cfg(feature = "sqlx")]
 use sqlx::{FromRow, Type};
 

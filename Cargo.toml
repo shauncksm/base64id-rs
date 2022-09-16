@@ -12,7 +12,7 @@ publish = false
 [features]
 rand = ["dep:rand"]
 serde = ["dep:serde"]
-sqlx = ["dep:sqlx"]
+sqlx = ["dep:sqlx", "std"]
 std = []
 
 [dependencies]

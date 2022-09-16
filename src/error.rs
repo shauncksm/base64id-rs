@@ -20,8 +20,6 @@ pub enum Error {
 }
 
 #[cfg(feature = "std")]
-extern crate std;
-#[cfg(feature = "std")]
 impl std::error::Error for Error {}
 
 impl fmt::Display for Error {
