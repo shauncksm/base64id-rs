@@ -92,7 +92,7 @@ impl TryFrom<[char; 11]> for Id64 {
     type Error = Error;
 
     fn try_from(input: [char; 11]) -> Result<Self, Self::Error> {
-        Ok(Self(base64::decode_u64(input)?))
+        Ok(Self(base64::decode_i64(input)?))
     }
 }
 
@@ -120,7 +120,7 @@ impl FromStr for Id64 {
 
 impl fmt::Display for Id64 {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let c = base64::encode_u64(self.0);
+        let c = base64::encode_i64(self.0);
         write!(
             f,
             "{}{}{}{}{}{}{}{}{}{}{}",

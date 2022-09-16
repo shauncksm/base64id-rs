@@ -12,7 +12,7 @@ use crate::Error;
 const ALPHABET_BASE64URL: &str = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
 
 #[rustfmt::skip]
-pub fn encode_u64(input: i64) -> [char; 11] {
+pub fn encode_i64(input: i64) -> [char; 11] {
     let b = input.to_be_bytes();
 
     let p1 = encode_quantum([b[0], b[1], b[2]]);
@@ -31,7 +31,7 @@ pub fn encode_u64(input: i64) -> [char; 11] {
 }
 
 #[rustfmt::skip]
-pub fn decode_u64(input: [char; 11]) -> Result<i64, Error> {
+pub fn decode_i64(input: [char; 11]) -> Result<i64, Error> {
     let mut c: [u8; 11] = [0; 11];
 
     for i in 0..=10 {
@@ -250,7 +250,7 @@ mod tests {
     #[test]
     fn encode_u64_validation() {
         for i in 0..=11 {
-            let output = base64::encode_u64(I64_INT[i]);
+            let output = base64::encode_i64(I64_INT[i]);
             assert_eq!(output, I64_BASE64[i]);
         }
     }
@@ -258,7 +258,7 @@ mod tests {
     #[test]
     fn decode_u64_validation() {
         for i in 0..=11 {
-            let output = base64::decode_u64(I64_BASE64[i]).expect("failed to decode input");
+            let output = base64::decode_i64(I64_BASE64[i]).expect("failed to decode input");
             assert_eq!(output, I64_INT[i]);
         }
     }
