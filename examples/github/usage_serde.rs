@@ -1,7 +1,7 @@
-use base64id::Id64;
-use serde::{Deserialize, Serialize};
-
 fn main() -> Result<(), serde_json::Error> {
+    use base64id::Id64;
+    use serde::{Deserialize, Serialize};
+
     #[derive(Serialize, Deserialize)]
     struct Record {
         id: Id64,

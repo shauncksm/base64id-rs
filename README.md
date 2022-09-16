@@ -68,11 +68,9 @@ You can use the `rand` feature flag for working with the `rand` crate
 use base64id::Id64;
 use rand::random;
 
-fn main() {
-    let id: Id64 = random();
+let id: Id64 = random();
 
-    println!("{id}"); // 11 random base64url characters
-}
+println!("{id}"); // 11 random base64url characters
 ```
 
 ### Serde
@@ -81,25 +79,28 @@ You can use the `serde` feature flag to drive `Serialize` and `Deserialize` on `
 use base64id::Id64;
 use serde::{Deserialize, Serialize};
 
-fn main() -> Result<(), serde_json::Error> {
-    #[derive(Serialize, Deserialize)]
-    struct Record {
-        id: Id64,
-    }
-
-    let record = Record {
-        id: Id64::from(0u64),
-    };
-
-    println!("{}", serde_json::to_string(&record)?); // {"id":"AAAAAAAAAAA"}
-
-    Ok(())
+#[derive(Serialize, Deserialize)]
+struct Record {
+    id: Id64,
 }
+
+let record = Record {
+    id: Id64::from(0u64),
+};
+
+println!("{}", serde_json::to_string(&record)?); // {"id":"AAAAAAAAAAA"}
 ```
 
 ### SQLx
 You can use the `sqlx` feature flag for using an `Id64` with SQLx SQL commands
 ```rs
+use base64id::Id64;
+use sqlx::{
+    sqlite::{Sqlite, SqliteConnection},
+    Connection,
+};
+use std::str::FromStr;
+
 let id = Id64::from_str("IkoY0lQYRrI").unwrap();
 let mut conn = SqliteConnection::connect("sqlite::memory:").await?;
 
