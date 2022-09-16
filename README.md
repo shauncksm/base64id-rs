@@ -101,7 +101,7 @@ use sqlx::{
 };
 use std::str::FromStr;
 
-let id = Id64::from_str("IkoY0lQYRrI").unwrap();
+let id = Id64::from_str("IkoY0lQYRrI")?;
 let mut conn = SqliteConnection::connect("sqlite::memory:").await?;
 
 sqlx::query("CREATE TABLE sqlx (id INT PRIMARY KEY)")

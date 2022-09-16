@@ -2,7 +2,7 @@ fn main() {
     async_std::task::block_on(database()).unwrap();
 }
 
-async fn database() -> Result<(), sqlx::Error> {
+async fn database() -> Result<(), Box<dyn std::error::Error>> {
     use base64id::Id64;
     use sqlx::{
         sqlite::{Sqlite, SqliteConnection},
@@ -10,7 +10,7 @@ async fn database() -> Result<(), sqlx::Error> {
     };
     use std::str::FromStr;
 
-    let id = Id64::from_str("IkoY0lQYRrI").unwrap();
+    let id = Id64::from_str("IkoY0lQYRrI")?;
     let mut conn = SqliteConnection::connect("sqlite::memory:").await?;
 
     sqlx::query("CREATE TABLE sqlx (id INT PRIMARY KEY)")
