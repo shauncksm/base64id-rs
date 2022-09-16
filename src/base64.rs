@@ -39,7 +39,7 @@ pub fn decode_i64(input: [char; 11]) -> Result<i64, Error> {
             .find(input[i])
             .ok_or(Error::InvalidCharacter)?;
 
-        c[i] = u8::try_from(idx).expect("infallible. failed to convert usize between 0 - 63 to u8");
+        c[i] = u8::try_from(idx).map_err(|e| Error::InfallibleU8FromUsize(e))?;
     }
 
     let p1 = decode_quantum([c[0], c[1], c[2], c[3]]);

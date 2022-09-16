@@ -50,6 +50,7 @@ impl<'de> Visitor<'de> for Id64Visitor {
                 Unexpected::Other("the last character was out of bounds"),
                 &EXP,
             ),
+            Error::InfallibleU8FromUsize(_) => E::custom(e),
         })
     }
 }
