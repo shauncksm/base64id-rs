@@ -38,17 +38,18 @@ impl<'de> Visitor<'de> for Id64Visitor {
     where
         E: serde::de::Error,
     {
-        const EXP: &str = "exactly 11 base64url characters";
+        const EXP1: &str = "exactly 11 base64url characters";
+        const EXP2: &str = "the last character must be one of the following: AEIMQUYcgkosw048";
 
         Id64::from_str(v).map_err(|e| match e {
-            Error::InvalidLength => E::invalid_length(v.len(), &EXP),
+            Error::InvalidLength => E::invalid_length(v.len(), &EXP1),
             Error::InvalidCharacter => E::invalid_value(
                 Unexpected::Other("1 or more non-base64url characters"),
-                &EXP,
+                &EXP1,
             ),
             Error::OutOfBoundsCharacter => E::invalid_value(
                 Unexpected::Other("the last character was out of bounds"),
-                &EXP,
+                &EXP2,
             ),
             Error::InfallibleU8FromUsize(_) => E::custom(e),
         })
