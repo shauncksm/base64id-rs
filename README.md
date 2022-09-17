@@ -1,7 +1,6 @@
 # base64id-rs
 A pure rust library for representing 64 bit integers as [base64url](https://datatracker.ietf.org/doc/html/rfc4648#section-5) encoded strings.
 This can be useful in web based applications ([like this](https://www.youtube.com/watch?v=gocwRvLhDf8)) for sending database record ID's to clients while reducing string lenth.
-
 ```txt
 base64url    i64                   u64
 -----------  --------------------  --------------------
@@ -27,7 +26,6 @@ base64id = { version = "1.0", features = ["rand"] }
 ```
 
 ## Usage
-
 All work is done using the `Id64` struct.
 
 ### Encoding
@@ -59,7 +57,6 @@ fn main() -> Result<(), Error> {
 ```
 
 ## Third Party Crates
-
 Support for Serde, Rand and SQLx may be enabled though the use of optional cargo feature flags.
 
 ### Rand
