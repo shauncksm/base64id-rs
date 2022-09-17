@@ -22,8 +22,10 @@ The motivation for this library was to design and implement the core concept onc
 Add the following to your `Cargo.toml` file
 ```toml
 [dependencies]
-base64id = { version = "1.0", features = ["rand"] }
+base64id = { version = "1.0", features = ["std"] }
 ```
+
+For `#![no_std]` environments the `std` cargo feature can be omitted.
 
 ## Usage
 All work is done using the `Id64` struct.
