@@ -59,10 +59,10 @@ fn main() -> Result<(), Error> {
 ```
 
 ## Third Party Crates
-Support for Serde, Rand and SQLx may be enabled though the use of optional cargo feature flags.
+Support for [Serde](https://serde.rs/), [Rand](https://github.com/rust-random/rand) and [SQLx](https://github.com/launchbadge/sqlx) may be enabled though the use of optional cargo feature flags.
 
 ### Rand
-You can use the `rand` feature flag for working with the `rand` crate
+You can use the `rand` feature flag for working with the `rand` crate.
 ```rs
 use base64id::Id64;
 use rand::random;
@@ -73,7 +73,7 @@ println!("{id}"); // 11 random base64url characters
 ```
 
 ### Serde
-You can use the `serde` feature flag to drive `Serialize` and `Deserialize` on `Id64`
+You can use the `serde` feature flag to drive `Serialize` and `Deserialize` on `Id64`.
 ```rs
 use base64id::Id64;
 use serde::{Deserialize, Serialize};
@@ -91,7 +91,7 @@ println!("{}", serde_json::to_string(&record)?); // {"id":"AAAAAAAAAAA"}
 ```
 
 ### SQLx
-You can use the `sqlx` feature flag for using an `Id64` with SQLx SQL commands
+You can use the `sqlx` feature flag for using an `Id64` with SQLx SQL commands.
 ```rs
 use base64id::Id64;
 use sqlx::{
