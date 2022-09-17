@@ -1,6 +1,5 @@
 # base64id-rs
 A pure rust library for representing 64 bit integers as [base64url](https://datatracker.ietf.org/doc/html/rfc4648#section-5) encoded strings.
-This can be useful in web based applications ([like this](https://www.youtube.com/watch?v=gocwRvLhDf8)) for sending database record ID's to clients while reducing string lenth.
 ```txt
 base64url    i64                   u64
 -----------  --------------------  --------------------
@@ -9,6 +8,16 @@ fHH_W21Typg   8967229101212682904   8967229101212682904
 kjsG-f3NhxI  -7909720649771415790  10537023423938135826
 jHamKFSl5oM  -8325284168998721917  10121459904710829699
 ```
+
+For a video of this concept in action, see [here](https://www.youtube.com/watch?v=gocwRvLhDf8).
+
+A 64 bit integer (8 bytes) is efficiently stored and manipulated in memory.
+When the value needs to be sent to a web client over HTTP, the value is base64url encoded and sent as exactly 11 base64url characters (11 bytes).
+
+### Benefits
+- 64 bit integers are sent in a url safe manor
+- Reduces the number of bytes needed to send the integer as compared to decimal, which would require up to 20 bytes.
+- Allows users to easily copy/paste the integer as a string
 
 ## Motivation
 I've used this concept a number of times in personal and work projects as I find it very useful.
@@ -118,6 +127,11 @@ let output = sqlx::query_as::<Sqlite, Id64>("SELECT id FROM sqlx LIMIT 1")
 
 println!("{output}"); // IkoY0lQYRrI
 ```
+
+## Alternatives
+Here are some alternative projects you might want to consider
+- [MessagePack](https://msgpack.org/)
+- [gRPC](https://grpc.io/)
 
 ## License
 Licensed under either of
