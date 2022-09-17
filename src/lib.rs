@@ -28,7 +28,7 @@
 #[cfg(feature = "std")]
 extern crate std;
 
-use core::{fmt, str::FromStr};
+use core::{cmp::Ordering, fmt, str::FromStr};
 
 pub(self) mod base64;
 pub(self) mod error;
@@ -45,7 +45,7 @@ pub(self) mod serde;
 use sqlx::{FromRow, Type};
 
 /// 64 bit container with methods for base64url encoding
-#[derive(Debug, Default, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
+#[derive(Debug, Default, Clone, Copy, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "sqlx", derive(Type, FromRow), sqlx(transparent))]
 pub struct Id64(i64);
 
@@ -129,6 +129,21 @@ impl fmt::Display for Id64 {
     }
 }
 
+impl PartialOrd for Id64 {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
+impl Ord for Id64 {
+    fn cmp(&self, other: &Self) -> Ordering {
+        let this = u64::from(*self);
+        let other = u64::from(*other);
+
+        this.cmp(&other)
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use crate::Id64;
@@ -162,6 +177,11 @@ mod tests {
     #[test]
     fn id64_max_const() {
         assert_eq!(u64::MAX.to_be_bytes(), u64::from(Id64::MAX).to_be_bytes());
+    }
+
+    #[test]
+    fn id64_min_max_ord() {
+        assert!(Id64::MIN < Id64::MAX);
     }
 
     #[test]
