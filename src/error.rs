@@ -4,7 +4,7 @@ use core::{fmt, num::TryFromIntError};
 #[derive(Debug, PartialEq, Eq)]
 #[non_exhaustive]
 pub enum Error {
-    /// returned when input data does not contain exactly 11 characters
+    /// returned when input data contains an invalid number of characters
     InvalidLength,
     /// returned when input data conatins a character that is not within the base64url alphabet
     InvalidCharacter,
@@ -31,7 +31,7 @@ impl fmt::Display for Error {
         use Error::*;
 
         match self {
-            InvalidLength => write!(f, "invalid length. expected 11 characters"),
+            InvalidLength => write!(f, "invalid length. number of characters was invalid"),
             InvalidCharacter => write!(
                 f,
                 "invalid character(s). expected only base64url characters"
