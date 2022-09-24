@@ -5,7 +5,9 @@ version = "0.1.0"
 edition = "2021"
 description = "A library for generating and representing 64 bit integers as base64url strings"
 repository = "https://github.com/shauncksm/base64id-rs"
-categories = ["data-structures", "encoding", "web-programming"]
+readme = "README.md"
+categories = ["data-structures", "encoding", "web-programming", "no-std", "value-formatting"]
+keywords = ["base64", "base64url"]
 license = "MIT OR Apache-2.0"
 publish = false
 
