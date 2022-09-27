@@ -23,6 +23,7 @@
 //! You can generate your own sample values using `cargo run --example random_sample`.
 
 #![no_std]
+#![forbid(unsafe_code)]
 #![warn(missing_docs)]
 
 #[cfg(feature = "std")]
