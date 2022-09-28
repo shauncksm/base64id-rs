@@ -68,7 +68,7 @@ fn main() -> Result<(), Error> {
 ```
 
 ## Third Party Crates
-Support for [Serde](https://serde.rs/), [Rand](https://github.com/rust-random/rand) and [SQLx](https://github.com/launchbadge/sqlx) may be enabled though the use of optional cargo feature flags.
+Support for [Serde](https://serde.rs/), [Rand](https://github.com/rust-random/rand) and [SQLx](https://github.com/launchbadge/sqlx) may be enabled through the use of optional cargo feature flags.
 
 ### Rand
 You can use the `rand` feature flag for working with the `rand` crate.
