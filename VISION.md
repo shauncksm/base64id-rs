@@ -1,5 +1,5 @@
 # Project Vision
-The ultimate end goal for this project is to have a Rust libray that can be used to represent 64, 32 and 16 bit integers as base64url encoded strings.
+The ultimate end goal for this project is to have a Rust library that can be used to represent 64, 32 and 16 bit integers as base64url encoded strings.
 
 I aim for this project to
 
