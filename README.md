@@ -9,10 +9,10 @@ kjsG-f3NhxI  -7909720649771415790  10537023423938135826
 jHamKFSl5oM  -8325284168998721917  10121459904710829699
 ```
 
-For a video of this concept in action, see [here](https://www.youtube.com/watch?v=gocwRvLhDf8).
-
 A 64 bit integer (8 bytes) is efficiently stored and manipulated in memory.
 When the value needs to be sent to a web client over HTTP, the value is base64url encoded and sent as exactly 11 base64url characters (11 bytes).
+
+For a video of the underlying concept in action, see [here](https://www.youtube.com/watch?v=gocwRvLhDf8).
 
 ### Benefits
 - 64 bit integers are sent in a url safe manor
@@ -25,7 +25,7 @@ The problem is I've had to reimplement the functionality everytime.
 
 The motivation for this library was to design and implement the core concept once, while paying attention to metrics such as performance, correctness, and compatability. To that end:
 - the library is `no_std` by default; with no heap allocation required, all execution is done on the stack
-- all base64 bit manipulation code is unit tested with fixed random values
+- all base64 bit manipulation code is unit tested with fixed random values for compliance with [RFC 4648](https://www.rfc-editor.org/rfc/rfc4648)
 
 ## Installation
 Add the following to your `Cargo.toml` file
