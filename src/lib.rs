@@ -1,26 +1,52 @@
-//! This crate allows for 64 bit integers to be represented as [base64url](https://datatracker.ietf.org/doc/html/rfc4648#section-5) encoded strings.
+//! This crate allows for fixed length 64 bit integers to be represented as [base64url](https://datatracker.ietf.org/doc/html/rfc4648#section-5) encoded strings.
 //! This is useful for exchanging unique identifiers in a web based contexts; eg. sending an SQL primary key to a client with as few character as possible.
 //!
-//! This crate is `#![no_std]`.
-//! *Future plans include the use of cargo feature flags to enable `std` as needed.*
+//! This crate is `#![no_std]` by default.
+//! You can use the `std` cargo feature flag to enable support for the standard library
 //!
-//! ## Example
-//! Here are some examples of random base64url encoded strings, with corosponding `i64` and `u64` integers.
-//! ```txt
-//! base64url    i64                   u64
-//! -----------  --------------------  --------------------
-//! 76ADBodgro0  -1179939775795122547  17266804297914429069
-//! LVJPJ0P_dGA   3265759709860164704   3265759709860164704
-//! ySbu11G3F3k  -3952209014414698631  14494535059294852985
-//! ltgSMEOLrCg  -7577286374549902296  10869457699159649320
-//! L1jRB4CFTzA   3411706547884347184   3411706547884347184
-//! DTPCFbSO_80    951317344784678861    951317344784678861
-//! b-CmzQnloEY   8061626732557738054   8061626732557738054
-//! U7KMg46RH7I   6031037347662995378   6031037347662995378
-//! epcgOxRHh1c   8833564632225908567   8833564632225908567
-//! 8OviPWfZnJU  -1086526131716645739  17360217941992905877
+//! ## Quick Start
+//! Add the following to your `Cargo.toml` file.
+//! ```toml
+//! [dependencies]
+//! base64id = { version = "0.1", features = ["std", "rand"] }
 //! ```
-//! You can generate your own sample values using `cargo run --example random_sample`.
+//!
+//! #### Encoding
+//! You can use the `rand` feature flag to generate a random ID like so.
+//! ```
+//! use rand::random;
+//! use base64id::Id64;
+//!
+//! fn main() {
+//! # #[cfg(feature = "rand")]
+//! # {
+//!     let id: Id64 = random();
+//!     println!("{id}"); // 3Zohppb9XMw
+//! # }
+//! }
+//! ```
+//!
+//! #### Decoding
+//! You can decode a string into an `Id64` using it's `TryFrom` impl.
+//! ```
+//! use std::str::FromStr;
+//! use base64id::{Error, Id64};
+//!
+//! fn main() -> Result<(), Error> {
+//!     let id = Id64::from_str("AAAAAAAAAAE")?;
+//!     assert_eq!(id, Id64::from(1u64));
+//!     Ok(())
+//! }
+//! ```
+//!
+//! Refer to the [Error] enum regarding decode errors.
+//!
+//! ## Random Values for Development
+//! From the command line you can quickly generate your own random `Id64` values, along with their corosponding `i64` and `u64` integers.
+//! ```sh
+//! cargo run --example random_sample
+//! ```
+//! ***Warning!** The output of this command is not guarentted to be stable, and may change at anytime.*
 
 #![no_std]
 #![forbid(unsafe_code)]
