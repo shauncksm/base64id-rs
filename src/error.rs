@@ -10,7 +10,7 @@ pub enum Error {
     InvalidCharacter,
     /// returned when the last character of a string is out of bounds
     ///
-    /// The 11th character of a Id64 string must not have a base64 index number who's first and/or second bit is set to 1.
+    /// The 11th character of an `Id64` string must not have a base64 index number who's first and/or second bit is set to 1.
     ///
     /// The following base64url characters satisfy this criteria:
     /// ```txt
