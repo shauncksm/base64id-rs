@@ -128,11 +128,6 @@ let output = sqlx::query_as::<Sqlite, Id64>("SELECT id FROM sqlx LIMIT 1")
 println!("{output}"); // IkoY0lQYRrI
 ```
 
-## Alternatives
-Here are some alternative projects you might want to consider
-- [MessagePack](https://msgpack.org/)
-- [gRPC](https://grpc.io/)
-
 ## License
 Licensed under either of
 
