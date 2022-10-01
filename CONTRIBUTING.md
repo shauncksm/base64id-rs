@@ -22,3 +22,8 @@ Additionally, pull requests are welcome for
 For feature requests, please see [VISION.md](VISION.md) for the overall direction I wish for this project to take.
 
 If your feature is not within scope I would encourage you to create a fork of this project.
+
+## When Contributing
+1. Please include a line in [CHANGELOG.md](CHANGELOG.md) describing your change.
+2. If you're fixing a bug or adding a feature, please add tests as appropraite.
+3. Please avoid big single commits. You should make multiple commits of smaller logical units where needed.
