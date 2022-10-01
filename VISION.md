@@ -23,6 +23,9 @@ At this time only 64 bit integers are supported.
 
 The primary goal for future work will be incorporating 32 and 16 bit value support.
 
+I am happy to implement, or to receive pull requests that implement common Traits from the Rust core or standard libraries where it makes sense.
+If there's a choice between implementing on `core` or `std`, `core` should always be preferred, for maximum compatability.
+
 I am open to additional base64 alphabets beyond base64url, though this is not a priority for me, and I don't plan on implementing this at this time.
 
 If you have a use case for this please open an issue on GitHub to elaborate.
