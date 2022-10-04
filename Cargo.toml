@@ -73,3 +73,6 @@ required-features = ["serde"]
 name = "github_usage_sqlx"
 path = "examples/github/usage_sqlx.rs"
 required-features = ["sqlx"]
+
+[package.metadata.docs.rs]
+all-features = true

@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Changed
 - Patch version bumps for sqlx and serde
+- Activate all feature flags within docs.rs build
 
 ### Fixed
 - Unable to compile due to conflicting sqlx feature flags (#1)
