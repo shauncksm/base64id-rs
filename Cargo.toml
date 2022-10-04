@@ -9,7 +9,6 @@ readme = "README.md"
 categories = ["data-structures", "encoding", "web-programming", "no-std", "value-formatting"]
 keywords = ["base64", "base64url"]
 license = "MIT OR Apache-2.0"
-publish = false
 
 [features]
 rand = ["dep:rand"]
