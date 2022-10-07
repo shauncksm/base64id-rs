@@ -127,6 +127,18 @@ impl From<&i64> for Id64 {
     }
 }
 
+impl From<&Id64> for i64 {
+    fn from(id: &Id64) -> Self {
+        Self::from(*id)
+    }
+}
+
+impl From<&Id64> for u64 {
+    fn from(id: &Id64) -> Self {
+        Self::from(*id)
+    }
+}
+
 impl TryFrom<[char; 11]> for Id64 {
     type Error = Error;
 
@@ -227,6 +239,20 @@ mod tests {
     fn create_u64_from_id64() {
         let id = Id64::new();
         let number = u64::from(id);
+        assert_eq!(id, Id64::from(number));
+    }
+
+    #[test]
+    fn create_i64_from_id64_ref() {
+        let id = Id64::new();
+        let number = i64::from(&id);
+        assert_eq!(id, Id64::from(number));
+    }
+
+    #[test]
+    fn create_u64_from_id64_ref() {
+        let id = Id64::new();
+        let number = u64::from(&id);
         assert_eq!(id, Id64::from(number));
     }
 
