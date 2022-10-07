@@ -217,6 +217,20 @@ mod tests {
     }
 
     #[test]
+    fn create_i64_from_id64() {
+        let id = Id64::new();
+        let number = i64::from(id);
+        assert_eq!(id, Id64::from(number));
+    }
+
+    #[test]
+    fn create_u64_from_id64() {
+        let id = Id64::new();
+        let number = u64::from(id);
+        assert_eq!(id, Id64::from(number));
+    }
+
+    #[test]
     fn create_id64_from_str() {
         let id = Id64::from_str("AAAAAAAAAAA").unwrap();
         assert_eq!(Id64::from(0u64), id);
