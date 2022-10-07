@@ -57,16 +57,16 @@ extern crate std;
 
 use core::{cmp::Ordering, fmt, str::FromStr};
 
-pub(self) mod base64;
-pub(self) mod error;
+mod base64;
+mod error;
 
 pub use error::Error;
 
 #[cfg(feature = "rand")]
-pub(self) mod rand;
+mod rand;
 
 #[cfg(feature = "serde")]
-pub(self) mod serde;
+mod serde;
 
 #[cfg(feature = "sqlx")]
 use sqlx::{FromRow, Type};
