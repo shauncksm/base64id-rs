@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Added reference based impls of the `From` trait for `&Id64`, `&u64` and `&i64`.
 
+### Fixed
+- Code examples not linted correctly in README.md
+
 ## [v0.1.1]
 ### Changed
 - Patch version bumps for sqlx and serde

@@ -41,7 +41,7 @@ All work is done using the `Id64` struct.
 
 ### Encoding
 You can convert an `i64` or `u64` into a `Id64` as follows
-```rs
+```rust
 use base64id::Id64;
 
 fn main() {
@@ -54,7 +54,7 @@ fn main() {
 
 ### Decoding
 You can also use `FromStr` to convert strings into an `Id64`
-```rs
+```rust
 use base64id::{Error, Id64};
 use std::str::FromStr;
 
@@ -72,7 +72,7 @@ Support for [Serde](https://serde.rs/), [Rand](https://github.com/rust-random/ra
 
 ### Rand
 You can use the `rand` feature flag for working with the `rand` crate.
-```rs
+```rust
 use base64id::Id64;
 use rand::random;
 
@@ -83,7 +83,7 @@ println!("{id}"); // 11 random base64url characters
 
 ### Serde
 You can use the `serde` feature flag to drive `Serialize` and `Deserialize` on `Id64`.
-```rs
+```rust
 use base64id::Id64;
 use serde::{Deserialize, Serialize};
 
@@ -101,7 +101,7 @@ println!("{}", serde_json::to_string(&record)?); // {"id":"AAAAAAAAAAA"}
 
 ### SQLx
 You can use the `sqlx` feature flag for using an `Id64` with SQLx SQL commands.
-```rs
+```rust
 use base64id::Id64;
 use sqlx::{
     sqlite::{Sqlite, SqliteConnection},
