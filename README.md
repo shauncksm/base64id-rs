@@ -31,7 +31,7 @@ The motivation for this library was to design and implement the core concept onc
 Add the following to your `Cargo.toml` file
 ```toml
 [dependencies]
-base64id = { version = "0.1", features = ["std"] }
+base64id = { version = "0.2", features = ["std"] }
 ```
 
 For `#![no_std]` environments the `std` cargo feature can be omitted.
