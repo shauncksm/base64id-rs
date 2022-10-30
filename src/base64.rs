@@ -150,6 +150,17 @@ fn decode_partial_16(input: [u8; 3]) -> Result<[u8; 2], Error> {
     Ok([d1, d2])
 }
 
+#[rustfmt::skip]
+fn decode_partial_8(input: [u8; 2]) -> Result<u8, Error> {
+    let d1 = (
+        input[0] << 2
+    ) | (
+        input[1] >> 4
+    );
+
+    Ok(d1)
+}
+
 #[cfg(test)]
 mod tests {
     extern crate std;
@@ -328,6 +339,16 @@ mod tests {
                 .expect("decode_partial_16 returned an unexpected Err");
 
             assert_eq!(output, PARTIAL_16_BINARY[i]);
+        }
+    }
+
+    #[test]
+    fn decode_partial_8_validation() {
+        for i in 0..=11 {
+            let output = base64::decode_partial_8(PARTIAL_8_BASE64[i])
+                .expect("decode_partial_8 returned an unexpected Err");
+
+            assert_eq!(output, PARTIAL_8_BINARY[i]);
         }
     }
 
