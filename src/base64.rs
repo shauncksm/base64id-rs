@@ -152,6 +152,10 @@ fn decode_partial_16(input: [u8; 3]) -> Result<[u8; 2], Error> {
 
 #[rustfmt::skip]
 fn decode_partial_8(input: [u8; 2]) -> Result<u8, Error> {
+    if input[1] & 0b00001111 != 0 {
+        return Err(Error::OutOfBoundsCharacter);
+    }
+
     let d1 = (
         input[0] << 2
     ) | (
@@ -235,6 +239,17 @@ mod tests {
         0b100101, 0b100110, 0b100111, 0b101001, 0b101010, 0b101011, 0b101101, 0b101110, 0b101111,
         0b110001, 0b110010, 0b110011, 0b110101, 0b110110, 0b110111, 0b111001, 0b111010, 0b111011,
         0b111101, 0b111110, 0b111111,
+    ];
+
+    /// All base64 u8 values who's first four bits contain a 1
+    const PARTIAL_8_BASE64_OUTOFBOUNDS: [u8; 60] = [
+        0b000001, 0b000010, 0b000011, 0b000100, 0b000101, 0b000110, 0b000111, 0b001000, 0b001001,
+        0b001010, 0b001011, 0b001100, 0b001101, 0b001110, 0b001111, 0b010001, 0b010010, 0b010011,
+        0b010100, 0b010101, 0b010110, 0b010111, 0b011000, 0b011001, 0b011010, 0b011011, 0b011100,
+        0b011101, 0b011110, 0b011111, 0b100001, 0b100010, 0b100011, 0b100100, 0b100101, 0b100110,
+        0b100111, 0b101000, 0b101001, 0b101010, 0b101011, 0b101100, 0b101101, 0b101110, 0b101111,
+        0b110001, 0b110010, 0b110011, 0b110100, 0b110101, 0b110110, 0b110111, 0b111000, 0b111001,
+        0b111010, 0b111011, 0b111100, 0b111101, 0b111110, 0b111111,
     ];
 
     const PARTIAL_8_BINARY: [u8; 12] = [1, 83, 207, 157, 81, 166, 160, 236, 107, 123, 195, 96];
@@ -372,6 +387,31 @@ mod tests {
         for i in PARTIAL_16_BASE64_OUTOFBOUNDS {
             let output = base64::decode_partial_16([0, 0, i])
                 .expect_err("decode_partial_16 did not return an Err");
+
+            assert_eq!(output, Error::OutOfBoundsCharacter);
+        }
+    }
+
+    /// decode_partial_8() should return an Error::OutOfBoundsCharacter
+    /// when an out of bounds character is encountered
+    ///
+    /// Such characters include any character who's base64 index number, expressed as a u8, has any combination of it's first, second, third for forth bit set to 1.
+    ///
+    /// Such u8 values can be detected with the following test:
+    /// ```
+    /// // base64url character 'B'. Binary 0b00000001
+    /// // First bit is a 1. This is out of bounds.
+    /// let int = 1u8;
+    ///
+    /// if int & 0b00001111 != 0 {
+    ///     panic!("It's out of bounds!")
+    /// }
+    /// ```
+    #[test]
+    fn decode_partial_8_out_of_bounds_detection() {
+        for i in PARTIAL_8_BASE64_OUTOFBOUNDS {
+            let output = base64::decode_partial_8([0, i])
+                .expect_err("decode_partial_8 did not return an Err");
 
             assert_eq!(output, Error::OutOfBoundsCharacter);
         }
