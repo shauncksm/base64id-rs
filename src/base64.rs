@@ -248,7 +248,7 @@ mod tests {
     ];
 
     #[test]
-    fn encode_u64_validation() {
+    fn encode_i64_validation() {
         for i in 0..=11 {
             let output = base64::encode_i64(I64_INT[i]);
             assert_eq!(output, I64_BASE64[i]);
@@ -256,7 +256,7 @@ mod tests {
     }
 
     #[test]
-    fn decode_u64_validation() {
+    fn decode_i64_validation() {
         for i in 0..=11 {
             let output = base64::decode_i64(I64_BASE64[i]).expect("failed to decode input");
             assert_eq!(output, I64_INT[i]);
