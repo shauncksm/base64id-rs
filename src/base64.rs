@@ -71,6 +71,27 @@ pub fn decode_i64(input: [char; 11]) -> Result<i64, Error> {
 }
 
 #[rustfmt::skip]
+pub fn decode_i32(input: [char; 6]) -> Result<i32, Error> {
+    let mut c: [u8; 6] = [0; 6];
+
+    for i in 0..=5 {
+        let idx = ALPHABET_BASE64URL
+            .find(input[i])
+            .ok_or(Error::InvalidCharacter)?;
+        
+        c[i] = u8::try_from(idx).map_err(Error::InfallibleU8FromUsize)?;
+    }
+
+    let p1 = decode_quantum([c[0], c[1], c[2], c[3]]);
+    let p2 = decode_partial_8([c[4], c[5]])?;
+
+    Ok(i32::from_be_bytes([
+        p1[0], p1[1], p1[2],
+        p2,
+    ]))
+}
+
+#[rustfmt::skip]
 fn encode_quantum(input: [u8; 3]) -> [u8; 4] {
     let c1 = input[0] >> 2;
 
@@ -344,6 +365,14 @@ mod tests {
         for i in 0..=11 {
             let output = base64::decode_i64(I64_BASE64[i]).expect("failed to decode input");
             assert_eq!(output, I64_INT[i]);
+        }
+    }
+
+    #[test]
+    fn decode_i32_validation() {
+        for i in 0..=1 {
+            let output = base64::decode_i32(I32_BASE64[i]).expect("failed to decode input");
+            assert_eq!(output, I32_INT[i]);
         }
     }
 
