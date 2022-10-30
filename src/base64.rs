@@ -31,6 +31,23 @@ pub fn encode_i64(input: i64) -> [char; 11] {
 }
 
 #[rustfmt::skip]
+pub fn encode_i32(input: i32) -> [char; 6] {
+    let b = input.to_be_bytes();
+
+    let p1 = encode_quantum([b[0], b[1], b[2]]);
+    let p2 = encode_partial_8(b[3]);
+
+    let product = [
+        p1[0], p1[1], p1[2], p1[3],
+        p2[0], p2[1],
+    ];
+
+    let alphabet = ALPHABET_BASE64URL.as_bytes();
+
+    product.map(|d| char::from(alphabet[usize::from(d)]))
+}
+
+#[rustfmt::skip]
 pub fn decode_i64(input: [char; 11]) -> Result<i64, Error> {
     let mut c: [u8; 11] = [0; 11];
 
@@ -299,11 +316,26 @@ mod tests {
         ['V', 'S', 'U', 'L', 'q', 'n', 'G', 'd', '6', '1', '4'],
     ];
 
+    const I32_INT: [i32; 2] = [-1, 0];
+
+    const I32_BASE64: [[char; 6]; 2] = [
+        ['_', '_', '_', '_', '_', 'w'],
+        ['A', 'A', 'A', 'A', 'A', 'A'],
+    ];
+
     #[test]
     fn encode_i64_validation() {
         for i in 0..=11 {
             let output = base64::encode_i64(I64_INT[i]);
             assert_eq!(output, I64_BASE64[i]);
+        }
+    }
+
+    #[test]
+    fn encode_i32_validation() {
+        for i in 0..=1 {
+            let output = base64::encode_i32(I32_INT[i]);
+            assert_eq!(output, I32_BASE64[i]);
         }
     }
 
