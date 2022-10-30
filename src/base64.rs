@@ -93,6 +93,15 @@ fn encode_partial_16(input: [u8; 2]) -> [u8; 3] {
 }
 
 #[rustfmt::skip]
+fn encode_partial_8(input: u8) -> [u8; 2] {
+    let c1 = input >> 2;
+
+    let c2 = input << 4 & 0b00110000;
+
+    [c1, c2]
+}
+
+#[rustfmt::skip]
 fn decode_quantum(input: [u8; 4]) -> [u8; 3] {
     let d1 = (
         input[0] << 2
@@ -217,6 +226,23 @@ mod tests {
         0b111101, 0b111110, 0b111111,
     ];
 
+    const PARTIAL_8_BINARY: [u8; 12] = [1, 83, 207, 157, 81, 166, 160, 236, 107, 123, 195, 96];
+
+    const PARTIAL_8_BASE64: [[u8; 2]; 12] = [
+        [0b000000, 0b010000],
+        [0b010100, 0b110000],
+        [0b110011, 0b110000],
+        [0b100111, 0b010000],
+        [0b010100, 0b010000],
+        [0b101001, 0b100000],
+        [0b101000, 0b000000],
+        [0b111011, 0b000000],
+        [0b011010, 0b110000],
+        [0b011110, 0b110000],
+        [0b110000, 0b110000],
+        [0b011000, 0b000000],
+    ];
+
     const I64_INT: [i64; 12] = [
         i64::from_be_bytes(u64::MAX.to_be_bytes()),
         0,
@@ -276,6 +302,14 @@ mod tests {
         for i in 0..=11 {
             let output = base64::encode_partial_16(PARTIAL_16_BINARY[i]);
             assert_eq!(output, PARTIAL_16_BASE64[i]);
+        }
+    }
+
+    #[test]
+    fn encode_partial_8_validation() {
+        for i in 0..=11 {
+            let output = base64::encode_partial_8(PARTIAL_8_BINARY[i]);
+            assert_eq!(output, PARTIAL_8_BASE64[i]);
         }
     }
 
