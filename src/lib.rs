@@ -59,6 +59,7 @@ use core::{cmp::Ordering, fmt, str::FromStr};
 
 mod base64;
 mod error;
+mod tests;
 
 pub use error::Error;
 
@@ -216,91 +217,3 @@ impl Ord for Id64 {
 // ############################### //
 
 // To be done
-
-#[cfg(test)]
-mod tests {
-    use crate::Id64;
-    use core::str::FromStr;
-
-    #[test]
-    fn create_id64_from_u64() {
-        let number: u64 = 25519;
-        let id = Id64::from(number);
-        assert_eq!(number, u64::from(id));
-    }
-
-    #[test]
-    fn create_id64_from_i64() {
-        let number: i64 = -25519;
-        let id = Id64::from(number);
-        assert_eq!(number, i64::from(id));
-    }
-
-    #[test]
-    fn create_id64_from_u64_ref() {
-        let number: u64 = 25519;
-        let id = Id64::from(&number);
-        assert_eq!(number, u64::from(id));
-    }
-
-    #[test]
-    fn create_id64_from_i64_ref() {
-        let number: i64 = -25519;
-        let id = Id64::from(&number);
-        assert_eq!(number, i64::from(id));
-    }
-
-    #[test]
-    fn create_i64_from_id64() {
-        let id = Id64::new();
-        let number = i64::from(id);
-        assert_eq!(id, Id64::from(number));
-    }
-
-    #[test]
-    fn create_u64_from_id64() {
-        let id = Id64::new();
-        let number = u64::from(id);
-        assert_eq!(id, Id64::from(number));
-    }
-
-    #[test]
-    fn create_i64_from_id64_ref() {
-        let id = Id64::new();
-        let number = i64::from(&id);
-        assert_eq!(id, Id64::from(number));
-    }
-
-    #[test]
-    fn create_u64_from_id64_ref() {
-        let id = Id64::new();
-        let number = u64::from(&id);
-        assert_eq!(id, Id64::from(number));
-    }
-
-    #[test]
-    fn create_id64_from_str() {
-        let id = Id64::from_str("AAAAAAAAAAA").unwrap();
-        assert_eq!(Id64::from(0u64), id);
-    }
-
-    #[test]
-    fn id64_min_const() {
-        assert_eq!(u64::MIN.to_be_bytes(), u64::from(Id64::MIN).to_be_bytes());
-    }
-
-    #[test]
-    fn id64_max_const() {
-        assert_eq!(u64::MAX.to_be_bytes(), u64::from(Id64::MAX).to_be_bytes());
-    }
-
-    #[test]
-    fn id64_min_max_ord() {
-        assert!(Id64::MIN < Id64::MAX);
-    }
-
-    #[test]
-    fn id64_new() {
-        assert_eq!(Id64(0i64), Id64::new());
-    }
-}
