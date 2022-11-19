@@ -72,6 +72,103 @@ mod serde;
 #[cfg(feature = "sqlx")]
 use sqlx::{FromRow, Type};
 
+macro_rules! generate_core_trait_impls {
+    ($lib_type:ident, $lib_char_array:ty, $u_type:ident, $i_type:ident, $decode_fn:ident) => {
+        impl From<$lib_type> for $i_type {
+            fn from(id: $lib_type) -> Self {
+                id.0
+            }
+        }
+
+        impl From<$i_type> for $lib_type {
+            fn from(id: $i_type) -> Self {
+                Self(id)
+            }
+        }
+
+        impl From<$lib_type> for $u_type {
+            fn from(id: $lib_type) -> Self {
+                $u_type::from_be_bytes(id.0.to_be_bytes())
+            }
+        }
+
+        impl From<$u_type> for $lib_type {
+            fn from(id: $u_type) -> Self {
+                Self($i_type::from_be_bytes(id.to_be_bytes()))
+            }
+        }
+
+        impl From<&$u_type> for $lib_type {
+            fn from(id: &$u_type) -> Self {
+                Self::from(*id)
+            }
+        }
+
+        impl From<&$i_type> for $lib_type {
+            fn from(id: &$i_type) -> Self {
+                Self::from(*id)
+            }
+        }
+
+        impl From<&$lib_type> for $i_type {
+            fn from(id: &$lib_type) -> Self {
+                Self::from(*id)
+            }
+        }
+
+        impl From<&$lib_type> for $u_type {
+            fn from(id: &$lib_type) -> Self {
+                Self::from(*id)
+            }
+        }
+
+        impl TryFrom<$lib_char_array> for $lib_type {
+            type Error = Error;
+
+            fn try_from(input: $lib_char_array) -> Result<Self, Self::Error> {
+                Ok(Self(base64::$decode_fn(input)?))
+            }
+        }
+
+        impl FromStr for $lib_type {
+            type Err = Error;
+
+            fn from_str(id: &str) -> Result<Self, Self::Err> {
+                let mut array: $lib_char_array = ::core::default::Default::default();
+                let mut id_iter = id.chars();
+
+                for c in array.iter_mut() {
+                    *c = match id_iter.next() {
+                        Some(d) => d,
+                        None => return Err(Error::InvalidLength),
+                    };
+                }
+
+                if id_iter.next().is_some() {
+                    return Err(Error::InvalidLength);
+                }
+
+                $lib_type::try_from(array)
+            }
+        }
+
+        impl PartialOrd for $lib_type {
+            fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+                Some(self.cmp(other))
+            }
+        }
+
+        impl Ord for $lib_type {
+            fn cmp(&self, other: &Self) -> Ordering {
+                let this = $u_type::from(*self);
+                let other = $u_type::from(*other);
+
+                this.cmp(&other)
+            }
+        }
+    };
+}
+
 // ############################### //
 // ########----------------####### //
 // ######--- 64 Bit Value ---##### //
@@ -98,83 +195,7 @@ impl Id64 {
     }
 }
 
-impl From<Id64> for i64 {
-    fn from(id: Id64) -> Self {
-        id.0
-    }
-}
-
-impl From<i64> for Id64 {
-    fn from(id: i64) -> Self {
-        Self(id)
-    }
-}
-
-impl From<Id64> for u64 {
-    fn from(id: Id64) -> Self {
-        u64::from_be_bytes(id.0.to_be_bytes())
-    }
-}
-
-impl From<u64> for Id64 {
-    fn from(id: u64) -> Self {
-        Self(i64::from_be_bytes(id.to_be_bytes()))
-    }
-}
-
-impl From<&u64> for Id64 {
-    fn from(id: &u64) -> Self {
-        Self::from(*id)
-    }
-}
-
-impl From<&i64> for Id64 {
-    fn from(id: &i64) -> Self {
-        Self::from(*id)
-    }
-}
-
-impl From<&Id64> for i64 {
-    fn from(id: &Id64) -> Self {
-        Self::from(*id)
-    }
-}
-
-impl From<&Id64> for u64 {
-    fn from(id: &Id64) -> Self {
-        Self::from(*id)
-    }
-}
-
-impl TryFrom<[char; 11]> for Id64 {
-    type Error = Error;
-
-    fn try_from(input: [char; 11]) -> Result<Self, Self::Error> {
-        Ok(Self(base64::decode_i64(input)?))
-    }
-}
-
-impl FromStr for Id64 {
-    type Err = Error;
-
-    fn from_str(id: &str) -> Result<Self, Self::Err> {
-        let mut array = ['A'; 11];
-        let mut id_iter = id.chars();
-
-        for c in array.iter_mut() {
-            *c = match id_iter.next() {
-                Some(d) => d,
-                None => return Err(Error::InvalidLength),
-            };
-        }
-
-        if id_iter.next().is_some() {
-            return Err(Error::InvalidLength);
-        }
-
-        Id64::try_from(array)
-    }
-}
+generate_core_trait_impls!(Id64, [char; 11], u64, i64, decode_i64);
 
 impl fmt::Display for Id64 {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -184,21 +205,6 @@ impl fmt::Display for Id64 {
             "{}{}{}{}{}{}{}{}{}{}{}",
             c[0], c[1], c[2], c[3], c[4], c[5], c[6], c[7], c[8], c[9], c[10]
         )
-    }
-}
-
-impl PartialOrd for Id64 {
-    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
-        Some(self.cmp(other))
-    }
-}
-
-impl Ord for Id64 {
-    fn cmp(&self, other: &Self) -> Ordering {
-        let this = u64::from(*self);
-        let other = u64::from(*other);
-
-        this.cmp(&other)
     }
 }
 
