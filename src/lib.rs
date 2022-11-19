@@ -217,7 +217,27 @@ generate_core_trait_impls!(Id64, [char; 11], u64, i64, decode_i64, encode_i64);
 // ########----------------####### //
 // ############################### //
 
-// To be done
+/// 32 bit container with methods for base64url encoding
+#[derive(Debug, Default, Clone, Copy, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = "sqlx", derive(Type, FromRow), sqlx(transparent))]
+pub struct Id32(i32);
+
+impl Id32 {
+    /// Binary equivalent to `u32::MIN`; All bits set to `0`.
+    pub const MIN: Id32 = Id32(0);
+
+    /// Binary equivalent to `u32::MAX`; All bits set to `1`.
+    pub const MAX: Id32 = Id32(-1);
+
+    /// Create a new `Id32` with an inner value of `0i32`
+    ///
+    /// This is an alias of `Id32::default()`
+    pub fn new() -> Id32 {
+        Id32::default()
+    }
+}
+
+generate_core_trait_impls!(Id32, [char; 6], u32, i32, decode_i32, encode_i32);
 
 // ############################### //
 // ########----------------####### //

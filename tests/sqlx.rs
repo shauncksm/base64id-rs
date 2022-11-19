@@ -38,3 +38,5 @@ macro_rules! generate_sqlx_test_suite {
 }
 
 generate_sqlx_test_suite!(Id64, id64);
+
+generate_sqlx_test_suite!(Id32, id32);

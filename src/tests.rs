@@ -130,3 +130,18 @@ generate_core_test_suite!(
         "1OLRIV5oHtM",
     ]
 );
+
+generate_core_test_suite!(
+    Id32,
+    id32,
+    u32,
+    25519u32,
+    0u32,
+    i32,
+    -25519i32,
+    0i32,
+    [
+        "AAAAAA", "IRSE_Q", "iJ4aLA", "bq7-cw", "mKDzMQ", "Wc8RpA", "AzOR6g", "gyQ5eA", "RE2VlQ",
+        "RE2Vlw"
+    ]
+);
