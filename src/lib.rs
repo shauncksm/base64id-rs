@@ -55,7 +55,11 @@
 #[cfg(feature = "std")]
 extern crate std;
 
-use core::{cmp::Ordering, fmt, str::FromStr};
+use core::{
+    cmp::Ordering,
+    fmt::{self, Write},
+    str::FromStr,
+};
 
 mod base64;
 mod error;
@@ -199,12 +203,11 @@ generate_core_trait_impls!(Id64, [char; 11], u64, i64, decode_i64);
 
 impl fmt::Display for Id64 {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let c = base64::encode_i64(self.0);
-        write!(
-            f,
-            "{}{}{}{}{}{}{}{}{}{}{}",
-            c[0], c[1], c[2], c[3], c[4], c[5], c[6], c[7], c[8], c[9], c[10]
-        )
+        for c in base64::encode_i64(self.0) {
+            f.write_char(c)?;
+        }
+
+        Ok(())
     }
 }
 
