@@ -1,4 +1,4 @@
-macro_rules! type_test_suite {
+macro_rules! generate_core_test_suite {
     ($lib_type:ident, $lib_type_name:ident, $u_type:ident, $u_value:literal, $u_zero:literal, $i_type:ident, $i_value:literal, $i_zero:literal, $str_value:expr) => {
         #[cfg(test)]
         mod $lib_type_name {
@@ -108,7 +108,7 @@ macro_rules! type_test_suite {
     };
 }
 
-type_test_suite!(
+generate_core_test_suite!(
     Id64,
     id64,
     u64,
