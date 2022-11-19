@@ -1,5 +1,5 @@
 macro_rules! type_test_suite {
-    ($lib_type:ident, $lib_type_name:ident, $u_type:ident, $u_value:literal, $u_zero:literal, $i_type:ident, $i_value:literal, $i_zero:literal, $str_value:literal) => {
+    ($lib_type:ident, $lib_type_name:ident, $u_type:ident, $u_value:literal, $u_zero:literal, $i_type:ident, $i_value:literal, $i_zero:literal, $str_value:expr) => {
         #[cfg(test)]
         mod $lib_type_name {
             use crate::$lib_type;
@@ -63,7 +63,7 @@ macro_rules! type_test_suite {
 
             #[test]
             fn create_from_str() {
-                let id = $lib_type::from_str($str_value).unwrap();
+                let id = $lib_type::from_str($str_value[0]).unwrap();
                 assert_eq!($lib_type::from($u_zero), id);
             }
 
@@ -72,9 +72,11 @@ macro_rules! type_test_suite {
                 extern crate std;
                 use std::format;
 
-                let id_str = $str_value;
-                let id = $lib_type::from_str($str_value).unwrap();
-                assert_eq!(id_str, format!("{id}"));
+                let id_str_list = $str_value;
+                for id_str in id_str_list {
+                    let id = $lib_type::from_str(id_str).unwrap();
+                    assert_eq!(id_str, format!("{id}"));
+                }
             }
 
             #[test]
@@ -115,5 +117,16 @@ type_test_suite!(
     i64,
     -25519i64,
     0i64,
-    "AAAAAAAAAAA"
+    [
+        "AAAAAAAAAAA",
+        "Yc9P3-xdNvs",
+        "ekEG7AofcJg",
+        "xVGMdimcrMU",
+        "U3qb2eQPdYs",
+        "Z-WOv92w6CM",
+        "RRvfLRwc6LA",
+        "SITpCH_VLpI",
+        "2ZhAjsFPPlU",
+        "1OLRIV5oHtM",
+    ]
 );
