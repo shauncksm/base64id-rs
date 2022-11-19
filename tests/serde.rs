@@ -40,3 +40,5 @@ generate_serde_test_suite!(
     2063772195469131459,
     r#"{"id":"HKP94KBD_sM"}"#
 );
+
+generate_serde_test_suite!(Id32, id32, i32, -1470257948, r#"{"id":"qF2k5A"}"#);
