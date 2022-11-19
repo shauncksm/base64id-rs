@@ -6,56 +6,56 @@ macro_rules! generate_core_test_suite {
             use ::core::str::FromStr;
 
             #[test]
-            fn create_from_u64() {
+            fn create_from_unsigned() {
                 let number: $u_type = $u_value;
                 let id = $lib_type::from(number);
                 assert_eq!(number, $u_type::from(id));
             }
 
             #[test]
-            fn create_from_i64() {
+            fn create_from_signed() {
                 let number: $i_type = $i_value;
                 let id = $lib_type::from(number);
                 assert_eq!(number, $i_type::from(id));
             }
 
             #[test]
-            fn create_from_u64_ref() {
+            fn create_from_unsigned_ref() {
                 let number: $u_type = $u_value;
                 let id = $lib_type::from(&number);
                 assert_eq!(number, $u_type::from(id));
             }
 
             #[test]
-            fn create_from_i64_ref() {
+            fn create_from_signed_ref() {
                 let number: $i_type = $i_value;
                 let id = $lib_type::from(&number);
                 assert_eq!(number, $i_type::from(id));
             }
 
             #[test]
-            fn create_i64() {
+            fn create_signed() {
                 let id = $lib_type::new();
                 let number = $i_type::from(id);
                 assert_eq!(id, $lib_type::from(number));
             }
 
             #[test]
-            fn create_u64() {
+            fn create_unsigned() {
                 let id = $lib_type::new();
                 let number = $u_type::from(id);
                 assert_eq!(id, $lib_type::from(number));
             }
 
             #[test]
-            fn create_i64_from_ref() {
+            fn create_signed_from_ref() {
                 let id = $lib_type::new();
                 let number = $i_type::from(&id);
                 assert_eq!(id, $lib_type::from(number));
             }
 
             #[test]
-            fn create_u64_from_ref() {
+            fn create_unsigned_from_ref() {
                 let id = $lib_type::new();
                 let number = $u_type::from(&id);
                 assert_eq!(id, $lib_type::from(number));
@@ -80,7 +80,7 @@ macro_rules! generate_core_test_suite {
             }
 
             #[test]
-            fn id64_min_const() {
+            fn min_const() {
                 assert_eq!(
                     $u_type::MIN.to_be_bytes(),
                     $u_type::from($lib_type::MIN).to_be_bytes()
@@ -88,7 +88,7 @@ macro_rules! generate_core_test_suite {
             }
 
             #[test]
-            fn id64_max_const() {
+            fn max_const() {
                 assert_eq!(
                     $u_type::MAX.to_be_bytes(),
                     $u_type::from($lib_type::MAX).to_be_bytes()
@@ -96,12 +96,12 @@ macro_rules! generate_core_test_suite {
             }
 
             #[test]
-            fn id64_min_max_ord() {
+            fn min_max_ord() {
                 assert!($lib_type::MIN < $lib_type::MAX);
             }
 
             #[test]
-            fn id64_new() {
+            fn new() {
                 assert_eq!($lib_type($i_zero), $lib_type::new());
             }
         }
