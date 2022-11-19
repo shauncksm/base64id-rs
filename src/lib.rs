@@ -77,7 +77,7 @@ mod serde;
 use sqlx::{FromRow, Type};
 
 macro_rules! generate_core_trait_impls {
-    ($lib_type:ident, $lib_char_array:ty, $u_type:ident, $i_type:ident, $decode_fn:ident) => {
+    ($lib_type:ident, $lib_char_array:ty, $u_type:ident, $i_type:ident, $decode_fn:ident, $encode_fn:ident) => {
         impl From<$lib_type> for $i_type {
             fn from(id: $lib_type) -> Self {
                 id.0
@@ -156,6 +156,16 @@ macro_rules! generate_core_trait_impls {
             }
         }
 
+        impl fmt::Display for $lib_type {
+            fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+                for c in base64::$encode_fn(self.0) {
+                    f.write_char(c)?;
+                }
+
+                Ok(())
+            }
+        }
+
         impl PartialOrd for $lib_type {
             fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
                 Some(self.cmp(other))
@@ -199,17 +209,7 @@ impl Id64 {
     }
 }
 
-generate_core_trait_impls!(Id64, [char; 11], u64, i64, decode_i64);
-
-impl fmt::Display for Id64 {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        for c in base64::encode_i64(self.0) {
-            f.write_char(c)?;
-        }
-
-        Ok(())
-    }
-}
+generate_core_trait_impls!(Id64, [char; 11], u64, i64, decode_i64, encode_i64);
 
 // ############################### //
 // ########----------------####### //
