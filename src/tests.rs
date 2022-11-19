@@ -68,6 +68,16 @@ macro_rules! type_test_suite {
             }
 
             #[test]
+            fn display_impl() {
+                extern crate std;
+                use std::format;
+
+                let id_str = $str_value;
+                let id = $lib_type::from_str($str_value).unwrap();
+                assert_eq!(id_str, format!("{id}"));
+            }
+
+            #[test]
             fn id64_min_const() {
                 assert_eq!(
                     $u_type::MIN.to_be_bytes(),
