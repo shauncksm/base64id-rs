@@ -8,7 +8,7 @@ use std::env::args;
 
 use rand::random;
 
-use base64id::{Id32, Id64};
+use base64id::{Id16, Id32, Id64};
 
 fn main() {
     let default = String::from("64");
@@ -17,6 +17,18 @@ fn main() {
     let id_type = args.get(1).unwrap_or(&default);
 
     match id_type.as_str() {
+        "16" => {
+            println!("base64url   i16      u16");
+            println!("---------   ------   -----");
+
+            for _ in 0..10 {
+                let i16: i16 = random();
+                let id = Id16::from(i16);
+                let u16 = u16::from(id);
+
+                println!("{id}  {i16:>13}  {u16:>6}");
+            }
+        }
         "32" => {
             println!("base64url   i32           u32");
             println!("---------   -----------   ----------");
