@@ -19,10 +19,6 @@ I do **NOT** aim for this project to incorporate
   I believe focusing on fixed length values, provides advantages in areas of compatability with other environments and simplicity, both for the developer using this library and in the libraries implementation.
 
 ## Future Work
-- At this time only 64 bit integers are supported.
-
-- The primary goal for future work will be incorporating 32 and 16 bit value support.
-
 - I am happy to implement, or to receive pull requests that implement common Traits from the Rust core or standard libraries where it makes sense.
 
   If there's a choice between implementing on `core` or `std`, `core` should always be preferred, for maximum compatability.
