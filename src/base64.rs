@@ -48,6 +48,17 @@ pub fn encode_i32(input: i32) -> [char; 6] {
 }
 
 #[rustfmt::skip]
+pub fn encode_i16(input: i16) -> [char; 3] {
+    let b = input.to_be_bytes();
+
+    let product = encode_partial_16([b[0], b[1]]);
+
+    let alphabet = ALPHABET_BASE64URL.as_bytes();
+
+    product.map(|d| char::from(alphabet[usize::from(d)]))
+}
+
+#[rustfmt::skip]
 pub fn decode_i64(input: [char; 11]) -> Result<i64, Error> {
     let mut c: [u8; 11] = [0; 11];
 
@@ -367,6 +378,25 @@ mod tests {
         ['y', '7', 'a', 'r', '8', 'A'],
     ];
 
+    const I16_INT: [i16; 12] = [
+        -1, 0, 30008, -2225, -14855, -23609, 30937, -6812, -24065, 13170, -8520, -13636,
+    ];
+
+    const I16_BASE64: [[char; 3]; 12] = [
+        ['_', '_', '8'],
+        ['A', 'A', 'A'],
+        ['d', 'T', 'g'],
+        ['9', '0', '8'],
+        ['x', 'f', 'k'],
+        ['o', '8', 'c'],
+        ['e', 'N', 'k'],
+        ['5', 'W', 'Q'],
+        ['o', 'f', '8'],
+        ['M', '3', 'I'],
+        ['3', 'r', 'g'],
+        ['y', 'r', 'w'],
+    ];
+
     #[test]
     fn encode_i64_validation() {
         for i in 0..=11 {
@@ -380,6 +410,14 @@ mod tests {
         for i in 0..=11 {
             let output = base64::encode_i32(I32_INT[i]);
             assert_eq!(output, I32_BASE64[i]);
+        }
+    }
+
+    #[test]
+    fn encode_i16_validation() {
+        for i in 0..=11 {
+            let output = base64::encode_i16(I16_INT[i]);
+            assert_eq!(output, I16_BASE64[i]);
         }
     }
 
