@@ -337,11 +337,34 @@ mod tests {
         ['V', 'S', 'U', 'L', 'q', 'n', 'G', 'd', '6', '1', '4'],
     ];
 
-    const I32_INT: [i32; 2] = [-1, 0];
+    const I32_INT: [i32; 12] = [
+        -1,
+        0,
+        -1674465201,
+        1200409755,
+        -19087501,
+        489625798,
+        -2147100188,
+        -1806006017,
+        -818530506,
+        -864315129,
+        1069495787,
+        -877220880,
+    ];
 
-    const I32_BASE64: [[char; 6]; 2] = [
+    const I32_BASE64: [[char; 6]; 12] = [
         ['_', '_', '_', '_', '_', 'w'],
         ['A', 'A', 'A', 'A', 'A', 'A'],
+        ['n', 'D', 'G', 'w', 'T', 'w'],
+        ['R', '4', 'z', 'M', 'm', 'w'],
+        ['_', 't', 'y', '_', 'c', 'w'],
+        ['H', 'S', '8', 'Y', 'x', 'g'],
+        ['g', 'A', 'X', 'Z', '5', 'A'],
+        ['l', 'F', 'q', 'I', '_', 'w'],
+        ['z', 'z', 'Y', '3', 'N', 'g'],
+        ['z', 'H', 'u', 'Z', 'B', 'w'],
+        ['P', '7', '8', '1', '6', 'w'],
+        ['y', '7', 'a', 'r', '8', 'A'],
     ];
 
     #[test]
@@ -354,7 +377,7 @@ mod tests {
 
     #[test]
     fn encode_i32_validation() {
-        for i in 0..=1 {
+        for i in 0..=11 {
             let output = base64::encode_i32(I32_INT[i]);
             assert_eq!(output, I32_BASE64[i]);
         }
@@ -370,7 +393,7 @@ mod tests {
 
     #[test]
     fn decode_i32_validation() {
-        for i in 0..=1 {
+        for i in 0..=11 {
             let output = base64::decode_i32(I32_BASE64[i]).expect("failed to decode input");
             assert_eq!(output, I32_INT[i]);
         }
