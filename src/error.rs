@@ -76,4 +76,6 @@ mod tests {
     generate_error_test_suite!(Id64, id64, "A", "AAAAAAAAAA=");
 
     generate_error_test_suite!(Id32, id32, "A", "AAAAA=");
+
+    generate_error_test_suite!(Id16, id16, "A", "AA=");
 }

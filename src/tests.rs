@@ -145,3 +145,15 @@ generate_core_test_suite!(
         "RE2Vlw"
     ]
 );
+
+generate_core_test_suite!(
+    Id16,
+    id16,
+    u16,
+    25519u16,
+    0u16,
+    i16,
+    -25519i16,
+    0i16,
+    ["AAA", "_54", "2Mk", "B6U", "8l0", "qBw", "iEI", "_rY", "GXg", "IOA"]
+);

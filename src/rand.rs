@@ -1,4 +1,4 @@
-use crate::{Id32, Id64};
+use crate::{Id16, Id32, Id64};
 
 use rand::{
     distributions::{Distribution, Standard},
@@ -14,5 +14,11 @@ impl Distribution<Id64> for Standard {
 impl Distribution<Id32> for Standard {
     fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> Id32 {
         Id32(rng.gen())
+    }
+}
+
+impl Distribution<Id16> for Standard {
+    fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> Id16 {
+        Id16(rng.gen())
     }
 }

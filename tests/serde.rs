@@ -42,3 +42,5 @@ generate_serde_test_suite!(
 );
 
 generate_serde_test_suite!(Id32, id32, i32, -1470257948, r#"{"id":"qF2k5A"}"#);
+
+generate_serde_test_suite!(Id16, id16, i16, 19936, r#"{"id":"TeA"}"#);

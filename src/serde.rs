@@ -5,7 +5,7 @@ use serde::{
     Deserialize, Serialize,
 };
 
-use crate::{error::Error, Id32, Id64};
+use crate::{error::Error, Id16, Id32, Id64};
 
 macro_rules! generate_serde_trait_impls {
     ($lib_type:ident, $visitor_type:ident, $char_count:literal, $last_char_range:literal) => {
@@ -68,3 +68,4 @@ macro_rules! generate_serde_trait_impls {
 
 generate_serde_trait_impls!(Id64, Id64Visitor, 11, "AEIMQUYcgkosw048");
 generate_serde_trait_impls!(Id32, Id32Visitor, 6, "AQgw");
+generate_serde_trait_impls!(Id16, Id16Visitor, 3, "AEIMQUYcgkosw048");
