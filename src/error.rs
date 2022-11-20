@@ -47,22 +47,33 @@ impl fmt::Display for Error {
     }
 }
 
-#[cfg(test)]
 mod tests {
-    use crate::Id64;
-    use core::str::FromStr;
+    macro_rules! generate_error_test_suite {
+        ($lib_type:ident, $lib_type_name:ident, $bad_length:expr, $bad_char:expr) => {
+            #[cfg(test)]
+            mod $lib_type_name {
+                use crate::{
+                    $lib_type,
+                    Error::{InvalidCharacter, InvalidLength},
+                };
+                use core::str::FromStr;
 
-    #[test]
-    fn id64_with_bad_length() {
-        let id = Id64::from_str("A").unwrap_err();
-        assert_eq!(id, super::Error::InvalidLength);
+                #[test]
+                fn bad_length() {
+                    let id = $lib_type::from_str($bad_length).unwrap_err();
+                    assert_eq!(id, InvalidLength);
+                }
+
+                #[test]
+                fn invalid_character() {
+                    let id = $lib_type::from_str($bad_char).unwrap_err();
+                    debug_assert_eq!(id, InvalidCharacter);
+                }
+            }
+        };
     }
 
-    #[test]
-    fn id64_with_invalid_character() {
-        let id = Id64::from_str("AAAAAAAAAA=").unwrap_err();
-        debug_assert_eq!(id, super::Error::InvalidCharacter);
-    }
+    generate_error_test_suite!(Id64, id64, "A", "AAAAAAAAAA=");
 
-    // Refer to crate::base64::tests::decode_partial_16_out_of_bounds_detection for OutOfBoundsCharacter variant test
+    generate_error_test_suite!(Id32, id32, "A", "AAAAA=");
 }
