@@ -4,7 +4,7 @@
 ![Rust Validation](https://github.com/shauncksm/base64id-rs/actions/workflows/rust-validate.yml/badge.svg)
 ![license](https://img.shields.io/crates/l/base64id)
 
-A pure rust library for representing 64 bit integers as [base64url](https://datatracker.ietf.org/doc/html/rfc4648#section-5) encoded strings.
+A pure rust library for representing 64, 32 and 16 bit integers as [base64url](https://datatracker.ietf.org/doc/html/rfc4648#section-5) encoded strings.
 ```txt
 base64url    i64                   u64
 -----------  --------------------  --------------------
@@ -14,23 +14,23 @@ kjsG-f3NhxI  -7909720649771415790  10537023423938135826
 jHamKFSl5oM  -8325284168998721917  10121459904710829699
 ```
 
-A 64 bit integer (8 bytes) is efficiently stored and manipulated in memory.
-When the value needs to be sent to a web client over HTTP, the value is base64url encoded and sent as exactly 11 base64url characters (11 bytes).
+An integer is efficiently stored and manipulated in memory.
+However the integer cannot be sent to/from a web client in a url safe manor, without some encoding scheme. This library allows you to encode the integer to/from an base64url character string.
 
 For a video of the underlying concept in action, see [here](https://www.youtube.com/watch?v=gocwRvLhDf8).
 
-### Benefits
-- 64 bit integers are sent in a url safe manor
-- Reduces the number of bytes needed to send the integer as compared to decimal, which would require up to 20 bytes.
-- Allows users to easily copy/paste the integer as a string
+## Benefits
+- Integers are made url safe
+- Encoded integers use fewer bytes as compared to hex or decimal encoding
+- Tests for [RFC 4648](https://www.rfc-editor.org/rfc/rfc4648) compliance where implemented from the start and across the entire libary
+- base64id is `#![no_std]` by default with no heap allocation required
+- base64id uses `#![forbid(unsafe_code)]`
 
 ## Motivation
 I've used this concept a number of times in personal and work projects as I find it very useful.
 The problem is I've had to reimplement the functionality everytime.
 
-The motivation for this library was to design and implement the core concept once, while paying attention to metrics such as performance, correctness, and compatability. To that end:
-- the library is `no_std` by default; with no heap allocation required, all execution is done on the stack
-- all base64 bit manipulation code is unit tested with fixed random values for compliance with [RFC 4648](https://www.rfc-editor.org/rfc/rfc4648)
+The motivation for this library was to design and implement the core concept once, while paying attention to metrics such as performance, correctness and compatability.
 
 ## Installation
 Add the following to your `Cargo.toml` file
@@ -42,38 +42,41 @@ base64id = { version = "0.3", features = ["std"] }
 For `#![no_std]` environments the `std` cargo feature can be omitted.
 
 ## Usage
-All work is done using the `Id64` struct.
+All work is done using the `Id64`, `Id32` and `Id16` structs.
+
+The examples below use the `Id64` struct, though any `Id__` struct can be used equivalently.
 
 ### Encoding
-You can convert an `i64` or `u64` into a `Id64` as follows
+You can convert an `i64` or `u64` into an `Id64` as follows
 ```rust
 use base64id::Id64;
 
 fn main() {
-    let id_i64 = Id64::from(1i64);
-    let id_u64 = Id64::from(1u64);
+    let int: i64 = 1;
+    let id = Id64::from(int);
 
-    println!("{id_i64} {id_u64}"); // AAAAAAAAAAE AAAAAAAAAAE
+    println!("{id}"); // AAAAAAAAAAE
 }
 ```
 
 ### Decoding
-You can also use `FromStr` to convert strings into an `Id64`
+You can use `FromStr` and `From<i64>` to convert a `String` into an `Id64` and then into an `i64` as follows
 ```rust
 use base64id::{Error, Id64};
 use std::str::FromStr;
 
 fn main() -> Result<(), Error> {
     let id_str = Id64::from_str("PDFehCFVGqA")?;
+    let id_int = i64::from(id_str);
 
-    println!("{}", i64::from(id_str)); // 4337351837722417824
+    println!("{}", id_int); // 4337351837722417824
 
     Ok(())
 }
 ```
 
 ## Third Party Crates
-Support for [Serde](https://serde.rs/), [Rand](https://github.com/rust-random/rand) and [SQLx](https://github.com/launchbadge/sqlx) may be enabled through the use of optional cargo feature flags.
+Support for [Serde](https://serde.rs/), [Rand](https://github.com/rust-random/rand) and [SQLx](https://github.com/launchbadge/sqlx) can be enabled through the use of optional cargo feature flags.
 
 ### Rand
 You can use the `rand` feature flag for working with the `rand` crate.

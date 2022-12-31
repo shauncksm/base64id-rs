@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Id32` struct for 32 bit value support
 - `Id16` struct for 16 bit value support
 
+### Changes
+- Updated explanatory text and code examples in README.md
+
 ### Fixed
 - Inaccurate version number in README.md
 
