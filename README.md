@@ -1,4 +1,9 @@
 # base64id-rs
+![crates.io](https://img.shields.io/crates/v/base64id.svg)
+![docs.rs](https://img.shields.io/docsrs/base64id)
+![Rust Validation](https://github.com/shauncksm/base64id-rs/actions/workflows/rust-validate.yml/badge.svg)
+![license](https://img.shields.io/crates/l/base64id)
+
 A pure rust library for representing 64 bit integers as [base64url](https://datatracker.ietf.org/doc/html/rfc4648#section-5) encoded strings.
 ```txt
 base64url    i64                   u64
