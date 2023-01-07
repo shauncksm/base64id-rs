@@ -10,6 +10,7 @@
 use crate::Error;
 
 const ALPHABET_BASE64URL: &str = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
+const ALPHABET_BASE64URL_BYTES: &[u8] = ALPHABET_BASE64URL.as_bytes();
 
 #[rustfmt::skip]
 pub fn encode_i64(input: i64) -> [char; 11] {
@@ -25,9 +26,7 @@ pub fn encode_i64(input: i64) -> [char; 11] {
         p3[0], p3[1], p3[2],
     ];
 
-    let alphabet = ALPHABET_BASE64URL.as_bytes();
-
-    product.map(|d| char::from(alphabet[usize::from(d)]))
+    product.map(|d| char::from(ALPHABET_BASE64URL_BYTES[usize::from(d)]))
 }
 
 #[rustfmt::skip]
@@ -42,9 +41,7 @@ pub fn encode_i32(input: i32) -> [char; 6] {
         p2[0], p2[1],
     ];
 
-    let alphabet = ALPHABET_BASE64URL.as_bytes();
-
-    product.map(|d| char::from(alphabet[usize::from(d)]))
+    product.map(|d| char::from(ALPHABET_BASE64URL_BYTES[usize::from(d)]))
 }
 
 #[rustfmt::skip]
@@ -53,9 +50,7 @@ pub fn encode_i16(input: i16) -> [char; 3] {
 
     let product = encode_partial_16([b[0], b[1]]);
 
-    let alphabet = ALPHABET_BASE64URL.as_bytes();
-
-    product.map(|d| char::from(alphabet[usize::from(d)]))
+    product.map(|d| char::from(ALPHABET_BASE64URL_BYTES[usize::from(d)]))
 }
 
 #[rustfmt::skip]
