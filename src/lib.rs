@@ -1,4 +1,4 @@
-//! This crate allows for fixed length 64 bit integers to be represented as [base64url](https://datatracker.ietf.org/doc/html/rfc4648#section-5) encoded strings.
+//! This crate allows for fixed length 64, 32 and 16 bit integers to be represented as [base64url](https://datatracker.ietf.org/doc/html/rfc4648#section-5) encoded strings.
 //! This is useful for exchanging unique identifiers in a web based contexts; eg. sending an SQL primary key to a client with as few character as possible.
 //!
 //! This crate is `#![no_std]` by default.
@@ -27,7 +27,7 @@
 //! ```
 //!
 //! #### Decoding
-//! You can decode a string into an `Id64` using it's `TryFrom` impl.
+//! You can decode a string into an `Id64` using it's `FromStr` impl.
 //! ```
 //! use std::str::FromStr;
 //! use base64id::{Error, Id64};
@@ -42,9 +42,9 @@
 //! Refer to the [Error] enum regarding decode errors.
 //!
 //! ## Random Values for Development
-//! From the command line you can quickly generate your own random `Id64` values, along with their corosponding `i64` and `u64` integers.
+//! From the command line you can quickly generate your own random values, along with their corosponding signed and unsigned integers.
 //! ```sh
-//! cargo run --example random_sample
+//! cargo run --example random_sample ([64|32|16])
 //! ```
 //! ***Warning!** The output of this command is not guarentted to be stable, and may change at anytime.*
 

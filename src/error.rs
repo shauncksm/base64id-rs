@@ -1,20 +1,37 @@
 use core::{fmt, num::TryFromIntError};
 
-/// Error type for base64url decoding
+/// Error enum for base64url decoding
 #[derive(Debug, PartialEq, Eq)]
 #[non_exhaustive]
 pub enum Error {
     /// returned when input data contains an invalid number of characters
+    ///
+    /// ## Expected Lengths
+    /// - `Id64` 11 characters
+    /// - `Id32` 6 characters
+    /// - `Id16` 3 characters
     InvalidLength,
     /// returned when input data conatins a character that is not within the base64url alphabet
     InvalidCharacter,
-    /// returned when the last character of a string is out of bounds
+    /// returned when the last character of input data is out of bounds
     ///
-    /// The 11th character of an `Id64` string must not have a base64 index number who's first and/or second bit is set to 1.
-    ///
-    /// The following base64url characters satisfy this criteria:
+    /// For `Id64` and `Id16` values, the last character must be one of the following:
     /// ```txt
     /// AEIMQUYcgkosw048
+    /// ```
+    ///
+    /// For `Id32` values, the last character must be one of the following:
+    /// ```txt
+    /// AQgw
+    /// ```
+    ///
+    /// ## Example
+    /// ```rust
+    /// # use std::str::FromStr;
+    /// # use base64id::{Error, Id64, Id32, Id16};
+    /// assert_eq!(Id64::from_str("AAAAAAAAAAB"), Err(Error::OutOfBoundsCharacter));
+    /// assert_eq!(Id32::from_str("AAAAAB"), Err(Error::OutOfBoundsCharacter));
+    /// assert_eq!(Id16::from_str("AAB"), Err(Error::OutOfBoundsCharacter));
     /// ```
     OutOfBoundsCharacter,
     /// returned when a `TryFromIntError` is encountered during base64url decoding
