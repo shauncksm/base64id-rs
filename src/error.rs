@@ -1,4 +1,4 @@
-use core::{fmt, num::TryFromIntError};
+use core::fmt;
 
 /// Error enum for base64url decoding
 #[derive(Debug, PartialEq, Eq)]
@@ -34,10 +34,6 @@ pub enum Error {
     /// assert_eq!(Id16::from_str("AAB"), Err(Error::OutOfBoundsCharacter));
     /// ```
     OutOfBoundsCharacter,
-    /// returned when a `TryFromIntError` is encountered during base64url decoding
-    ///
-    /// This error should never occur, as a `usize` between 0 to 63 can always convert to a `u8`.
-    InfallibleU8FromUsize(TryFromIntError),
 }
 
 #[cfg(feature = "std")]
@@ -56,10 +52,6 @@ impl fmt::Display for Error {
             OutOfBoundsCharacter => {
                 write!(f, "invalid character. last character was out of bounds")
             }
-            InfallibleU8FromUsize(_) => write!(
-                f,
-                "infallible. failed to convert usize between 0 - 63 to u8"
-            ),
         }
     }
 }

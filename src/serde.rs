@@ -59,7 +59,6 @@ macro_rules! generate_serde_trait_impls {
                         Unexpected::Other("the last character was out of bounds"),
                         &EXP2,
                     ),
-                    Error::InfallibleU8FromUsize(_) => E::custom(e),
                 })
             }
         }
