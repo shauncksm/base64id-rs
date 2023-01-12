@@ -40,6 +40,50 @@
 //!
 //! Refer to the [Error] enum regarding decode errors.
 //!
+//! ## Serde
+//!
+//! You can use the `serde` feature flag to derive `Serialize` and `Deserialize` on `Id64`, `Id32` and `Id16`.
+//!
+//! #### Examples
+//!
+//! Deserializing a json string into an `Id32`
+//! ```
+//! # #[cfg(feature = "serde")]
+//! # {
+//! # use serde_json::Error;
+//! # use base64id::Id32;
+//! # fn main() -> Result<(), Error> {
+//! let id: Id32 = serde_json::from_str(r#""CyRWFA""#)?;
+//! assert_eq!(id, Id32::from(186930708));
+//! #   Ok(())
+//! # }
+//! # }
+//! ```
+//!
+//! Serializing a struct containing an `Id64`
+//! ```
+//! # #[cfg(feature = "serde")]
+//! # {
+//! # use serde::Serialize;
+//! # use serde_json::Error;
+//! # use base64id::Id64;
+//! # fn main() -> Result<(), Error> {
+//! #[derive(Serialize)]
+//! struct Record {
+//!     pub id: Id64,
+//! }
+//!
+//! let record = Record { id: Id64::from(5869384017340884593i64) };
+//!
+//! assert_eq!(
+//!     serde_json::to_string(&record)?,
+//!     r#"{"id":"UXQ9qpv1ZnE"}"#
+//! );
+//! # Ok(())
+//! # }
+//! # }
+//! ```
+//!
 //! ## Random Values for Development
 //! From the command line you can quickly generate your own random values, along with their corosponding signed and unsigned integers.
 //! ```sh
