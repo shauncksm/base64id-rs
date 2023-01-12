@@ -14,13 +14,12 @@
 //! #### Encoding
 //! You can use the `rand` feature flag to generate a random ID like so.
 //! ```
-//! use rand::random;
 //! use base64id::Id64;
 //!
 //! fn main() {
 //! # #[cfg(feature = "rand")]
 //! # {
-//!     let id: Id64 = random();
+//!     let id: Id64 = rand::random();
 //!     println!("{id}"); // 3Zohppb9XMw
 //! # }
 //! }
