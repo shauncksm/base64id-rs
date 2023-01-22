@@ -1,6 +1,8 @@
 use core::fmt;
 
 /// Error enum for base64url decoding
+///
+/// This enum will only implement the `std::error::Error` trait when the `std` feature flag is enabled. This is not enabled by default.
 #[derive(Debug, PartialEq, Eq)]
 #[non_exhaustive]
 pub enum Error {

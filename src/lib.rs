@@ -84,6 +84,13 @@
 //! # }
 //! ```
 //!
+//! ## SQLx
+//!
+//! You can use the `sqlx` feature flag to derive `Type` and `FromRow` on `Id64`, `Id32` and `Id16`.\
+//! This will allow you to add, update or query values from any SQLx supported database without manual type conversion.
+//!
+//! Values are converted to and from SQL data types based on their `i64`, `i32` and `i16` representations.
+//!
 //! ## Random Values for Development
 //! From the command line you can quickly generate your own random values, along with their corosponding signed and unsigned integers.
 //! ```sh
