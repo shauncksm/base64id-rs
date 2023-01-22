@@ -19,6 +19,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Inaccurate version number in README.md
 
+### Security
+- Updated bumpalo dependency to 3.12.0 after [use after free](https://github.com/shauncksm/base64id-rs/security/dependabot/1) bug was detected
+
 ## [v0.2.0]
 ### Added
 - Added reference based impls of the `From` trait for `&Id64`, `&u64` and `&i64`.
