@@ -1,8 +1,8 @@
 # base64id-rs
-![crates.io](https://img.shields.io/crates/v/base64id.svg)
-![docs.rs](https://img.shields.io/docsrs/base64id)
-![Rust Validation](https://github.com/shauncksm/base64id-rs/actions/workflows/rust-validate.yml/badge.svg)
-![license](https://img.shields.io/crates/l/base64id)
+[![crates.io](https://img.shields.io/crates/v/base64id.svg)](https://crates.io/crates/base64id)
+[![docs.rs](https://img.shields.io/docsrs/base64id)](https://docs.rs/base64id/latest/base64id)
+[![Rust Validation](https://github.com/shauncksm/base64id-rs/actions/workflows/rust-validate.yml/badge.svg)](https://github.com/shauncksm/base64id-rs/actions/workflows/rust-validate.yml)
+<picture><img alt="license" src="https://img.shields.io/crates/l/base64id"></picture>
 
 A pure rust library for representing 64, 32 and 16 bit integers as [base64url](https://datatracker.ietf.org/doc/html/rfc4648#section-5) encoded strings.
 ```txt
