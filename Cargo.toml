@@ -1,7 +1,7 @@
 [package]
 name = "base64id"
 authors = ["Shaun Priestley <shaun@cksm.cc>"]
-version = "0.3.0"
+version = "0.3.1"
 edition = "2021"
 description = "Efficiently represent 64, 32 and 16 bit integers as base64url strings"
 repository = "https://github.com/shauncksm/base64id-rs"
