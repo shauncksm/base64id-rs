@@ -176,11 +176,20 @@ name = "base64id"
 version = "0.3.1"
 dependencies = [
  "async-std",
+ "base64id-derive",
  "criterion",
  "rand",
  "serde",
  "serde_json",
  "sqlx",
+]
+
+[[package]]
+name = "base64id-derive"
+version = "0.3.1"
+dependencies = [
+ "quote",
+ "syn 1.0.109",
 ]
 
 [[package]]

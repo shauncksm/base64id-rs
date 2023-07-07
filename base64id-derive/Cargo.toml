@@ -1,0 +1,18 @@
+[package]
+name = "base64id-derive"
+readme = "README.md"
+description = "Derive macro for base64id. Not intended for use directly."
+authors.workspace = true
+edition.workspace = true
+categories.workspace = true
+repository.workspace = true
+keywords.workspace = true
+license.workspace = true
+version.workspace = true
+
+[lib]
+proc-macro = true
+
+[dependencies]
+syn = "1.0"
+quote = "1.0"

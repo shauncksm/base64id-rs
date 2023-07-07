@@ -1,16 +1,32 @@
-[package]
-name = "base64id"
-authors = ["Shaun Priestley <shaun@cksm.cc>"]
+[workspace]
+members = [
+    ".",
+    "base64id-derive",
+]
+
+[workspace.package]
 version = "0.3.1"
 edition = "2021"
-description = "Efficiently represent 64, 32 and 16 bit integers as base64url strings"
+authors = ["Shaun Priestley <shaun@cksm.cc>"]
+license = "MIT OR Apache-2.0"
 repository = "https://github.com/shauncksm/base64id-rs"
-readme = "README.md"
 categories = ["data-structures", "encoding", "web-programming", "no-std", "value-formatting"]
 keywords = ["base64", "base64url"]
-license = "MIT OR Apache-2.0"
+
+[package]
+name = "base64id"
+readme = "README.md"
+description = "Efficiently represent 64, 32 and 16 bit integers as base64url strings"
+authors.workspace = true
+edition.workspace = true
+categories.workspace = true
+repository.workspace = true
+keywords.workspace = true
+license.workspace = true
+version.workspace = true
 
 [features]
+derive = ["dep:base64id-derive"]
 rand = ["dep:rand"]
 serde = ["dep:serde"]
 sqlx = ["dep:sqlx", "std"]
@@ -26,6 +42,7 @@ _sqlx_hack = ["sqlx?/runtime-async-std-rustls"]
 rand = { version = "0.8.5", optional = true, default-features = false}
 serde = { version = "1.0.145", optional = true, default-features = false }
 sqlx = { version = "0.6.2", optional = true, default-features = false, features = [ "macros" ] }
+base64id-derive = { version = "0.3.1", optional = true, path = "base64id-derive" }
 
 [dev-dependencies]
 criterion = { version = "0.3.6", features = [ "html_reports" ] }

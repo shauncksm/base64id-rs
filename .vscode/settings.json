@@ -4,6 +4,7 @@
         "editor.formatOnSave": true
     },
     "rust-analyzer.cargo.features": [
+        "derive",
         "rand",
         "serde",
         "sqlx",
