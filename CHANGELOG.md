@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Changes
+- (Breaking) Updated sqlx crate from 0.6.2 to 0.7.1. Users of the sqlx feature flag must upgrade to sqlx 0.7.1 or later
+
 ## [v0.3.1]
 ### Security
 - Updated all cargo dependencies, to update spin 0.9.4 to 0.9.8 https://github.com/shauncksm/base64id-rs/security/dependabot/3

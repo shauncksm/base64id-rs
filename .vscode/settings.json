@@ -7,7 +7,6 @@
         "rand",
         "serde",
         "sqlx",
-        "std",
-        "_sqlx_hack"
+        "std"
     ]
 }
