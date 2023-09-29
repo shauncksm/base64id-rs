@@ -126,6 +126,9 @@ mod serde;
 #[cfg(feature = "sqlx")]
 use sqlx::{FromRow, Type};
 
+#[cfg(feature = "derive")]
+pub use base64id_derive::Base64Id;
+
 macro_rules! generate_core_trait_impls {
     ($lib_type:ident, $lib_char_array:ty, $u_type:ident, $i_type:ident, $decode_fn:ident, $encode_fn:ident) => {
         impl From<$lib_type> for $i_type {
