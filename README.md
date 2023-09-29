@@ -1,5 +1,7 @@
 # base64id-rs
 [![crates.io](https://img.shields.io/crates/v/base64id.svg)](https://crates.io/crates/base64id)
+[![official website](https://img.shields.io/badge/official-website-166534
+)](https://base64id.cksm.cc/)
 [![docs.rs](https://img.shields.io/docsrs/base64id)](https://docs.rs/base64id/latest/base64id)
 [![Rust Validation](https://github.com/shauncksm/base64id-rs/actions/workflows/rust-validate.yml/badge.svg)](https://github.com/shauncksm/base64id-rs/actions/workflows/rust-validate.yml)
 <picture><img alt="license" src="https://img.shields.io/crates/l/base64id"></picture>
@@ -25,6 +27,11 @@ For a video of the underlying concept in action, see [here](https://www.youtube.
 - Tests for [RFC 4648](https://www.rfc-editor.org/rfc/rfc4648) compliance where implemented from the start and across the entire libary
 - base64id is `#![no_std]` by default with no heap allocation required
 - base64id uses `#![forbid(unsafe_code)]`
+
+## Website
+You can use [base64id.cksm.cc](https://base64id.cksm.cc) to test, debug and generate random base64id strings instantly.
+
+All conversions are run locally in the browser using JavaScript and Web Assembly, with no server backend needed. You can view the GitHub repo for this website [here](https://github.com/shauncksm/base64id-rs-website).
 
 ## Motivation
 I've used this concept a number of times in personal and work projects as I find it very useful.
