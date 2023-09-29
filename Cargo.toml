@@ -61,7 +61,7 @@ required-features = ["sqlx"]
 
 [[test]]
 name = "derive"
-requried-features = ["derive"]
+required-features = ["derive"]
 
 [[bench]]
 name = "id64"
