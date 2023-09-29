@@ -10,6 +10,7 @@ edition = "2021"
 authors = ["Shaun Priestley <shaun@cksm.cc>"]
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/shauncksm/base64id-rs"
+homepage = "https://base64id.cksm.cc"
 categories = ["data-structures", "encoding", "web-programming", "no-std", "value-formatting"]
 keywords = ["base64", "base64url"]
 
@@ -57,6 +58,10 @@ required-features = ["serde"]
 [[test]]
 name = "sqlx"
 required-features = ["sqlx"]
+
+[[test]]
+name = "derive"
+requried-features = ["derive"]
 
 [[bench]]
 name = "id64"
