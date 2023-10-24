@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Changes
 - (Breaking) Updated sqlx crate from 0.6.2 to 0.7.1. Users of the sqlx feature flag must upgrade to sqlx 0.7.1 or later
+- Removed Cargo.lock from version control
 
 ## [v0.3.1]
 ### Security
