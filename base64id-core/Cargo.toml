@@ -41,10 +41,6 @@ required-features = ["serde"]
 name = "sqlx"
 required-features = ["sqlx"]
 
-[[test]]
-name = "derive"
-required-features = ["derive"]
-
 [[bench]]
 name = "id64"
 harness = false
