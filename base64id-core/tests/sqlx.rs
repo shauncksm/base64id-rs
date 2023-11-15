@@ -5,7 +5,7 @@ macro_rules! generate_sqlx_test_suite {
             use async_std::task;
             use sqlx::{sqlite::SqliteConnection, Connection, Sqlite};
 
-            use base64id::$lib_type;
+            use base64id_core::$lib_type;
 
             #[test]
             fn sqlx_type() {

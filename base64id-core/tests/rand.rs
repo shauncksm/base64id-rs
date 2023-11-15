@@ -1,4 +1,4 @@
-use base64id::{Id16, Id32, Id64};
+use base64id_core::{Id16, Id32, Id64};
 
 use rand::random;
 

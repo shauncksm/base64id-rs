@@ -2,7 +2,7 @@ macro_rules! generate_serde_test_suite {
     ($lib_type:ident, $lib_type_name:ident, $i_type:ident, $test_int:literal, $test_str:literal) => {
         #[cfg(feature = "serde")]
         mod $lib_type_name {
-            use base64id::$lib_type;
+            use base64id_core::$lib_type;
             use serde::{Deserialize, Serialize};
 
             const INT: $i_type = $test_int;

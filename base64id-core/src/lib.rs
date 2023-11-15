@@ -14,7 +14,7 @@
 //! #### Encoding
 //! You can use the `rand` feature flag to generate a random ID like so.
 //! ```
-//! use base64id::Id64;
+//! use base64id_core::Id64;
 //!
 //! fn main() {
 //! # #[cfg(feature = "rand")]
@@ -29,7 +29,7 @@
 //! You can decode a string into an `Id64` using it's `FromStr` impl.
 //! ```
 //! use std::str::FromStr;
-//! use base64id::{Error, Id64};
+//! use base64id_core::{Error, Id64};
 //!
 //! fn main() -> Result<(), Error> {
 //!     let id = Id64::from_str("AAAAAAAAAAE")?;
@@ -51,7 +51,7 @@
 //! # #[cfg(feature = "serde")]
 //! # {
 //! # use serde_json::Error;
-//! # use base64id::Id32;
+//! # use base64id_core::Id32;
 //! # fn main() -> Result<(), Error> {
 //! let id: Id32 = serde_json::from_str(r#""CyRWFA""#)?;
 //! assert_eq!(id, Id32::from(186930708));
@@ -66,7 +66,7 @@
 //! # {
 //! # use serde::Serialize;
 //! # use serde_json::Error;
-//! # use base64id::Id64;
+//! # use base64id_core::Id64;
 //! # fn main() -> Result<(), Error> {
 //! #[derive(Serialize)]
 //! struct Record {

@@ -1,4 +1,4 @@
-use base64id::Base64Id;
+use base64id_core::Base64Id;
 
 #[derive(Base64Id)]
 struct MyId64(i64);
