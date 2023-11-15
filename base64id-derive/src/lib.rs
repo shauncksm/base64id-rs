@@ -14,7 +14,13 @@ pub fn tuple_struct_into_base64id(input: TokenStream) -> TokenStream {
             quote::quote! {
                 impl ::core::fmt::Display for #ident {
                     fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-                        ::core::write!(f, "AAAAAAAAAAA")
+                        use ::core::fmt::Write;
+
+                        for c in ::base64id_core::base64::encode_i64(self.0) {
+                            f.write_char(c)?;
+                        }
+
+                        Ok(())
                     }
                 }
             }
@@ -23,7 +29,13 @@ pub fn tuple_struct_into_base64id(input: TokenStream) -> TokenStream {
             quote::quote! {
                 impl ::core::fmt::Display for #ident {
                     fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-                        ::core::write!(f, "AAAAAA")
+                        use ::core::fmt::Write;
+
+                        for c in ::base64id_core::base64::encode_i32(self.0) {
+                            f.write_char(c)?;
+                        }
+
+                        Ok(())
                     }
                 }
             }
@@ -32,7 +44,13 @@ pub fn tuple_struct_into_base64id(input: TokenStream) -> TokenStream {
             quote::quote! {
                 impl ::core::fmt::Display for #ident {
                     fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-                        ::core::write!(f, "AAA")
+                        use ::core::fmt::Write;
+
+                        for c in ::base64id_core::base64::encode_i16(self.0) {
+                            f.write_char(c)?;
+                        }
+
+                        Ok(())
                     }
                 }
             }

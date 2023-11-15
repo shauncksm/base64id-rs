@@ -111,7 +111,8 @@ use core::{
     str::FromStr,
 };
 
-mod base64;
+#[allow(missing_docs)]
+pub mod base64;
 mod error;
 mod tests;
 

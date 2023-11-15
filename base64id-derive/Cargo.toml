@@ -16,6 +16,7 @@ proc-macro = true
 [dependencies]
 syn = "1.0"
 quote = "1.0"
+base64id-core = { workspace = true }
 
 [[test]]
 name = "derive"
