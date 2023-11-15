@@ -14,6 +14,10 @@ homepage = "https://base64id.cksm.cc"
 categories = ["data-structures", "encoding", "web-programming", "no-std", "value-formatting"]
 keywords = ["base64", "base64url"]
 
+[workspace.dependencies]
+base64id-core = { version = "=0.3.1", path = "base64id-core" }
+base64id-derive = { version = "=0.3.1", path = "base64id-derive" }
+
 [package]
 name = "base64id"
 readme = "README.md"
@@ -27,17 +31,21 @@ license.workspace = true
 version.workspace = true
 
 [features]
-derive = ["dep:base64id-derive"]
-rand = ["dep:rand"]
-serde = ["dep:serde"]
-sqlx = ["dep:sqlx", "std"]
-std = []
+rand = ["base64id-core/rand"]
+serde = ["base64id-core/serde"]
+sqlx = ["base64id-core/sqlx", "std"]
+std = ["base64id-core/std"]
 
 [dependencies]
-rand = { version = "0.8.5", optional = true, default-features = false}
-serde = { version = "1.0.145", optional = true, default-features = false }
-sqlx = { version = "0.7.1", optional = true, default-features = false, features = [ "macros" ] }
-base64id-derive = { version = "0.3.1", optional = true, path = "base64id-derive" }
+base64id-core = { workspace = true }
+base64id-derive = { workspace = true }
+
+[dev-dependencies]
+rand = "0.8.5"
+serde = { version = "1.0.145", features = [ "derive" ] }
+serde_json = "1.0.85"
+sqlx = { version = "0.7.1", default-features = false, features = [ "macros", "sqlite" ] }
+async-std = "1.12.0"
 
 [[example]]
 name = "github_usage_1"
