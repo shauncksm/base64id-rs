@@ -10,10 +10,22 @@ pub fn tuple_struct_into_base64id(input: TokenStream) -> TokenStream {
     let ident = ast.ident;
     let struct_inner_type = get_validated_struct_data(ast.data);
 
-    let (encode_fn) = match struct_inner_type.to_string().as_str() {
-        "i64" => (quote! {::base64id_core::base64::encode_i64}),
-        "i32" => (quote! {::base64id_core::base64::encode_i32}),
-        "i16" => (quote! {::base64id_core::base64::encode_i16}),
+    let (encode_fn, decode_fn, char_array_type) = match struct_inner_type.to_string().as_str() {
+        "i64" => (
+            quote! {::base64id_core::base64::encode_i64},
+            quote! {::base64id_core::base64::decode_i64},
+            quote! {[char; 11]},
+        ),
+        "i32" => (
+            quote! {::base64id_core::base64::encode_i32},
+            quote! {::base64id_core::base64::decode_i32},
+            quote! {[char; 6]},
+        ),
+        "i16" => (
+            quote! {::base64id_core::base64::encode_i16},
+            quote! {::base64id_core::base64::decode_i16},
+            quote! {[char; 3]},
+        ),
         _ => panic!("invalid type within tuple struct, expected i64, i32 or i16"),
     };
 
@@ -27,6 +39,36 @@ pub fn tuple_struct_into_base64id(input: TokenStream) -> TokenStream {
                 }
 
                 Ok(())
+            }
+        }
+
+        impl ::core::convert::TryFrom<#char_array_type> for #ident {
+            type Error = ::base64id_core::Error;
+
+            fn try_from(input: #char_array_type) -> Result<Self, Self::Error> {
+                Ok(Self(#decode_fn(input)?))
+            }
+        }
+
+        impl ::core::str::FromStr for #ident {
+            type Err = ::base64id_core::Error;
+
+            fn from_str(id: &str) -> Result<Self, Self::Err> {
+                let mut array: #char_array_type = ::core::default::Default::default();
+                let mut id_iter = id.chars();
+
+                for c in array.iter_mut() {
+                    *c = match id_iter.next() {
+                        Some(d) => d,
+                        None => return Err(::base64id_core::Error::InvalidLength),
+                    };
+                }
+
+                if id_iter.next().is_some() {
+                    return Err(::base64id_core::Error::InvalidLength);
+                }
+
+                #ident::try_from(array)
             }
         }
     }
