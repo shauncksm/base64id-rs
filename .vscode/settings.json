@@ -9,5 +9,8 @@
         "serde",
         "sqlx",
         "std"
+    ],
+    "rust-analyzer.linkedProjects": [
+        "./Cargo.toml"
     ]
 }
