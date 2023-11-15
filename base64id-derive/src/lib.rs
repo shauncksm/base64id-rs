@@ -1,4 +1,5 @@
 use proc_macro::TokenStream;
+use quote::quote;
 use syn::DeriveInput;
 
 /// Create your own base64id tuple struct
@@ -7,55 +8,27 @@ pub fn tuple_struct_into_base64id(input: TokenStream) -> TokenStream {
     let ast: DeriveInput = syn::parse(input).expect("failed to parse token stream");
 
     let ident = ast.ident;
-    let struct_type = get_validated_struct_data(ast.data);
+    let struct_inner_type = get_validated_struct_data(ast.data);
 
-    match struct_type.to_string().as_str() {
-        "i64" => {
-            quote::quote! {
-                impl ::core::fmt::Display for #ident {
-                    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-                        use ::core::fmt::Write;
-
-                        for c in ::base64id_core::base64::encode_i64(self.0) {
-                            f.write_char(c)?;
-                        }
-
-                        Ok(())
-                    }
-                }
-            }
-        }
-        "i32" => {
-            quote::quote! {
-                impl ::core::fmt::Display for #ident {
-                    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-                        use ::core::fmt::Write;
-
-                        for c in ::base64id_core::base64::encode_i32(self.0) {
-                            f.write_char(c)?;
-                        }
-
-                        Ok(())
-                    }
-                }
-            }
-        }
-        "i16" => {
-            quote::quote! {
-                impl ::core::fmt::Display for #ident {
-                    fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
-                        use ::core::fmt::Write;
-
-                        for c in ::base64id_core::base64::encode_i16(self.0) {
-                            f.write_char(c)?;
-                        }
-
-                        Ok(())
-                    }
-                }
-            }
-        }
+    let (encode_fn) = match struct_inner_type.to_string().as_str() {
+        "i64" => (quote! {::base64id_core::base64::encode_i64}),
+        "i32" => (quote! {::base64id_core::base64::encode_i32}),
+        "i16" => (quote! {::base64id_core::base64::encode_i16}),
         _ => panic!("invalid type within tuple struct, expected i64, i32 or i16"),
+    };
+
+    quote! {
+        impl ::core::fmt::Display for #ident {
+            fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
+                use ::core::fmt::Write;
+
+                for c in #encode_fn(self.0) {
+                    f.write_char(c)?;
+                }
+
+                Ok(())
+            }
+        }
     }
     .into()
 }
