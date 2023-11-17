@@ -1,46 +1,28 @@
-use base64id::Base64Id;
-use core::str::FromStr;
+macro_rules! generate_derive_test_suite {
+    ($test_suite:ident, $struct_type:ident, $int_type:ident, $struct_str:expr) => {
+        #[cfg(test)]
+        mod $test_suite {
+            use base64id::Base64Id;
+            use core::str::FromStr;
 
-#[derive(Base64Id)]
-struct MyId64(i64);
+            #[derive(Base64Id, Debug)]
+            struct $struct_type($int_type);
 
-#[test]
-fn id64_str_from_struct() {
-    let id = MyId64(0);
-    assert_eq!("AAAAAAAAAAA", format!("{id}"));
+            #[test]
+            fn str_from_struct() {
+                let id = $struct_type(0);
+                assert_eq!($struct_str, format!("{id}"));
+            }
+
+            #[test]
+            fn struct_from_str() {
+                let _id = $struct_type::from_str($struct_str)
+                    .expect("failed to convert str to struct via FromStr trait");
+            }
+        }
+    };
 }
 
-#[test]
-fn id64_struct_from_str() {
-    let _id =
-        MyId64::from_str("AAAAAAAAAAA").expect("failed to convert str to struct via FromStr trait");
-}
-
-#[derive(Base64Id)]
-struct MyId32(i32);
-
-#[test]
-fn id32_str_from_struct() {
-    let id = MyId32(0);
-    assert_eq!("AAAAAA", format!("{id}"));
-}
-
-#[test]
-fn id32_struct_from_str() {
-    let _id =
-        MyId32::from_str("AAAAAA").expect("failed to convert str to struct via FromStr trait");
-}
-
-#[derive(Base64Id)]
-struct MyId16(i16);
-
-#[test]
-fn id16_str_from_struct() {
-    let id = MyId16(0);
-    assert_eq!("AAA", format!("{id}"));
-}
-
-#[test]
-fn id16_struct_from_str() {
-    let _id = MyId16::from_str("AAA").expect("failed to convert str to struct via FromStr trait");
-}
+generate_derive_test_suite!(derive_64, MyId64, i64, "AAAAAAAAAAA");
+generate_derive_test_suite!(derive_32, MyId32, i32, "AAAAAA");
+generate_derive_test_suite!(derive_16, MyId16, i16, "AAA");
