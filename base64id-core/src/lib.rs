@@ -8,20 +8,17 @@
 //! Add the following to your `Cargo.toml` file.
 //! ```toml
 //! [dependencies]
-//! base64id = { version = "0.3", features = ["std", "rand"] }
+//! base64id = { version = "0.3", features = ["std"] }
 //! ```
 //!
 //! #### Encoding
-//! You can use the `rand` feature flag to generate a random ID like so.
+//! You can create a new ID like so.
 //! ```
 //! use base64id_core::Id64;
 //!
 //! fn main() {
-//! # #[cfg(feature = "rand")]
-//! # {
-//!     let id: Id64 = rand::random();
-//!     println!("{id}"); // 3Zohppb9XMw
-//! # }
+//!     let id = Id64::from(1i64);
+//!     println!("{id}"); // AAAAAAAAAE
 //! }
 //! ```
 //!
@@ -110,9 +107,6 @@ mod error;
 mod tests;
 
 pub use error::Error;
-
-#[cfg(feature = "rand")]
-mod rand;
 
 #[cfg(feature = "serde")]
 mod serde;

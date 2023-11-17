@@ -31,7 +31,6 @@ license.workspace = true
 version.workspace = true
 
 [features]
-rand = ["base64id-core/rand"]
 serde = ["base64id-core/serde"]
 std = ["base64id-core/std"]
 
@@ -51,11 +50,6 @@ path = "examples/github/usage_1.rs"
 [[example]]
 name = "github_usage_2"
 path = "examples/github/usage_2.rs"
-
-[[example]]
-name = "github_usage_rand"
-path = "examples/github/usage_rand.rs"
-required-features = ["rand"]
 
 [[example]]
 name = "github_usage_serde"

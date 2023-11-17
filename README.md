@@ -83,18 +83,7 @@ fn main() -> Result<(), Error> {
 ```
 
 ## Third Party Crates
-Support for [Serde](https://serde.rs/) and [Rand](https://github.com/rust-random/rand) can be enabled through the use of optional cargo feature flags.
-
-### Rand
-You can use the `rand` feature flag for working with the `rand` crate.
-```rust
-use base64id::Id64;
-use rand::random;
-
-let id: Id64 = random();
-
-println!("{id}"); // 11 random base64url characters
-```
+Support for [Serde](https://serde.rs/) can be enabled through the use of optional cargo feature flags.
 
 ### Serde
 You can use the `serde` feature flag to drive `Serialize` and `Deserialize` on `Id64`.

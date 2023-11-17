@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Removed
 - Removed direct SQLx support and all related documentation
+- Removed direct rand support and most related documentation
 - Removed Cargo.lock from version control
 
 ## [v0.3.1]
