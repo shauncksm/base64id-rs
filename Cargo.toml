@@ -33,7 +33,6 @@ version.workspace = true
 [features]
 rand = ["base64id-core/rand"]
 serde = ["base64id-core/serde"]
-sqlx = ["base64id-core/sqlx", "std"]
 std = ["base64id-core/std"]
 
 [dependencies]
@@ -44,8 +43,6 @@ base64id-derive = { workspace = true }
 rand = "0.8.5"
 serde = { version = "1.0.145", features = [ "derive" ] }
 serde_json = "1.0.85"
-sqlx = { version = "0.7.1", default-features = false, features = [ "macros", "sqlite" ] }
-async-std = "1.12.0"
 
 [[example]]
 name = "github_usage_1"
@@ -64,11 +61,6 @@ required-features = ["rand"]
 name = "github_usage_serde"
 path = "examples/github/usage_serde.rs"
 required-features = ["serde"]
-
-[[example]]
-name = "github_usage_sqlx"
-path = "examples/github/usage_sqlx.rs"
-required-features = ["sqlx"]
 
 [package.metadata.docs.rs]
 all-features = true

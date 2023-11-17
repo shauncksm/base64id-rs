@@ -83,7 +83,7 @@ fn main() -> Result<(), Error> {
 ```
 
 ## Third Party Crates
-Support for [Serde](https://serde.rs/), [Rand](https://github.com/rust-random/rand) and [SQLx](https://github.com/launchbadge/sqlx) can be enabled through the use of optional cargo feature flags.
+Support for [Serde](https://serde.rs/) and [Rand](https://github.com/rust-random/rand) can be enabled through the use of optional cargo feature flags.
 
 ### Rand
 You can use the `rand` feature flag for working with the `rand` crate.
@@ -112,35 +112,6 @@ let record = Record {
 };
 
 println!("{}", serde_json::to_string(&record)?); // {"id":"AAAAAAAAAAA"}
-```
-
-### SQLx
-You can use the `sqlx` feature flag for using an `Id64` with SQLx SQL commands.
-```rust
-use base64id::Id64;
-use sqlx::{
-    sqlite::{Sqlite, SqliteConnection},
-    Connection,
-};
-use std::str::FromStr;
-
-let id = Id64::from_str("IkoY0lQYRrI")?;
-let mut conn = SqliteConnection::connect("sqlite::memory:").await?;
-
-sqlx::query("CREATE TABLE sqlx (id INT PRIMARY KEY)")
-    .execute(&mut conn)
-    .await?;
-
-sqlx::query("INSERT INTO sqlx VALUES (?)")
-    .bind(id)
-    .execute(&mut conn)
-    .await?;
-
-let output = sqlx::query_as::<Sqlite, Id64>("SELECT id FROM sqlx LIMIT 1")
-    .fetch_one(&mut conn)
-    .await?;
-
-println!("{output}"); // IkoY0lQYRrI
 ```
 
 ## License

@@ -84,13 +84,6 @@
 //! # }
 //! ```
 //!
-//! ## SQLx
-//!
-//! You can use the `sqlx` feature flag to derive `Type` and `FromRow` on `Id64`, `Id32` and `Id16`.\
-//! This will allow you to add, update or query values from any SQLx supported database without manual type conversion.
-//!
-//! Values are converted to and from SQL data types based on their `i64`, `i32` and `i16` representations.
-//!
 //! ## Random Values for Development
 //! From the command line you can quickly generate your own random values, along with their corosponding signed and unsigned integers.
 //! ```sh
@@ -123,9 +116,6 @@ mod rand;
 
 #[cfg(feature = "serde")]
 mod serde;
-
-#[cfg(feature = "sqlx")]
-use sqlx::{FromRow, Type};
 
 macro_rules! generate_core_trait_impls {
     ($lib_type:ident, $lib_char_array:ty, $u_type:ident, $i_type:ident, $decode_fn:ident, $encode_fn:ident) => {
@@ -242,7 +232,6 @@ macro_rules! generate_core_trait_impls {
 
 /// 64 bit container with methods for base64url encoding
 #[derive(Debug, Default, Clone, Copy, PartialEq, Eq, Hash)]
-#[cfg_attr(feature = "sqlx", derive(Type, FromRow), sqlx(transparent))]
 pub struct Id64(i64);
 
 impl Id64 {
@@ -270,7 +259,6 @@ generate_core_trait_impls!(Id64, [char; 11], u64, i64, decode_i64, encode_i64);
 
 /// 32 bit container with methods for base64url encoding
 #[derive(Debug, Default, Clone, Copy, PartialEq, Eq, Hash)]
-#[cfg_attr(feature = "sqlx", derive(Type, FromRow), sqlx(transparent))]
 pub struct Id32(i32);
 
 impl Id32 {
@@ -298,7 +286,6 @@ generate_core_trait_impls!(Id32, [char; 6], u32, i32, decode_i32, encode_i32);
 
 /// 16 bit container with methods for base64url encoding
 #[derive(Debug, Default, Clone, Copy, PartialEq, Eq, Hash)]
-#[cfg_attr(feature = "sqlx", derive(Type, FromRow), sqlx(transparent))]
 pub struct Id16(i16);
 
 impl Id16 {

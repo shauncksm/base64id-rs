@@ -13,21 +13,17 @@ version.workspace = true
 [features]
 rand = ["dep:rand"]
 serde = ["dep:serde"]
-sqlx = ["dep:sqlx", "std"]
 std = []
 
 [dependencies]
 rand = { version = "0.8.5", optional = true, default-features = false }
 serde = { version = "1.0.145", optional = true, default-features = false }
-sqlx = { version = "0.7.1", optional = true, default-features = false, features = [ "macros" ] }
 
 [dev-dependencies]
 criterion = { version = "0.3.6", features = [ "html_reports" ] }
 rand = "0.8.5"
 serde = { version = "1.0.145", features = [ "derive" ] }
 serde_json = "1.0.85"
-sqlx = { version = "0.7.1", default-features = false, features = [ "macros", "sqlite" ] }
-async-std = "1.12.0"
 
 [[test]]
 name = "rand"
@@ -36,10 +32,6 @@ required-features = ["rand"]
 [[test]]
 name = "serde"
 required-features = ["serde"]
-
-[[test]]
-name = "sqlx"
-required-features = ["sqlx"]
 
 [[bench]]
 name = "id64"
