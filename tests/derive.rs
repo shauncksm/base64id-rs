@@ -1,4 +1,4 @@
-use base64id_derive::Base64Id;
+use base64id::Base64Id;
 use core::str::FromStr;
 
 #[derive(Base64Id)]
