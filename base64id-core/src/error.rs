@@ -60,7 +60,7 @@ impl fmt::Display for Error {
 
 mod tests {
     macro_rules! generate_error_test_suite {
-        ($lib_type:ident, $lib_type_name:ident, $bad_length:expr, $bad_char:expr) => {
+        ($lib_type:ident, $lib_type_name:ident, $bad_char:expr) => {
             #[cfg(test)]
             mod $lib_type_name {
                 use crate::{
@@ -71,7 +71,7 @@ mod tests {
 
                 #[test]
                 fn bad_length() {
-                    let id = $lib_type::from_str($bad_length).unwrap_err();
+                    let id = $lib_type::from_str("A").unwrap_err();
                     assert_eq!(id, InvalidLength);
                 }
 
@@ -84,9 +84,9 @@ mod tests {
         };
     }
 
-    generate_error_test_suite!(Id64, id64, "A", "AAAAAAAAAA=");
+    generate_error_test_suite!(Id64, id64, "AAAAAAAAAA=");
 
-    generate_error_test_suite!(Id32, id32, "A", "AAAAA=");
+    generate_error_test_suite!(Id32, id32, "AAAAA=");
 
-    generate_error_test_suite!(Id16, id16, "A", "AA=");
+    generate_error_test_suite!(Id16, id16, "AA=");
 }
