@@ -10,24 +10,28 @@ pub fn tuple_struct_into_base64id(input: TokenStream) -> TokenStream {
     let ident = ast.ident;
     let struct_inner_type = get_validated_struct_data(ast.data);
 
-    let (encode_fn, decode_fn, char_array_type) = match struct_inner_type.to_string().as_str() {
-        "i64" => (
-            quote! {::base64id_core::base64::encode_i64},
-            quote! {::base64id_core::base64::decode_i64},
-            quote! {[char; 11]},
-        ),
-        "i32" => (
-            quote! {::base64id_core::base64::encode_i32},
-            quote! {::base64id_core::base64::decode_i32},
-            quote! {[char; 6]},
-        ),
-        "i16" => (
-            quote! {::base64id_core::base64::encode_i16},
-            quote! {::base64id_core::base64::decode_i16},
-            quote! {[char; 3]},
-        ),
-        _ => panic!("invalid type within tuple struct, expected i64, i32 or i16"),
-    };
+    let (encode_fn, decode_fn, char_array_type, struct_inner_type_u) =
+        match struct_inner_type.to_string().as_str() {
+            "i64" => (
+                quote! {::base64id_core::base64::encode_i64},
+                quote! {::base64id_core::base64::decode_i64},
+                quote! {[char; 11]},
+                quote! {u64},
+            ),
+            "i32" => (
+                quote! {::base64id_core::base64::encode_i32},
+                quote! {::base64id_core::base64::decode_i32},
+                quote! {[char; 6]},
+                quote! {u32},
+            ),
+            "i16" => (
+                quote! {::base64id_core::base64::encode_i16},
+                quote! {::base64id_core::base64::decode_i16},
+                quote! {[char; 3]},
+                quote! {u16},
+            ),
+            _ => panic!("invalid type within tuple struct, expected i64, i32 or i16"),
+        };
 
     quote! {
         impl ::core::fmt::Display for #ident {
@@ -51,6 +55,18 @@ pub fn tuple_struct_into_base64id(input: TokenStream) -> TokenStream {
         impl ::core::convert::From<#struct_inner_type> for #ident {
             fn from(id: #struct_inner_type) -> Self {
                 Self(id)
+            }
+        }
+
+        impl ::core::convert::From<#ident> for #struct_inner_type_u {
+            fn from(id: #ident) -> Self {
+                #struct_inner_type_u::from_be_bytes(id.0.to_be_bytes())
+            }
+        }
+
+        impl ::core::convert::From<#struct_inner_type_u> for #ident {
+            fn from(id: #struct_inner_type_u) -> Self {
+                Self(#struct_inner_type::from_be_bytes(id.to_be_bytes()))
             }
         }
 
