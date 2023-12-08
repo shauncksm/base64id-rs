@@ -8,7 +8,16 @@ use std::env::args;
 
 use rand::random;
 
-use base64id::{Id16, Id32, Id64};
+use base64id::Base64Id;
+
+#[derive(Base64Id, Clone, Copy)]
+struct Id64(i64);
+
+#[derive(Base64Id, Clone, Copy)]
+struct Id32(i32);
+
+#[derive(Base64Id, Clone, Copy)]
+struct Id16(i16);
 
 fn main() {
     let default = String::from("64");
