@@ -42,6 +42,18 @@ pub fn tuple_struct_into_base64id(input: TokenStream) -> TokenStream {
             }
         }
 
+        impl ::core::convert::From<#ident> for #struct_inner_type {
+            fn from(id: #ident) -> Self {
+                id.0
+            }
+        }
+
+        impl ::core::convert::From<#struct_inner_type> for #ident {
+            fn from(id: #struct_inner_type) -> Self {
+                Self(id)
+            }
+        }
+
         impl ::core::convert::TryFrom<#char_array_type> for #ident {
             type Error = ::base64id_core::Error;
 

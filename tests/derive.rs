@@ -1,5 +1,5 @@
 macro_rules! generate_derive_test_suite {
-    ($test_suite:ident, $struct_type:ident, $int_type:ident, $struct_str:expr) => {
+    ($test_suite:ident, $struct_type:ident, $int_type:ident, $int_value:literal, $struct_str:expr) => {
         #[cfg(test)]
         mod $test_suite {
             use base64id::{Base64Id, Error};
@@ -21,6 +21,18 @@ macro_rules! generate_derive_test_suite {
             }
 
             #[test]
+            fn int_from_struct() {
+                let int = $int_type::from($struct_type($int_value));
+                assert_eq!(int, $int_value);
+            }
+
+            #[test]
+            fn struct_from_int() {
+                let id = $struct_type::from($int_value);
+                assert!(matches!(id, $struct_type($int_value)));
+            }
+
+            #[test]
             fn error_bad_char() {
                 let err = $struct_type::from_str("A").expect_err("failed to get an error");
                 assert_eq!(Error::InvalidLength, err);
@@ -29,6 +41,6 @@ macro_rules! generate_derive_test_suite {
     };
 }
 
-generate_derive_test_suite!(derive_64, MyId64, i64, "AAAAAAAAAAA");
-generate_derive_test_suite!(derive_32, MyId32, i32, "AAAAAA");
-generate_derive_test_suite!(derive_16, MyId16, i16, "AAA");
+generate_derive_test_suite!(derive_64, MyId64, i64, 0i64, "AAAAAAAAAAA");
+generate_derive_test_suite!(derive_32, MyId32, i32, 0i32, "AAAAAA");
+generate_derive_test_suite!(derive_16, MyId16, i16, 0i16, "AAA");
