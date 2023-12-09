@@ -34,6 +34,11 @@ pub fn tuple_struct_into_base64id(input: TokenStream) -> TokenStream {
         };
 
     quote! {
+        impl #ident {
+            const MIN: #ident = #ident(0);
+            const MAX: #ident = #ident(-1);
+        }
+
         impl ::core::fmt::Display for #ident {
             fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
                 use ::core::fmt::Write;

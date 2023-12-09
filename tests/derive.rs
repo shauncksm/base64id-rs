@@ -45,6 +45,22 @@ macro_rules! generate_derive_test_suite {
             }
 
             #[test]
+            fn min_const() {
+                assert_eq!(
+                    $int_type_u::MIN.to_be_bytes(),
+                    $int_type_u::from($struct_type::MIN).to_be_bytes()
+                );
+            }
+
+            #[test]
+            fn max_const() {
+                assert_eq!(
+                    $int_type_u::MAX.to_be_bytes(),
+                    $int_type_u::from($struct_type::MAX).to_be_bytes()
+                );
+            }
+
+            #[test]
             fn error_bad_char() {
                 let err = $struct_type::from_str("A").expect_err("failed to get an error");
                 assert_eq!(Error::InvalidLength, err);
