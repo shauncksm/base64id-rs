@@ -61,6 +61,11 @@ macro_rules! generate_derive_test_suite {
             }
 
             #[test]
+            fn partial_eq() {
+                assert_eq!($struct_type($int_value), $struct_type($int_value));
+            }
+
+            #[test]
             fn error_bad_char() {
                 let err = $struct_type::from_str("A").expect_err("failed to get an error");
                 assert_eq!(Error::InvalidLength, err);

@@ -104,6 +104,13 @@ pub fn tuple_struct_into_base64id(input: TokenStream) -> TokenStream {
                 #ident::try_from(array)
             }
         }
+
+        impl ::core::cmp::PartialEq for #ident {
+            fn eq(&self, other: &Self) -> bool {
+                self.0 == other.0
+            }
+        }
+        impl ::core::cmp::Eq for #ident {}
     }
     .into()
 }
