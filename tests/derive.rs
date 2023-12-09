@@ -66,6 +66,11 @@ macro_rules! generate_derive_test_suite {
             }
 
             #[test]
+            fn min_max_ord() {
+                assert!($struct_type::MIN < $struct_type::MAX);
+            }
+
+            #[test]
             fn error_bad_char() {
                 let err = $struct_type::from_str("A").expect_err("failed to get an error");
                 assert_eq!(Error::InvalidLength, err);

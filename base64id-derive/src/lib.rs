@@ -111,6 +111,21 @@ pub fn tuple_struct_into_base64id(input: TokenStream) -> TokenStream {
             }
         }
         impl ::core::cmp::Eq for #ident {}
+
+        impl ::core::cmp::PartialOrd for #ident {
+            fn partial_cmp(&self, other: &Self) -> Option<::core::cmp::Ordering> {
+                Some(self.cmp(other))
+            }
+        }
+
+        impl ::core::cmp::Ord for #ident {
+            fn cmp(&self, other: &Self) -> ::core::cmp::Ordering {
+                let this = #struct_inner_type_u::from_be_bytes(self.0.to_be_bytes());
+                let other = #struct_inner_type_u::from_be_bytes(other.0.to_be_bytes());
+
+                this.cmp(&other)
+            }
+        }
     }
     .into()
 }
