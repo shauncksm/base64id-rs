@@ -157,7 +157,7 @@ fn get_validated_struct_data(data: syn::Data) -> syn::Ident {
     };
 
     match item_type.to_string().as_str() {
-        "i64" | "i32" | "i16" => return item_type.clone(),
+        "i64" | "i32" | "i16" => item_type.clone(),
         _ => panic!("invalid type within tuple struct, expected i64, i32 or i16"),
-    };
+    }
 }
