@@ -31,7 +31,6 @@ license.workspace = true
 version.workspace = true
 
 [features]
-serde = ["base64id-core/serde"]
 std = ["base64id-core/std"]
 
 [dependencies]
@@ -50,11 +49,6 @@ path = "examples/github/usage_1.rs"
 [[example]]
 name = "github_usage_2"
 path = "examples/github/usage_2.rs"
-
-[[example]]
-name = "github_usage_serde"
-path = "examples/github/usage_serde.rs"
-required-features = ["serde"]
 
 [package.metadata.docs.rs]
 all-features = true

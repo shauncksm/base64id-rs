@@ -43,43 +43,7 @@
 //!
 //! #### Examples
 //!
-//! Deserializing a json string into an `Id32`
-//! ```
-//! # #[cfg(feature = "serde")]
-//! # {
-//! # use serde_json::Error;
-//! # use base64id_core::Id32;
-//! # fn main() -> Result<(), Error> {
-//! let id: Id32 = serde_json::from_str(r#""CyRWFA""#)?;
-//! assert_eq!(id, Id32::from(186930708));
-//! #   Ok(())
-//! # }
-//! # }
-//! ```
-//!
-//! Serializing a struct containing an `Id64`
-//! ```
-//! # #[cfg(feature = "serde")]
-//! # {
-//! # use serde::Serialize;
-//! # use serde_json::Error;
-//! # use base64id_core::Id64;
-//! # fn main() -> Result<(), Error> {
-//! #[derive(Serialize)]
-//! struct Record {
-//!     pub id: Id64,
-//! }
-//!
-//! let record = Record { id: Id64::from(5869384017340884593i64) };
-//!
-//! assert_eq!(
-//!     serde_json::to_string(&record)?,
-//!     r#"{"id":"UXQ9qpv1ZnE"}"#
-//! );
-//! # Ok(())
-//! # }
-//! # }
-//! ```
+//! TBA
 //!
 //! ## Random Values for Development
 //! From the command line you can quickly generate your own random values, along with their corosponding signed and unsigned integers.
@@ -107,9 +71,6 @@ mod error;
 mod tests;
 
 pub use error::Error;
-
-#[cfg(feature = "serde")]
-mod serde;
 
 macro_rules! generate_core_trait_impls {
     ($lib_type:ident, $lib_char_array:ty, $u_type:ident, $i_type:ident, $decode_fn:ident, $encode_fn:ident) => {
