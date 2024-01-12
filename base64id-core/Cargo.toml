@@ -22,10 +22,6 @@ criterion = { version = "0.3.6", features = [ "html_reports" ] }
 serde = { version = "1.0.145", features = [ "derive" ] }
 serde_json = "1.0.85"
 
-[[test]]
-name = "serde"
-required-features = ["serde"]
-
 [[bench]]
 name = "id64"
 harness = false
