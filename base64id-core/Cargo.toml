@@ -11,11 +11,7 @@ license.workspace = true
 version.workspace = true
 
 [features]
-serde = ["dep:serde"]
 std = []
-
-[dependencies]
-serde = { version = "1.0.145", optional = true, default-features = false }
 
 [dev-dependencies]
 criterion = { version = "0.3.6", features = [ "html_reports" ] }
