@@ -6,6 +6,7 @@ macro_rules! generate_derive_test_suite {
             use core::str::FromStr;
 
             #[derive(Base64Id, Debug)]
+            #[base64id(Serialize)]
             struct $struct_type($int_type);
 
             #[test]
@@ -74,6 +75,14 @@ macro_rules! generate_derive_test_suite {
             fn error_bad_char() {
                 let err = $struct_type::from_str("A").expect_err("failed to get an error");
                 assert_eq!(Error::InvalidLength, err);
+            }
+
+            #[test]
+            fn serde_serialize() {
+                let id = $struct_type($int_value);
+                let serialized_id = serde_json::to_string(&id).expect("failed to serialize value");
+
+                assert_eq!(serialized_id, format!("\"{}\"", $struct_str));
             }
         }
     };

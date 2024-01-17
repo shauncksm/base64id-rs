@@ -1,9 +1,10 @@
 use proc_macro::TokenStream;
+use proc_macro2::TokenTree;
 use quote::quote;
-use syn::DeriveInput;
+use syn::{Attribute, DeriveInput, Meta};
 
 /// Create your own base64id tuple struct
-#[proc_macro_derive(Base64Id)]
+#[proc_macro_derive(Base64Id, attributes(base64id))]
 pub fn tuple_struct_into_base64id(input: TokenStream) -> TokenStream {
     let ast: DeriveInput = syn::parse(input).expect("failed to parse token stream");
 
@@ -33,7 +34,7 @@ pub fn tuple_struct_into_base64id(input: TokenStream) -> TokenStream {
             _ => panic!("invalid type within tuple struct, expected i64, i32 or i16"),
         };
 
-    quote! {
+    let mut implementation = quote! {
         impl #ident {
             const MIN: #ident = #ident(0);
             const MAX: #ident = #ident(-1);
@@ -126,8 +127,70 @@ pub fn tuple_struct_into_base64id(input: TokenStream) -> TokenStream {
                 this.cmp(&other)
             }
         }
+    };
+
+    evaluate_attributes(ident, ast.attrs, &mut implementation);
+
+    implementation.into()
+}
+
+/// Determines if the base64id attribute is present
+/// and if it contains expected keywords
+fn evaluate_attributes(
+    ident: proc_macro2::Ident,
+    attrs: Vec<Attribute>,
+    implementation: &mut proc_macro2::TokenStream,
+) {
+    for attr in attrs {
+        let attr_ident = match attr.path().get_ident() {
+            Some(i) => i,
+            None => continue,
+        };
+
+        if attr_ident != "base64id" {
+            continue;
+        }
+
+        let meta_list = match attr.meta {
+            Meta::List(l) => l,
+            _ => continue,
+        };
+
+        for token in meta_list.tokens {
+            let token_ident = match token {
+                TokenTree::Ident(i) => i,
+                _ => continue,
+            };
+
+            if token_ident == "Serialize" {
+                apply_serialize_trait(&ident, implementation);
+            }
+        }
+
+        return;
     }
-    .into()
+}
+
+/// Enable the following syntax:
+/// ```ignore
+/// #[derive(base64id::Base64Id)]
+/// #[base64id(Serialize)]
+/// struct MyType(i64);
+/// ```
+fn apply_serialize_trait(
+    ident: &proc_macro2::Ident,
+    implementation: &mut proc_macro2::TokenStream,
+) {
+    implementation.extend(quote!(
+        impl ::serde::Serialize for #ident {
+            fn serialize<S>(&self, serializer: S) -> ::core::result::Result<S::Ok, S::Error>
+                where
+                    S: ::serde::Serializer
+            {
+                serializer.collect_str(self)
+            }
+        }
+    ));
 }
 
 fn get_validated_struct_data(data: syn::Data) -> syn::Ident {
