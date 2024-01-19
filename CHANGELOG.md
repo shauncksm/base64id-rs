@@ -5,9 +5,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- New `Base64Id` derive macro in new `base64id_derive` crate
+
+### Changed
+- (Breaking) Replaced serde feature flag with Base64Id derive macro helper attribute
+- Moved majority of crate code to new `base64id_core` crate re-exported via `pub use`
+
 ### Removed
-- Removed direct SQLx support and all related documentation
-- Removed direct rand support and most related documentation
+- (Breaking) Removed `Id64`, `Id32` and `Id16` structs (See Base64Id derive macro)
+- (Breaking) Removed direct SQLx support and all related documentation
+- (Breaking) Removed direct rand support and most related documentation
 - Removed Cargo.lock from version control
 
 ## [v0.3.1]
