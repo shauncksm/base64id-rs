@@ -1,5 +1,5 @@
 use proc_macro::TokenStream;
-use proc_macro2::TokenTree;
+use proc_macro2::{Ident, Span, TokenTree};
 use quote::quote;
 use syn::{Attribute, DeriveInput, Meta};
 
@@ -11,24 +11,31 @@ pub fn tuple_struct_into_base64id(input: TokenStream) -> TokenStream {
     let ident = ast.ident;
     let struct_inner_type = get_validated_struct_data(ast.data);
 
+    let char_len = match struct_inner_type.to_string().as_str() {
+        "i64" => 11,
+        "i32" => 6,
+        "i16" => 3,
+        _ => panic!("invalid type within tuple struct, expected i64, i32 or i16"),
+    };
+
     let (encode_fn, decode_fn, char_array_type, struct_inner_type_u) =
         match struct_inner_type.to_string().as_str() {
             "i64" => (
                 quote! {::base64id_core::base64::encode_i64},
                 quote! {::base64id_core::base64::decode_i64},
-                quote! {[char; 11]},
+                quote! {[char; #char_len]},
                 quote! {u64},
             ),
             "i32" => (
                 quote! {::base64id_core::base64::encode_i32},
                 quote! {::base64id_core::base64::decode_i32},
-                quote! {[char; 6]},
+                quote! {[char; #char_len]},
                 quote! {u32},
             ),
             "i16" => (
                 quote! {::base64id_core::base64::encode_i16},
                 quote! {::base64id_core::base64::decode_i16},
-                quote! {[char; 3]},
+                quote! {[char; #char_len]},
                 quote! {u16},
             ),
             _ => panic!("invalid type within tuple struct, expected i64, i32 or i16"),
@@ -129,7 +136,7 @@ pub fn tuple_struct_into_base64id(input: TokenStream) -> TokenStream {
         }
     };
 
-    evaluate_attributes(ident, ast.attrs, &mut implementation);
+    evaluate_attributes(ident, ast.attrs, char_len, &mut implementation);
 
     implementation.into()
 }
@@ -139,6 +146,7 @@ pub fn tuple_struct_into_base64id(input: TokenStream) -> TokenStream {
 fn evaluate_attributes(
     ident: proc_macro2::Ident,
     attrs: Vec<Attribute>,
+    char_len: usize,
     implementation: &mut proc_macro2::TokenStream,
 ) {
     for attr in attrs {
@@ -165,6 +173,10 @@ fn evaluate_attributes(
             if token_ident == "Serialize" {
                 apply_serialize_trait(&ident, implementation);
             }
+
+            if token_ident == "Deserialize" {
+                apply_deserialize_trait(&ident, char_len, implementation);
+            }
         }
 
         return;
@@ -188,6 +200,75 @@ fn apply_serialize_trait(
                     S: ::serde::Serializer
             {
                 serializer.collect_str(self)
+            }
+        }
+    ));
+}
+
+/// Enable the following syntax:
+/// ```ignore
+/// #[derive(base64id::Base64Id)]
+/// #[base64id(Deserialize)]
+/// struct MyType(i64);
+/// ```
+fn apply_deserialize_trait(
+    ident: &proc_macro2::Ident,
+    char_len: usize,
+    implementation: &mut proc_macro2::TokenStream,
+) {
+    let visitor = Ident::new(
+        format!("{ident}__Base64Id_Serde_Visitor").as_str(),
+        Span::call_site(),
+    );
+
+    let last_char_range = match char_len {
+        11 | 3 => "AEIMQUYcgkosw048",
+        6 => "AQgw",
+        _ => panic!("unexpected character length {char_len}. cannot get last_char_range"),
+    };
+
+    implementation.extend(quote!(
+        impl<'de> ::serde::de::Deserialize<'de> for #ident {
+            fn deserialize<D>(deserializer: D) -> ::core::result::Result<Self, D::Error>
+            where
+                D: ::serde::Deserializer<'de>,
+            {
+                deserializer.deserialize_str(#visitor)
+            }
+        }
+
+        struct #visitor;
+
+        impl<'de> ::serde::de::Visitor<'de> for #visitor {
+            type Value = #ident;
+
+            fn expecting(&self, f: &mut ::core::fmt::Formatter) -> ::core::fmt::Result {
+                f.write_str("a base64url encoded string")
+            }
+
+            fn visit_str<E>(self, v: &str) -> ::core::result::Result<Self::Value, E>
+            where
+                E: ::serde::de::Error,
+            {
+                const EXP1: &str = concat!("exactly ", #char_len, " base64url characters");
+                const EXP2: &str = concat!(
+                    "the last character must be one of the following: ",
+                    #last_char_range
+                );
+                const ERR: &str = concat!("unknown error! expected exactly ", #char_len, "base64url characters");
+
+                #ident::from_str(v).map_err(|e| match e {
+                    ::base64id_core::Error::InvalidLength => E::invalid_length(v.len(), &EXP1),
+                    ::base64id_core::Error::InvalidCharacter => E::invalid_value(
+                        ::serde::de::Unexpected::Other("1 or more non-base64url characters"),
+                        &EXP1,
+                    ),
+                    ::base64id_core::Error::OutOfBoundsCharacter => E::invalid_value(
+                        ::serde::de::Unexpected::Other("the last character was out of bounds"),
+                        &EXP2,
+                    ),
+                    _ => E::custom(ERR)
+                })
             }
         }
     ));
