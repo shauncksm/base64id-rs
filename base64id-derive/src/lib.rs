@@ -86,7 +86,7 @@ pub fn tuple_struct_into_base64id(input: TokenStream) -> TokenStream {
         impl ::core::convert::TryFrom<#char_array_type> for #ident {
             type Error = ::base64id_core::Error;
 
-            fn try_from(input: #char_array_type) -> Result<Self, Self::Error> {
+            fn try_from(input: #char_array_type) -> ::core::result::Result<Self, Self::Error> {
                 Ok(Self(#decode_fn(input)?))
             }
         }
@@ -94,7 +94,7 @@ pub fn tuple_struct_into_base64id(input: TokenStream) -> TokenStream {
         impl ::core::str::FromStr for #ident {
             type Err = ::base64id_core::Error;
 
-            fn from_str(id: &str) -> Result<Self, Self::Err> {
+            fn from_str(id: &str) -> ::core::result::Result<Self, Self::Err> {
                 let mut array: #char_array_type = ::core::default::Default::default();
                 let mut id_iter = id.chars();
 
@@ -121,7 +121,7 @@ pub fn tuple_struct_into_base64id(input: TokenStream) -> TokenStream {
         impl ::core::cmp::Eq for #ident {}
 
         impl ::core::cmp::PartialOrd for #ident {
-            fn partial_cmp(&self, other: &Self) -> Option<::core::cmp::Ordering> {
+            fn partial_cmp(&self, other: &Self) -> ::core::option::Option<::core::cmp::Ordering> {
                 Some(self.cmp(other))
             }
         }
