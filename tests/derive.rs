@@ -93,6 +93,15 @@ macro_rules! generate_derive_test_suite {
 
                 assert_eq!($struct_type($int_value), id);
             }
+
+            /// Ensure deserialize impl works without use of external FromStr import
+            mod can_deserialize_without_use_from_str {
+                use base64id::Base64Id;
+
+                #[derive(Base64Id)]
+                #[base64id(Deserialize)]
+                struct $struct_type($int_type);
+            }
         }
     };
 }

@@ -250,6 +250,8 @@ fn apply_deserialize_trait(
             where
                 E: ::serde::de::Error,
             {
+                use ::core::str::FromStr;
+
                 const EXP1: &str = concat!("exactly ", #char_len, " base64url characters");
                 const EXP2: &str = concat!(
                     "the last character must be one of the following: ",
