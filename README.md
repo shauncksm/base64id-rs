@@ -43,37 +43,48 @@ The motivation for this library was to design and implement the core concept onc
 Add the following to your `Cargo.toml` file
 ```toml
 [dependencies]
-base64id = { version = "0.3", features = ["std"] }
+base64id = { version = "0.4", features = ["std"] }
 ```
 
 For `#![no_std]` environments the `std` cargo feature can be omitted.
 
 ## Usage
-All work is done using the `Id64`, `Id32` and `Id16` structs.
+You start by creating your own tuple struct with a single `i64`, `i32` or `i16`. Then apply the `Base64Id` derive macro to your struct.
 
-The examples below use the `Id64` struct, though any `Id__` struct can be used equivalently.
+```rust
+use base64id::Base64Id;
+
+#[derive(Base64Id)]
+struct MyId(i64);
+```
 
 ### Encoding
-You can convert an `i64` or `u64` into an `Id64` as follows
+You can convert signed or unsigned integers to a Base64Id struct as follows:
 ```rust
-use base64id::Id64;
+use base64id::Base64Id;
+
+#[derive(Base64Id)]
+struct MyId(i64);
 
 fn main() {
     let int: i64 = 1;
-    let id = Id64::from(int);
+    let id = MyId::from(int);
 
     println!("{id}"); // AAAAAAAAAAE
 }
 ```
 
 ### Decoding
-You can use `FromStr` and `From<i64>` to convert a `String` into an `Id64` and then into an `i64` as follows
+You can use `FromStr` and `From<{integer}>` to convert a `String` to a Base64Id struct and then into an `i64` as follows:
 ```rust
-use base64id::{Error, Id64};
+use base64id::{Base64Id, Error};
 use std::str::FromStr;
 
+#[derive(Base64Id)]
+struct MyId(i64);
+
 fn main() -> Result<(), Error> {
-    let id_str = Id64::from_str("PDFehCFVGqA")?;
+    let id_str = MyId::from_str("PDFehCFVGqA")?;
     let id_int = i64::from(id_str);
 
     println!("{}", id_int); // 4337351837722417824
@@ -82,26 +93,27 @@ fn main() -> Result<(), Error> {
 }
 ```
 
-## Third Party Crates
-Support for [Serde](https://serde.rs/) can be enabled through the use of optional cargo feature flags.
+## Serde
+Support for [Serde](https://serde.rs/) is possible through the use of the `base64id` derive macro helper attribute.
 
-### Serde
-You can use the `serde` feature flag to drive `Serialize` and `Deserialize` on `Id64`.
 ```rust
-use base64id::Id64;
-use serde::{Deserialize, Serialize};
+use base64id::Base64Id;
+use serde_json::Result;
 
-#[derive(Serialize, Deserialize)]
-struct Record {
-    id: Id64,
+#[derive(Base64Id)]
+#[base64id(Serialize, Deserialize)]
+struct MyId(i32);
+
+fn main() -> Result<()> {
+    let id = MyId(897100256);
+
+    println!("{}", serde_json::to_string(&id)?); // "NXip4A"
+
+    Ok(())
 }
-
-let record = Record {
-    id: Id64::from(0u64),
-};
-
-println!("{}", serde_json::to_string(&record)?); // {"id":"AAAAAAAAAAA"}
 ```
+
+This will apply Base64Id specific implementations of `Serialize` and `Deserialize` to your struct.
 
 ## License
 Licensed under either of

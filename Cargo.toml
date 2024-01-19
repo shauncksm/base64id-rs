@@ -43,12 +43,20 @@ serde = { version = "1.0.145", features = [ "derive" ] }
 serde_json = "1.0.85"
 
 [[example]]
-name = "github_usage_1"
-path = "examples/github/usage_1.rs"
+name = "readme_1_usage"
+path = "examples/readme/1_usage.rs"
 
 [[example]]
-name = "github_usage_2"
-path = "examples/github/usage_2.rs"
+name = "readme_2_encoding"
+path = "examples/readme/2_encoding.rs"
+
+[[example]]
+name = "readme_3_decoding"
+path = "examples/readme/3_decoding.rs"
+
+[[example]]
+name = "readme_4_serde"
+path = "examples/readme/4_serde.rs"
 
 [package.metadata.docs.rs]
 all-features = true
