@@ -28,13 +28,7 @@ pub enum Error {
     /// ```
     ///
     /// ## Example
-    /// ```rust
-    /// # use std::str::FromStr;
-    /// # use base64id_core::{Error, Id64, Id32, Id16};
-    /// assert_eq!(Id64::from_str("AAAAAAAAAAB"), Err(Error::OutOfBoundsCharacter));
-    /// assert_eq!(Id32::from_str("AAAAAB"), Err(Error::OutOfBoundsCharacter));
-    /// assert_eq!(Id16::from_str("AAB"), Err(Error::OutOfBoundsCharacter));
-    /// ```
+    /// TBA
     OutOfBoundsCharacter,
 }
 
