@@ -405,7 +405,7 @@ mod tests {
         6135322894040689502,
     ];
 
-    const I64_BASE64: [[char; 11]; 12] = [
+    const BASE64_64_BIT: [[char; 11]; 12] = [
         ['_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '8'],
         ['A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A'],
         ['Y', 'B', '7', 'D', 'R', '4', 'B', 'c', 'w', 'p', 'o'],
@@ -435,7 +435,7 @@ mod tests {
         -877220880,
     ];
 
-    const I32_BASE64: [[char; 6]; 12] = [
+    const BASE64_32_BIT: [[char; 6]; 12] = [
         ['_', '_', '_', '_', '_', 'w'],
         ['A', 'A', 'A', 'A', 'A', 'A'],
         ['n', 'D', 'G', 'w', 'T', 'w'],
@@ -454,7 +454,7 @@ mod tests {
         -1, 0, 30008, -2225, -14855, -23609, 30937, -6812, -24065, 13170, -8520, -13636,
     ];
 
-    const I16_BASE64: [[char; 3]; 12] = [
+    const BASE64_16_BIT: [[char; 3]; 12] = [
         ['_', '_', '8'],
         ['A', 'A', 'A'],
         ['d', 'T', 'g'],
@@ -473,7 +473,7 @@ mod tests {
     fn encode_i64_validation() {
         for i in 0..=11 {
             let output = base64::encode_i64(I64_INT[i]);
-            assert_eq!(output, I64_BASE64[i]);
+            assert_eq!(output, BASE64_64_BIT[i]);
         }
     }
 
@@ -481,7 +481,7 @@ mod tests {
     fn encode_i32_validation() {
         for i in 0..=11 {
             let output = base64::encode_i32(I32_INT[i]);
-            assert_eq!(output, I32_BASE64[i]);
+            assert_eq!(output, BASE64_32_BIT[i]);
         }
     }
 
@@ -489,14 +489,14 @@ mod tests {
     fn encode_i16_validation() {
         for i in 0..=11 {
             let output = base64::encode_i16(I16_INT[i]);
-            assert_eq!(output, I16_BASE64[i]);
+            assert_eq!(output, BASE64_16_BIT[i]);
         }
     }
 
     #[test]
     fn decode_i64_validation() {
         for i in 0..=11 {
-            let output = base64::decode_i64(I64_BASE64[i]).expect("failed to decode input");
+            let output = base64::decode_i64(BASE64_64_BIT[i]).expect("failed to decode input");
             assert_eq!(output, I64_INT[i]);
         }
     }
@@ -504,7 +504,7 @@ mod tests {
     #[test]
     fn decode_i32_validation() {
         for i in 0..=11 {
-            let output = base64::decode_i32(I32_BASE64[i]).expect("failed to decode input");
+            let output = base64::decode_i32(BASE64_32_BIT[i]).expect("failed to decode input");
             assert_eq!(output, I32_INT[i]);
         }
     }
@@ -512,7 +512,7 @@ mod tests {
     #[test]
     fn decode_i16_validation() {
         for i in 0..=11 {
-            let output = base64::decode_i16(I16_BASE64[i]).expect("failed to decode input");
+            let output = base64::decode_i16(BASE64_16_BIT[i]).expect("failed to decode input");
             assert_eq!(output, I16_INT[i]);
         }
     }
