@@ -1,6 +1,9 @@
 //! This crate contains the derive macro for [base64id-rs](https://github.com/shauncksm/base64id-rs).
 //! You shouldn't use this crate directly. See [here](https://docs.rs/base64id/latest/base64id/) instead.
 
+#![forbid(unsafe_code)]
+#![warn(missing_docs)]
+
 use proc_macro::TokenStream;
 use proc_macro2::{Ident, Span, TokenTree};
 use quote::quote;
