@@ -1,5 +1,5 @@
 macro_rules! generate_derive_test_suite {
-    ($test_suite:ident, $struct_type:ident, $int_type:ident, $int_value:literal, $int_type_u:ident, $int_value_u:literal, $struct_str:expr) => {
+    ($test_suite:ident, $struct_type:ident, $int_type:ident, $int_value:literal, $int_type_alt:ident, $int_value_alt:literal, $struct_str:expr) => {
         #[cfg(test)]
         mod $test_suite {
             use base64id::{Base64Id, Error};
@@ -35,29 +35,29 @@ macro_rules! generate_derive_test_suite {
 
             #[test]
             fn int_from_struct_u() {
-                let int_u = $int_type_u::from($struct_type($int_value));
-                assert_eq!(int_u, $int_value_u);
+                let int_u = $int_type_alt::from($struct_type($int_value));
+                assert_eq!(int_u, $int_value_alt);
             }
 
             #[test]
             fn struct_from_int_u() {
-                let id = $struct_type::from($int_value_u);
+                let id = $struct_type::from($int_value_alt);
                 assert!(matches!(id, $struct_type($int_value)));
             }
 
             #[test]
             fn min_const() {
                 assert_eq!(
-                    $int_type_u::MIN.to_be_bytes(),
-                    $int_type_u::from($struct_type::MIN).to_be_bytes()
+                    $int_type::from($struct_type::MIN).to_be_bytes(),
+                    $int_type_alt::from($struct_type::MIN).to_be_bytes()
                 );
             }
 
             #[test]
             fn max_const() {
                 assert_eq!(
-                    $int_type_u::MAX.to_be_bytes(),
-                    $int_type_u::from($struct_type::MAX).to_be_bytes()
+                    $int_type::from($struct_type::MAX).to_be_bytes(),
+                    $int_type_alt::from($struct_type::MAX).to_be_bytes()
                 );
             }
 
@@ -106,6 +106,8 @@ macro_rules! generate_derive_test_suite {
     };
 }
 
-generate_derive_test_suite!(derive_64, MyId64, i64, 0i64, u64, 0u64, "AAAAAAAAAAA");
+generate_derive_test_suite!(derive_64_i, MyIdi64, i64, 0i64, u64, 0u64, "AAAAAAAAAAA");
+generate_derive_test_suite!(derive_64_u, MyIdu64, u64, 0u64, i64, 0i64, "AAAAAAAAAAA");
+
 generate_derive_test_suite!(derive_32, MyId32, i32, 0i32, u32, 0u32, "AAAAAA");
 generate_derive_test_suite!(derive_16, MyId16, i16, 0i16, u16, 0u16, "AAA");

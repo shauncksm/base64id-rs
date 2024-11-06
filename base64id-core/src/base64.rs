@@ -84,13 +84,19 @@ fn decode_char(c: char) -> Result<u8, Error> {
     Ok(idx)
 }
 
-#[rustfmt::skip]
 pub fn encode_i64(input: i64) -> [char; 11] {
-    let b = input.to_be_bytes();
+    encode_64(input.to_be_bytes())
+}
 
-    let p1 = encode_quantum([b[0], b[1], b[2]]);
-    let p2 = encode_quantum([b[3], b[4], b[5]]);
-    let p3 = encode_partial_16([b[6], b[7]]);
+pub fn encode_u64(input: u64) -> [char; 11] {
+    encode_64(input.to_be_bytes())
+}
+
+#[rustfmt::skip]
+fn encode_64(bytes: [u8; 8]) -> [char; 11] {
+    let p1 = encode_quantum([bytes[0], bytes[1], bytes[2]]);
+    let p2 = encode_quantum([bytes[3], bytes[4], bytes[5]]);
+    let p3 = encode_partial_16([bytes[6], bytes[7]]);
 
     let product = [
         p1[0], p1[1], p1[2], p1[3],
@@ -127,6 +133,17 @@ pub fn encode_i16(input: i16) -> [char; 3] {
 
 #[rustfmt::skip]
 pub fn decode_i64(input: [char; 11]) -> Result<i64, Error> {
+    let bytes = decode_64(input)?;
+    Ok(i64::from_be_bytes(bytes))
+}
+
+#[rustfmt::skip]
+pub fn decode_u64(input: [char; 11]) -> Result<u64, Error> {
+    let bytes = decode_64(input)?;
+    Ok(u64::from_be_bytes(bytes))
+}
+
+fn decode_64(input: [char; 11]) -> Result<[u8; 8], Error> {
     let mut c: [u8; 11] = [0; 11];
 
     for i in 0..=10 {
@@ -137,11 +154,7 @@ pub fn decode_i64(input: [char; 11]) -> Result<i64, Error> {
     let p2 = decode_quantum([c[4], c[5], c[6], c[7]]);
     let p3 = decode_partial_16([c[8], c[9], c[10]])?;
 
-    Ok(i64::from_be_bytes([
-        p1[0], p1[1], p1[2],
-        p2[0], p2[1], p2[2],
-        p3[0], p3[1],
-    ]))
+    Ok([p1[0], p1[1], p1[2], p2[0], p2[1], p2[2], p3[0], p3[1]])
 }
 
 #[rustfmt::skip]
@@ -405,6 +418,21 @@ mod tests {
         6135322894040689502,
     ];
 
+    const U64_INT: [u64; 12] = [
+        u64::from_be_bytes(u64::MAX.to_be_bytes()),
+        0,
+        6926187988806058650,
+        2685194398265091357,
+        3161873750843059683,
+        18346529466575505198,
+        8763564039737214670,
+        16739081003593422698,
+        15209036241586303564,
+        4264493385337507395,
+        10056125592488327328,
+        6135322894040689502,
+    ];
+
     const BASE64_64_BIT: [[char; 11]; 12] = [
         ['_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '8'],
         ['A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A', 'A'],
@@ -514,6 +542,22 @@ mod tests {
         for i in 0..=11 {
             let output = base64::decode_i16(BASE64_16_BIT[i]).expect("failed to decode input");
             assert_eq!(output, I16_INT[i]);
+        }
+    }
+
+    #[test]
+    fn encode_u64_validation() {
+        for i in 0..=11 {
+            let output = base64::encode_u64(U64_INT[i]);
+            assert_eq!(output, BASE64_64_BIT[i]);
+        }
+    }
+
+    #[test]
+    fn decode_u64_validation() {
+        for i in 0..=11 {
+            let output = base64::decode_u64(BASE64_64_BIT[i]).expect("failed to decode input");
+            assert_eq!(output, U64_INT[i]);
         }
     }
 

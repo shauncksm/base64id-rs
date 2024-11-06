@@ -18,39 +18,64 @@ pub fn tuple_struct_into_base64id(input: TokenStream) -> TokenStream {
     let struct_inner_type = get_validated_struct_data(ast.data);
 
     let char_len = match struct_inner_type.to_string().as_str() {
-        "i64" => 11,
+        "i64" | "u64" => 11,
         "i32" => 6,
         "i16" => 3,
         _ => panic!("invalid type within tuple struct, expected i64, i32 or i16"),
     };
 
-    let (encode_fn, decode_fn, char_array_type, struct_inner_type_u) =
-        match struct_inner_type.to_string().as_str() {
-            "i64" => (
-                quote! {::base64id_core::base64::encode_i64},
-                quote! {::base64id_core::base64::decode_i64},
-                quote! {[char; #char_len]},
-                quote! {u64},
-            ),
-            "i32" => (
-                quote! {::base64id_core::base64::encode_i32},
-                quote! {::base64id_core::base64::decode_i32},
-                quote! {[char; #char_len]},
-                quote! {u32},
-            ),
-            "i16" => (
-                quote! {::base64id_core::base64::encode_i16},
-                quote! {::base64id_core::base64::decode_i16},
-                quote! {[char; #char_len]},
-                quote! {u16},
-            ),
-            _ => panic!("invalid type within tuple struct, expected i64, i32 or i16"),
-        };
+    let (
+        encode_fn,
+        decode_fn,
+        char_array_type,
+        struct_inner_type_u,
+        struct_inner_type_alt,
+        int_min,
+        int_max,
+    ) = match struct_inner_type.to_string().as_str() {
+        "i64" => (
+            quote! {::base64id_core::base64::encode_i64},
+            quote! {::base64id_core::base64::decode_i64},
+            quote! {[char; #char_len]},
+            quote! {u64},
+            quote! {u64},
+            quote! {0},
+            quote! {-1},
+        ),
+        "u64" => (
+            quote! {::base64id_core::base64::encode_u64},
+            quote! {::base64id_core::base64::decode_u64},
+            quote! {[char; #char_len]},
+            quote! {u64},
+            quote! {i64},
+            quote! {0},
+            quote! {#struct_inner_type::MAX},
+        ),
+        "i32" => (
+            quote! {::base64id_core::base64::encode_i32},
+            quote! {::base64id_core::base64::decode_i32},
+            quote! {[char; #char_len]},
+            quote! {u32},
+            quote! {u32},
+            quote! {0},
+            quote! {-1},
+        ),
+        "i16" => (
+            quote! {::base64id_core::base64::encode_i16},
+            quote! {::base64id_core::base64::decode_i16},
+            quote! {[char; #char_len]},
+            quote! {u16},
+            quote! {u16},
+            quote! {0},
+            quote! {-1},
+        ),
+        _ => panic!("invalid type within tuple struct, expected i64, i32 or i16"),
+    };
 
     let mut implementation = quote! {
         impl #ident {
-            const MIN: #ident = #ident(0);
-            const MAX: #ident = #ident(-1);
+            const MIN: #ident = #ident(#int_min);
+            const MAX: #ident = #ident(#int_max);
         }
 
         impl ::core::fmt::Display for #ident {
@@ -77,14 +102,14 @@ pub fn tuple_struct_into_base64id(input: TokenStream) -> TokenStream {
             }
         }
 
-        impl ::core::convert::From<#ident> for #struct_inner_type_u {
+        impl ::core::convert::From<#ident> for #struct_inner_type_alt {
             fn from(id: #ident) -> Self {
-                #struct_inner_type_u::from_be_bytes(id.0.to_be_bytes())
+                #struct_inner_type_alt::from_be_bytes(id.0.to_be_bytes())
             }
         }
 
-        impl ::core::convert::From<#struct_inner_type_u> for #ident {
-            fn from(id: #struct_inner_type_u) -> Self {
+        impl ::core::convert::From<#struct_inner_type_alt> for #ident {
+            fn from(id: #struct_inner_type_alt) -> Self {
                 Self(#struct_inner_type::from_be_bytes(id.to_be_bytes()))
             }
         }
@@ -309,7 +334,7 @@ fn get_validated_struct_data(data: syn::Data) -> syn::Ident {
     };
 
     match item_type.to_string().as_str() {
-        "i64" | "i32" | "i16" => item_type.clone(),
+        "i64" | "i32" | "i16" | "u64" => item_type.clone(),
         _ => panic!("invalid type within tuple struct, expected i64, i32 or i16"),
     }
 }
