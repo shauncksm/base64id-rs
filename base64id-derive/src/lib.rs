@@ -117,13 +117,16 @@ pub fn tuple_struct_into_base64id(input: TokenStream) -> TokenStream {
 
     let ident = ast.ident;
     let struct_inner_type = get_validated_struct_data(ast.data);
+    let struct_inner_type_string = struct_inner_type.to_string();
 
-    let char_len = match struct_inner_type.to_string().as_str() {
+    let char_len = match struct_inner_type_string.as_str() {
         "i64" | "u64" => 11,
         "i32" | "u32" => 6,
         "i16" | "u16" => 3,
         _ => panic!("{ERROR_INVALID_INNER_TYPE}"),
     };
+
+    let is_signed = struct_inner_type_string.starts_with("i");
 
     let (
         encode_fn,
@@ -133,7 +136,7 @@ pub fn tuple_struct_into_base64id(input: TokenStream) -> TokenStream {
         struct_inner_type_alt,
         int_min,
         int_max,
-    ) = match struct_inner_type.to_string().as_str() {
+    ) = match struct_inner_type_string.as_str() {
         "i64" => (
             quote! {::base64id_core::base64::encode_i64},
             quote! {::base64id_core::base64::decode_i64},
@@ -269,32 +272,60 @@ pub fn tuple_struct_into_base64id(input: TokenStream) -> TokenStream {
             }
         }
         impl ::core::cmp::Eq for #ident {}
+    };
 
+    apply_ord_trait(&ident, struct_inner_type_u, is_signed, &mut implementation);
+
+    evaluate_attributes(&ident, ast.attrs, char_len, &mut implementation);
+
+    implementation.into()
+}
+
+/// Add PartialOrd and Ord trait to struct.
+/// This applies a signed to unsigned integer byte conversion if the inner integer type is signed
+fn apply_ord_trait(
+    ident: &proc_macro2::Ident,
+    struct_inner_type_u: proc_macro2::TokenStream,
+    is_signed: bool,
+    implementation: &mut proc_macro2::TokenStream,
+) {
+    implementation.extend(quote! {
         impl ::core::cmp::PartialOrd for #ident {
             fn partial_cmp(&self, other: &Self) -> ::core::option::Option<::core::cmp::Ordering> {
                 Some(self.cmp(other))
             }
         }
+    });
 
-        impl ::core::cmp::Ord for #ident {
-            fn cmp(&self, other: &Self) -> ::core::cmp::Ordering {
-                let this = #struct_inner_type_u::from_be_bytes(self.0.to_be_bytes());
-                let other = #struct_inner_type_u::from_be_bytes(other.0.to_be_bytes());
+    if is_signed {
+        implementation.extend(quote! {
+            impl ::core::cmp::Ord for #ident {
+                fn cmp(&self, other: &Self) -> ::core::cmp::Ordering {
+                    let this = #struct_inner_type_u::from_be_bytes(self.0.to_be_bytes());
+                    let other = #struct_inner_type_u::from_be_bytes(other.0.to_be_bytes());
 
-                this.cmp(&other)
+                    this.cmp(&other)
+                }
             }
-        }
-    };
+        });
+    } else {
+        implementation.extend(quote! {
+            impl ::core::cmp::Ord for #ident {
+                fn cmp(&self, other: &Self) -> ::core::cmp::Ordering {
+                    let this = self.0;
+                    let other = other.0;
 
-    evaluate_attributes(ident, ast.attrs, char_len, &mut implementation);
-
-    implementation.into()
+                    this.cmp(&other)
+                }
+            }
+        });
+    }
 }
 
 /// Determines if the base64id attribute is present
 /// and if it contains expected keywords
 fn evaluate_attributes(
-    ident: proc_macro2::Ident,
+    ident: &proc_macro2::Ident,
     attrs: Vec<Attribute>,
     char_len: usize,
     implementation: &mut proc_macro2::TokenStream,
