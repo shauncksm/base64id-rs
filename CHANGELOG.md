@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - New `Base64Id` derive macro in new `base64id_derive` crate
+- Support for unsigned integer types (u64, u32, u16)
 
 ### Changed
 - (Breaking) Replaced serde feature flag with Base64Id derive macro helper attribute
