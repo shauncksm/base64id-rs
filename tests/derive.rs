@@ -109,5 +109,7 @@ macro_rules! generate_derive_test_suite {
 generate_derive_test_suite!(derive_64_i, MyIdi64, i64, 0i64, u64, 0u64, "AAAAAAAAAAA");
 generate_derive_test_suite!(derive_64_u, MyIdu64, u64, 0u64, i64, 0i64, "AAAAAAAAAAA");
 
-generate_derive_test_suite!(derive_32, MyId32, i32, 0i32, u32, 0u32, "AAAAAA");
+generate_derive_test_suite!(derive_32_i, MyIdi32, i32, 0i32, u32, 0u32, "AAAAAA");
+generate_derive_test_suite!(derive_32_u, MyIdu32, u32, 0u32, i32, 0i32, "AAAAAA");
+
 generate_derive_test_suite!(derive_16, MyId16, i16, 0i16, u16, 0u16, "AAA");

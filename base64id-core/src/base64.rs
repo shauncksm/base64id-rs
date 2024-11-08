@@ -109,10 +109,18 @@ fn encode_64(bytes: [u8; 8]) -> [char; 11] {
 
 #[rustfmt::skip]
 pub fn encode_i32(input: i32) -> [char; 6] {
-    let b = input.to_be_bytes();
+    encode_32(input.to_be_bytes())
+}
 
-    let p1 = encode_quantum([b[0], b[1], b[2]]);
-    let p2 = encode_partial_8(b[3]);
+#[rustfmt::skip]
+pub fn encode_u32(input: u32) -> [char; 6] {
+    encode_32(input.to_be_bytes())
+}
+
+#[rustfmt::skip]
+fn encode_32(bytes: [u8; 4]) -> [char; 6] {
+    let p1 = encode_quantum([bytes[0], bytes[1], bytes[2]]);
+    let p2 = encode_partial_8(bytes[3]);
 
     let product = [
         p1[0], p1[1], p1[2], p1[3],
@@ -159,6 +167,18 @@ fn decode_64(input: [char; 11]) -> Result<[u8; 8], Error> {
 
 #[rustfmt::skip]
 pub fn decode_i32(input: [char; 6]) -> Result<i32, Error> {
+    let bytes = decode_32(input)?;
+    Ok(i32::from_be_bytes(bytes))
+}
+
+#[rustfmt::skip]
+pub fn decode_u32(input: [char; 6]) -> Result<u32, Error> {
+    let bytes = decode_32(input)?;
+    Ok(u32::from_be_bytes(bytes))
+}
+
+#[rustfmt::skip]
+pub fn decode_32(input: [char; 6]) -> Result<[u8; 4], Error> {
     let mut c: [u8; 6] = [0; 6];
 
     for i in 0..=5 {
@@ -168,10 +188,10 @@ pub fn decode_i32(input: [char; 6]) -> Result<i32, Error> {
     let p1 = decode_quantum([c[0], c[1], c[2], c[3]]);
     let p2 = decode_partial_8([c[4], c[5]])?;
 
-    Ok(i32::from_be_bytes([
+    Ok([
         p1[0], p1[1], p1[2],
-        p2,
-    ]))
+        p2
+    ])
 }
 
 #[rustfmt::skip]
@@ -463,6 +483,21 @@ mod tests {
         -877220880,
     ];
 
+    const U32_INT: [u32; 12] = [
+        u32::from_be_bytes(u32::MAX.to_be_bytes()),
+        0,
+        2620502095,
+        1200409755,
+        4275879795,
+        489625798,
+        2147867108,
+        2488961279,
+        3476436790,
+        3430652167,
+        1069495787,
+        3417746416,
+    ];
+
     const BASE64_32_BIT: [[char; 6]; 12] = [
         ['_', '_', '_', '_', '_', 'w'],
         ['A', 'A', 'A', 'A', 'A', 'A'],
@@ -554,10 +589,26 @@ mod tests {
     }
 
     #[test]
+    fn encode_u32_validation() {
+        for i in 0..=11 {
+            let output = base64::encode_u32(U32_INT[i]);
+            assert_eq!(output, BASE64_32_BIT[i]);
+        }
+    }
+
+    #[test]
     fn decode_u64_validation() {
         for i in 0..=11 {
             let output = base64::decode_u64(BASE64_64_BIT[i]).expect("failed to decode input");
             assert_eq!(output, U64_INT[i]);
+        }
+    }
+
+    #[test]
+    fn decode_u32_validation() {
+        for i in 0..=11 {
+            let output = base64::decode_u32(BASE64_32_BIT[i]).expect("failed to decode input");
+            assert_eq!(output, U32_INT[i]);
         }
     }
 

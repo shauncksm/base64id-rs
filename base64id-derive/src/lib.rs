@@ -19,7 +19,7 @@ pub fn tuple_struct_into_base64id(input: TokenStream) -> TokenStream {
 
     let char_len = match struct_inner_type.to_string().as_str() {
         "i64" | "u64" => 11,
-        "i32" => 6,
+        "i32" | "u32" => 6,
         "i16" => 3,
         _ => panic!("invalid type within tuple struct, expected i64, i32 or i16"),
     };
@@ -59,6 +59,15 @@ pub fn tuple_struct_into_base64id(input: TokenStream) -> TokenStream {
             quote! {u32},
             quote! {0},
             quote! {-1},
+        ),
+        "u32" => (
+            quote! {::base64id_core::base64::encode_u32},
+            quote! {::base64id_core::base64::decode_u32},
+            quote! {[char; #char_len]},
+            quote! {u32},
+            quote! {i32},
+            quote! {0},
+            quote! {#struct_inner_type::MAX},
         ),
         "i16" => (
             quote! {::base64id_core::base64::encode_i16},
@@ -334,7 +343,7 @@ fn get_validated_struct_data(data: syn::Data) -> syn::Ident {
     };
 
     match item_type.to_string().as_str() {
-        "i64" | "i32" | "i16" | "u64" => item_type.clone(),
+        "i64" | "i32" | "i16" | "u64" | "u32" => item_type.clone(),
         _ => panic!("invalid type within tuple struct, expected i64, i32 or i16"),
     }
 }
