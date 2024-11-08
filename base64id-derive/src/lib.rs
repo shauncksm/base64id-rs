@@ -111,6 +111,11 @@ const ERROR_INVALID_INNER_TYPE: &str =
 /// ```
 ///
 /// You can add neither, either or both traits as needed.
+///
+/// ## `MIN` / `MAX` Constants
+///
+/// In addition to the above trait implementations, `MIN` and `MAX` constants are added.
+/// These values are based on the inner integers unsigned / binary representation.
 #[proc_macro_derive(Base64Id, attributes(base64id))]
 pub fn tuple_struct_into_base64id(input: TokenStream) -> TokenStream {
     let ast: DeriveInput = syn::parse(input).expect("failed to parse token stream");
