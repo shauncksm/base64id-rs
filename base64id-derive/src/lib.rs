@@ -289,6 +289,7 @@ fn apply_deserialize_trait(
             }
         }
 
+        #[allow(non_camel_case_types)]
         struct #visitor;
 
         impl<'de> ::serde::de::Visitor<'de> for #visitor {
