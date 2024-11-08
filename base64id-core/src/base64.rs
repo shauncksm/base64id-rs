@@ -107,12 +107,10 @@ fn encode_64(bytes: [u8; 8]) -> [char; 11] {
     product.map(|d| char::from(ALPHABET_BASE64URL_BYTES[usize::from(d)]))
 }
 
-#[rustfmt::skip]
 pub fn encode_i32(input: i32) -> [char; 6] {
     encode_32(input.to_be_bytes())
 }
 
-#[rustfmt::skip]
 pub fn encode_u32(input: u32) -> [char; 6] {
     encode_32(input.to_be_bytes())
 }
@@ -130,35 +128,31 @@ fn encode_32(bytes: [u8; 4]) -> [char; 6] {
     product.map(|d| char::from(ALPHABET_BASE64URL_BYTES[usize::from(d)]))
 }
 
-#[rustfmt::skip]
 pub fn encode_i16(input: i16) -> [char; 3] {
     encode_16(input.to_be_bytes())
 }
 
-#[rustfmt::skip]
 pub fn encode_u16(input: u16) -> [char; 3] {
     encode_16(input.to_be_bytes())
 }
 
-#[rustfmt::skip]
 pub fn encode_16(bytes: [u8; 2]) -> [char; 3] {
     let product = encode_partial_16([bytes[0], bytes[1]]);
 
     product.map(|d| char::from(ALPHABET_BASE64URL_BYTES[usize::from(d)]))
 }
 
-#[rustfmt::skip]
 pub fn decode_i64(input: [char; 11]) -> Result<i64, Error> {
     let bytes = decode_64(input)?;
     Ok(i64::from_be_bytes(bytes))
 }
 
-#[rustfmt::skip]
 pub fn decode_u64(input: [char; 11]) -> Result<u64, Error> {
     let bytes = decode_64(input)?;
     Ok(u64::from_be_bytes(bytes))
 }
 
+#[rustfmt::skip]
 fn decode_64(input: [char; 11]) -> Result<[u8; 8], Error> {
     let mut c: [u8; 11] = [0; 11];
 
@@ -170,16 +164,18 @@ fn decode_64(input: [char; 11]) -> Result<[u8; 8], Error> {
     let p2 = decode_quantum([c[4], c[5], c[6], c[7]]);
     let p3 = decode_partial_16([c[8], c[9], c[10]])?;
 
-    Ok([p1[0], p1[1], p1[2], p2[0], p2[1], p2[2], p3[0], p3[1]])
+    Ok([
+        p1[0], p1[1], p1[2],
+        p2[0], p2[1], p2[2],
+        p3[0], p3[1]
+    ])
 }
 
-#[rustfmt::skip]
 pub fn decode_i32(input: [char; 6]) -> Result<i32, Error> {
     let bytes = decode_32(input)?;
     Ok(i32::from_be_bytes(bytes))
 }
 
-#[rustfmt::skip]
 pub fn decode_u32(input: [char; 6]) -> Result<u32, Error> {
     let bytes = decode_32(input)?;
     Ok(u32::from_be_bytes(bytes))
@@ -202,19 +198,16 @@ pub fn decode_32(input: [char; 6]) -> Result<[u8; 4], Error> {
     ])
 }
 
-#[rustfmt::skip]
 pub fn decode_i16(input: [char; 3]) -> Result<i16, Error> {
     let bytes = decode_16(input)?;
     Ok(i16::from_be_bytes(bytes))
 }
 
-#[rustfmt::skip]
 pub fn decode_u16(input: [char; 3]) -> Result<u16, Error> {
     let bytes = decode_16(input)?;
     Ok(u16::from_be_bytes(bytes))
 }
 
-#[rustfmt::skip]
 pub fn decode_16(input: [char; 3]) -> Result<[u8; 2], Error> {
     let mut c: [u8; 3] = [0; 3];
 
