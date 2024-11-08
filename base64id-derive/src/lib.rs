@@ -13,6 +13,104 @@ const ERROR_INVALID_INNER_TYPE: &str =
     "invalid type within tuple struct, expected i64, u64, i32, u32, i16 or u16";
 
 /// Create your own base64id tuple struct
+///
+/// # Usage
+///
+/// In it's most simple form, `#[derive(Base64Id)]` may be used as follows:
+/// ```ignore
+/// #[derive(Base64Id)]
+/// struct MyCustomId(T);
+/// ```
+///
+/// Where `T` is any of the following concrete types:
+/// [`i64`](https://doc.rust-lang.org/core/primitive.i64.html),
+/// [`i32`](https://doc.rust-lang.org/core/primitive.i32.html),
+/// [`i16`](https://doc.rust-lang.org/core/primitive.i16.html),
+/// [`u64`](https://doc.rust-lang.org/core/primitive.u64.html),
+/// [`u32`](https://doc.rust-lang.org/core/primitive.u32.html),
+/// [`u16`](https://doc.rust-lang.org/core/primitive.u16.html)
+///
+/// For example:
+/// ```ignore
+/// #[derive(Base64Id)]
+/// struct MyCustomId(i64);
+/// ```
+///
+/// ## Derive Macro Trait Implementations
+/// Once `#[derive(Base64Id)]` is applied to a tuple struct as described above, the following trait implementations are added:
+///
+/// #### [`Display`](https://doc.rust-lang.org/core/fmt/trait.Display.html)
+///
+/// Display is added to encode the inner integer as a base64url string of appropriate length.
+///
+/// #### [`FromStr`](https://doc.rust-lang.org/core/str/trait.FromStr.html)
+///
+/// FromStr is added to decode any string from base64url to the inner integer type, returning an [`Error`](https://docs.rs/base64id/latest/base64id/enum.Error.html) on failure.
+///
+/// #### [`TryFrom`](https://doc.rust-lang.org/core/convert/trait.TryFrom.html)
+///
+/// `TryFrom<[char; n]>` is added where `n` is the length of a given base64url string.
+/// This allows for converting a [`char`](https://doc.rust-lang.org/core/primitive.char.html) array of length `n` into your tuple struct.
+/// The value of `n` is:
+/// - 11 for 64 bit integers
+/// - 6 for 32 bit integers
+/// - 3 for 16 bit integers
+///
+/// #### [`PartialEq`](https://doc.rust-lang.org/core/cmp/trait.PartialEq.html), [`Eq`](https://doc.rust-lang.org/core/cmp/trait.Eq.html)
+///
+/// These are standard impl's and have no special behaviour.
+///
+/// #### [`PartialOrd`](https://doc.rust-lang.org/core/cmp/trait.PartialOrd.html), [`Ord`](https://doc.rust-lang.org/core/cmp/trait.Ord.html)
+///
+/// These traits are implemented with special behaviour where the inner type is a signed integer.
+///
+/// For unsigned integers the ordering behaviour is standard.
+/// For signed integers, the value is converted to big endian bytes, these bytes are then converted into an unsigned integer and order comparsion is done on this.
+///
+/// In other words, order comparions are based on the unsigned integer / binary representation of the integer.
+///
+/// #### [`From`](https://doc.rust-lang.org/core/convert/trait.From.html)
+///
+/// Four `From` trait impl's are added.
+/// Given the following example struct:
+/// ```ignore
+/// #[derive(Base64Id)]
+/// struct MyCustomId(i64);
+/// ```
+///
+/// The following `From` traits would be added:
+///
+/// ```ignore
+/// impl From<MyCustomId> for i64;
+/// impl From<i64> for MyCustomId;
+///
+/// impl From<MyCustomId> for u64;
+/// impl From<u64> for MyCustomId;
+/// ```
+///
+/// The first two trait impl's allow converting to and from the structs internal integer type, useful for simply extracting the internal integer out of the struct.
+///
+/// The last two allow converting integers **of the opposite sign** to and from the struct.
+/// This conversion preserves the binary representation of the integer.
+/// In practice this means signed and unsigned positive integers will have the same decimal value when converting between them.
+/// However, signed and unsigned negative integers will have different decimal values however.
+///
+/// ## Serde Trait Implementations
+///
+/// #### [`Serialize`](https://docs.rs/serde/latest/serde/trait.Serialize.html), [`Deserialize`](https://docs.rs/serde/latest/serde/trait.Deserialize.html)
+///
+/// You can also add optional Serde Serialize and Deserialize trait implementations to the struct.
+/// To do this you must include Serde as a dependency in your Cargo.toml file.
+/// Serde is not a dependency of this crate.
+///
+/// Serde traits can be applied using the following derive macro helper attribute:
+/// ```ignore
+/// #[derive(Base64Id)]
+/// #[base64id(Serialize, Deserialize)]
+/// struct MyCustomId(i64);
+/// ```
+///
+/// You can add neither, either or both traits as needed.
 #[proc_macro_derive(Base64Id, attributes(base64id))]
 pub fn tuple_struct_into_base64id(input: TokenStream) -> TokenStream {
     let ast: DeriveInput = syn::parse(input).expect("failed to parse token stream");
@@ -329,6 +427,7 @@ fn apply_deserialize_trait(
     ));
 }
 
+/// Ensure data type is a tuple struct and contains one of the expected integer types inside
 fn get_validated_struct_data(data: syn::Data) -> syn::Ident {
     let data = match data {
         syn::Data::Struct(s) => s,
