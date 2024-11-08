@@ -136,7 +136,7 @@ pub fn encode_u16(input: u16) -> [char; 3] {
     encode_16(input.to_be_bytes())
 }
 
-pub fn encode_16(bytes: [u8; 2]) -> [char; 3] {
+fn encode_16(bytes: [u8; 2]) -> [char; 3] {
     let product = encode_partial_16([bytes[0], bytes[1]]);
 
     product.map(|d| char::from(ALPHABET_BASE64URL_BYTES[usize::from(d)]))
@@ -182,7 +182,7 @@ pub fn decode_u32(input: [char; 6]) -> Result<u32, Error> {
 }
 
 #[rustfmt::skip]
-pub fn decode_32(input: [char; 6]) -> Result<[u8; 4], Error> {
+fn decode_32(input: [char; 6]) -> Result<[u8; 4], Error> {
     let mut c: [u8; 6] = [0; 6];
 
     for i in 0..=5 {
@@ -208,7 +208,7 @@ pub fn decode_u16(input: [char; 3]) -> Result<u16, Error> {
     Ok(u16::from_be_bytes(bytes))
 }
 
-pub fn decode_16(input: [char; 3]) -> Result<[u8; 2], Error> {
+fn decode_16(input: [char; 3]) -> Result<[u8; 2], Error> {
     let mut c: [u8; 3] = [0; 3];
 
     for i in 0..=2 {
