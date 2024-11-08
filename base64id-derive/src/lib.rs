@@ -9,6 +9,9 @@ use proc_macro2::{Ident, Span, TokenTree};
 use quote::quote;
 use syn::{Attribute, DeriveInput, Meta};
 
+const ERROR_INVALID_INNER_TYPE: &str =
+    "invalid type within tuple struct, expected i64, u64, i32, u32, i16 or u16";
+
 /// Create your own base64id tuple struct
 #[proc_macro_derive(Base64Id, attributes(base64id))]
 pub fn tuple_struct_into_base64id(input: TokenStream) -> TokenStream {
@@ -21,7 +24,7 @@ pub fn tuple_struct_into_base64id(input: TokenStream) -> TokenStream {
         "i64" | "u64" => 11,
         "i32" | "u32" => 6,
         "i16" | "u16" => 3,
-        _ => panic!("invalid type within tuple struct, expected i64, i32 or i16"),
+        _ => panic!("{ERROR_INVALID_INNER_TYPE}"),
     };
 
     let (
@@ -87,7 +90,7 @@ pub fn tuple_struct_into_base64id(input: TokenStream) -> TokenStream {
             quote! {0},
             quote! {#struct_inner_type::MAX},
         ),
-        _ => panic!("invalid type within tuple struct, expected i64, i32 or i16"),
+        _ => panic!("{ERROR_INVALID_INNER_TYPE}"),
     };
 
     let mut implementation = quote! {
@@ -343,16 +346,16 @@ fn get_validated_struct_data(data: syn::Data) -> syn::Ident {
 
     let item_path = match item.ty.clone() {
         syn::Type::Path(p) => p.path,
-        _ => panic!("invalid type within tuple struct, expected i64, i32 or i16"),
+        _ => panic!("{ERROR_INVALID_INNER_TYPE}"),
     };
 
     let item_type = match item_path.get_ident() {
         Some(t) => t,
-        None => panic!("invalid type within tuple struct, expected i64, i32 or i16"),
+        None => panic!("{ERROR_INVALID_INNER_TYPE}"),
     };
 
     match item_type.to_string().as_str() {
         "i64" | "i32" | "i16" | "u64" | "u32" | "u16" => item_type.clone(),
-        _ => panic!("invalid type within tuple struct, expected i64, i32 or i16"),
+        _ => panic!("{ERROR_INVALID_INNER_TYPE}"),
     }
 }
