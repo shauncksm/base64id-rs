@@ -43,10 +43,8 @@ The motivation for this library was to design and implement the core concept onc
 Add the following to your `Cargo.toml` file
 ```toml
 [dependencies]
-base64id = { version = "0.4", features = ["std"] }
+base64id = "0.4"
 ```
-
-For `#![no_std]` environments the `std` cargo feature can be omitted.
 
 ## Usage
 You start by creating your own tuple struct with a single `i64`, `i32` or `i16`. Then apply the `Base64Id` derive macro to your struct.

@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - (Breaking) Removed `Id64`, `Id32` and `Id16` structs (See Base64Id derive macro)
 - (Breaking) Removed direct SQLx support and all related documentation
 - (Breaking) Removed direct rand support and most related documentation
+- (Breaking) Removed `std` cargo feature flag
 - Removed Cargo.lock from version control
 
 ## [v0.3.1]

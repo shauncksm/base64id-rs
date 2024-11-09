@@ -5,9 +5,6 @@
 #![forbid(unsafe_code)]
 #![warn(missing_docs)]
 
-#[cfg(feature = "std")]
-extern crate std;
-
 #[allow(missing_docs)]
 pub mod base64;
 mod error;

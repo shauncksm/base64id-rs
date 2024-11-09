@@ -3,9 +3,6 @@
         "editor.defaultFormatter": "rust-lang.rust-analyzer",
         "editor.formatOnSave": true
     },
-    "rust-analyzer.cargo.features": [
-        "std"
-    ],
     "rust-analyzer.linkedProjects": [
         "./Cargo.toml"
     ]

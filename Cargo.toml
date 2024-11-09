@@ -30,9 +30,6 @@ keywords.workspace = true
 license.workspace = true
 version.workspace = true
 
-[features]
-std = ["base64id-core/std"]
-
 [dependencies]
 base64id-core = { workspace = true }
 base64id-derive = { workspace = true }

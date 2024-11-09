@@ -1,14 +1,13 @@
 //! This crate allows for fixed length 64, 32 and 16 bit integers to be represented as [base64url](https://datatracker.ietf.org/doc/html/rfc4648#section-5) encoded strings.
 //! This is useful for exchanging unique identifiers in a web based contexts; eg. sending an SQL primary key to a client with as few character as possible.
 //!
-//! This crate is `#![no_std]` by default.
-//! You can use the `std` cargo feature flag to enable support for the standard library
+//! This crate is `#![no_std]`.
 //!
 //! ## Quick Start
 //! Add the following to your `Cargo.toml` file.
 //! ```toml
 //! [dependencies]
-//! base64id = { version = "0.4", features = ["std"] }
+//! base64id = "0.4"
 //! ```
 //!
 //! ### Encoding
