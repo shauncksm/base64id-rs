@@ -47,6 +47,9 @@ Add the following to your `Cargo.toml` file
 base64id = "0.4"
 ```
 
+### Migrating From v0.3
+For users of v0.3.x or less migrating to v0.4.0 or greater, please see the [migration guide](docs/MIGRATION.0.4.md).
+
 ## Usage
 You start by creating your own tuple struct with a single `i64`, `i32` or `i16`. Then apply the `Base64Id` derive macro to your struct.
 
