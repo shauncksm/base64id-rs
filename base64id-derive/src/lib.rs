@@ -143,8 +143,8 @@ pub fn tuple_struct_into_base64id(input: TokenStream) -> TokenStream {
         int_max,
     ) = match struct_inner_type_string.as_str() {
         "i64" => (
-            quote! {::base64id_core::base64::encode_i64},
-            quote! {::base64id_core::base64::decode_i64},
+            quote! {::base64id::base64::encode_i64},
+            quote! {::base64id::base64::decode_i64},
             quote! {[char; #char_len]},
             quote! {u64},
             quote! {u64},
@@ -152,8 +152,8 @@ pub fn tuple_struct_into_base64id(input: TokenStream) -> TokenStream {
             quote! {-1},
         ),
         "u64" => (
-            quote! {::base64id_core::base64::encode_u64},
-            quote! {::base64id_core::base64::decode_u64},
+            quote! {::base64id::base64::encode_u64},
+            quote! {::base64id::base64::decode_u64},
             quote! {[char; #char_len]},
             quote! {u64},
             quote! {i64},
@@ -161,8 +161,8 @@ pub fn tuple_struct_into_base64id(input: TokenStream) -> TokenStream {
             quote! {#struct_inner_type::MAX},
         ),
         "i32" => (
-            quote! {::base64id_core::base64::encode_i32},
-            quote! {::base64id_core::base64::decode_i32},
+            quote! {::base64id::base64::encode_i32},
+            quote! {::base64id::base64::decode_i32},
             quote! {[char; #char_len]},
             quote! {u32},
             quote! {u32},
@@ -170,8 +170,8 @@ pub fn tuple_struct_into_base64id(input: TokenStream) -> TokenStream {
             quote! {-1},
         ),
         "u32" => (
-            quote! {::base64id_core::base64::encode_u32},
-            quote! {::base64id_core::base64::decode_u32},
+            quote! {::base64id::base64::encode_u32},
+            quote! {::base64id::base64::decode_u32},
             quote! {[char; #char_len]},
             quote! {u32},
             quote! {i32},
@@ -179,8 +179,8 @@ pub fn tuple_struct_into_base64id(input: TokenStream) -> TokenStream {
             quote! {#struct_inner_type::MAX},
         ),
         "i16" => (
-            quote! {::base64id_core::base64::encode_i16},
-            quote! {::base64id_core::base64::decode_i16},
+            quote! {::base64id::base64::encode_i16},
+            quote! {::base64id::base64::decode_i16},
             quote! {[char; #char_len]},
             quote! {u16},
             quote! {u16},
@@ -188,8 +188,8 @@ pub fn tuple_struct_into_base64id(input: TokenStream) -> TokenStream {
             quote! {-1},
         ),
         "u16" => (
-            quote! {::base64id_core::base64::encode_u16},
-            quote! {::base64id_core::base64::decode_u16},
+            quote! {::base64id::base64::encode_u16},
+            quote! {::base64id::base64::decode_u16},
             quote! {[char; #char_len]},
             quote! {u16},
             quote! {i16},
@@ -242,7 +242,7 @@ pub fn tuple_struct_into_base64id(input: TokenStream) -> TokenStream {
         }
 
         impl ::core::convert::TryFrom<#char_array_type> for #ident {
-            type Error = ::base64id_core::Error;
+            type Error = ::base64id::Error;
 
             fn try_from(input: #char_array_type) -> ::core::result::Result<Self, Self::Error> {
                 Ok(Self(#decode_fn(input)?))
@@ -250,7 +250,7 @@ pub fn tuple_struct_into_base64id(input: TokenStream) -> TokenStream {
         }
 
         impl ::core::str::FromStr for #ident {
-            type Err = ::base64id_core::Error;
+            type Err = ::base64id::Error;
 
             fn from_str(id: &str) -> ::core::result::Result<Self, Self::Err> {
                 let mut array: #char_array_type = ::core::default::Default::default();
@@ -259,12 +259,12 @@ pub fn tuple_struct_into_base64id(input: TokenStream) -> TokenStream {
                 for c in array.iter_mut() {
                     *c = match id_iter.next() {
                         Some(d) => d,
-                        None => return Err(::base64id_core::Error::InvalidLength),
+                        None => return Err(::base64id::Error::InvalidLength),
                     };
                 }
 
                 if id_iter.next().is_some() {
-                    return Err(::base64id_core::Error::InvalidLength);
+                    return Err(::base64id::Error::InvalidLength);
                 }
 
                 #ident::try_from(array)
@@ -447,12 +447,12 @@ fn apply_deserialize_trait(
                 const ERR: &str = concat!("unknown error! expected exactly ", #char_len, "base64url characters");
 
                 #ident::from_str(v).map_err(|e| match e {
-                    ::base64id_core::Error::InvalidLength => E::invalid_length(v.len(), &EXP1),
-                    ::base64id_core::Error::InvalidCharacter => E::invalid_value(
+                    ::base64id::Error::InvalidLength => E::invalid_length(v.len(), &EXP1),
+                    ::base64id::Error::InvalidCharacter => E::invalid_value(
                         ::serde::de::Unexpected::Other("1 or more non-base64url characters"),
                         &EXP1,
                     ),
-                    ::base64id_core::Error::OutOfBoundsCharacter => E::invalid_value(
+                    ::base64id::Error::OutOfBoundsCharacter => E::invalid_value(
                         ::serde::de::Unexpected::Other("the last character was out of bounds"),
                         &EXP2,
                     ),
