@@ -1,26 +1,26 @@
 use core::fmt;
 
-/// Error enum for base64url decoding
+/// Enum for base64url decoding errors
 #[derive(Debug, PartialEq, Eq)]
 #[non_exhaustive]
 pub enum Error {
-    /// returned when input data contains an invalid number of characters
+    /// Returned when input data contains an invalid number of characters
     ///
     /// ## Expected Lengths
-    /// - `i64` 11 characters
-    /// - `i32` 6 characters
-    /// - `i16` 3 characters
+    /// - `i64` or `u64`: 11 characters
+    /// - `i32` or `u32`: 6 characters
+    /// - `i16` or `u16`: 3 characters
     InvalidLength,
-    /// returned when input data conatins a character that is not within the base64url alphabet
+    /// Returned when input data conatins a character that is not within the base64url alphabet
     InvalidCharacter,
-    /// returned when the last character of input data is out of bounds
+    /// Returned when the last character of input data is out of bounds
     ///
-    /// For `i64` and `i16` values, the last character must be one of the following:
+    /// For `i64`, `u64`, `i16` and `u16` values, the last character must be one of the following:
     /// ```txt
     /// AEIMQUYcgkosw048
     /// ```
     ///
-    /// For `i32` values, the last character must be one of the following:
+    /// For `i32` and `u32` values, the last character must be one of the following:
     /// ```txt
     /// AQgw
     /// ```
