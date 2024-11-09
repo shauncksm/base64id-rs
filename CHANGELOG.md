@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - (Breaking) Replaced serde feature flag with Base64Id derive macro helper attribute
 - Moved majority of crate code to new `base64id_core` crate re-exported via `pub use`
+- Replaced std::error::Error with core::error::Error on crate Error enum
 
 ### Removed
 - (Breaking) Removed `Id64`, `Id32` and `Id16` structs (See Base64Id derive macro)

@@ -22,6 +22,24 @@ macro_rules! generate_error_test_suite {
                 let id = TestId::from_str($bad_char).unwrap_err();
                 debug_assert_eq!(id, InvalidCharacter);
             }
+
+            #[test]
+            fn core_error_trait_impl() {
+                fn test<E: core::error::Error>(_: E) {}
+
+                let error = InvalidLength;
+
+                test(error);
+            }
+
+            #[test]
+            fn std_error_trait_impl() {
+                fn test<E: std::error::Error>(_: E) {}
+
+                let error = InvalidLength;
+
+                test(error);
+            }
         }
     };
 }

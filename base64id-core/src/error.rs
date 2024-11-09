@@ -1,8 +1,6 @@
 use core::fmt;
 
 /// Error enum for base64url decoding
-///
-/// This enum will only implement the `std::error::Error` trait when the `std` feature flag is enabled. This is not enabled by default.
 #[derive(Debug, PartialEq, Eq)]
 #[non_exhaustive]
 pub enum Error {
@@ -29,8 +27,7 @@ pub enum Error {
     OutOfBoundsCharacter,
 }
 
-#[cfg(feature = "std")]
-impl std::error::Error for Error {}
+impl core::error::Error for Error {}
 
 impl fmt::Display for Error {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
