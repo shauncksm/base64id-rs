@@ -17,7 +17,8 @@ jHamKFSl5oM  -8325284168998721917  10121459904710829699
 ```
 
 An integer is efficiently stored and manipulated in memory.
-However the integer cannot be sent to/from a web client in a url safe manor, without some encoding scheme. This library allows you to encode the integer to/from an base64url character string.
+However the integer cannot be sent to/from a web client in a url safe manor, without some encoding scheme.
+This library allows you to encode the integer to/from an base64url character string.
 
 For a video of the underlying concept in action, see [here](https://www.youtube.com/watch?v=gocwRvLhDf8).
 
@@ -25,7 +26,7 @@ For a video of the underlying concept in action, see [here](https://www.youtube.
 - Integers are made url safe
 - Encoded integers use fewer bytes as compared to hex or decimal encoding
 - Tests for [RFC 4648](https://www.rfc-editor.org/rfc/rfc4648) compliance where implemented from the start and across the entire libary
-- base64id is `#![no_std]` by default with no heap allocation required
+- base64id uses `#![no_std]` with no heap allocation required
 - base64id uses `#![forbid(unsafe_code)]`
 
 ## Website

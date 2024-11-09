@@ -1,6 +1,7 @@
 # base64id-core
 
-This crate contains the core library code for [base64id-rs](https://github.com/shauncksm/base64id-rs). You shouldn't use this crate directly. See [here](https://crates.io/crates/base64id) instead.
+This crate contains the core library code for [base64id-rs](https://github.com/shauncksm/base64id-rs).
+You shouldn't use this crate directly. See [here](https://crates.io/crates/base64id) instead.
 
 ## License
 Licensed under either of
