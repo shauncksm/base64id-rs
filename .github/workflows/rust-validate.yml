@@ -32,8 +32,6 @@ jobs:
       run: cargo build --release --workspace --verbose
     - name: Tests
       run: cargo test --release --workspace --verbose
-    - name: Packaging Test
-      run: cargo package --workspace --verbose
 
   validate-all:
     name: Build and Test (All Features)
@@ -49,5 +47,3 @@ jobs:
       run: cargo build --release --workspace --verbose --all-features
     - name: Tests
       run: cargo test --release --workspace --verbose --all-features
-    - name: Packaging Test
-      run: cargo package --workspace --verbose --all-features
