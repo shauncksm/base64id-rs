@@ -228,17 +228,17 @@ fn encode_quantum(input: [u8; 3]) -> [u8; 4] {
         input[1] >> 4
     ) | (
         input[0] << 4 &
-        0b00110000
+        0b0011_0000
     );
     
     let c3 = (
         input[2] >> 6
     ) | (
         input[1] << 2 &
-        0b00111100
+        0b0011_1100
     );
     
-    let c4 = input[2] & 0b00111111;
+    let c4 = input[2] & 0b0011_1111;
 
     [c1, c2, c3, c4]
 }
@@ -251,10 +251,10 @@ fn encode_partial_16(input: [u8; 2]) -> [u8; 3] {
         input[1] >> 4
     ) | (
         input[0] << 4 &
-        0b00110000
+        0b0011_0000
     );
     
-    let c3 = input[1] << 2 & 0b00111100;
+    let c3 = input[1] << 2 & 0b0011_1100;
 
     [c1, c2, c3]
 }
@@ -263,7 +263,7 @@ fn encode_partial_16(input: [u8; 2]) -> [u8; 3] {
 fn encode_partial_8(input: u8) -> [u8; 2] {
     let c1 = input >> 2;
 
-    let c2 = input << 4 & 0b00110000;
+    let c2 = input << 4 & 0b0011_0000;
 
     [c1, c2]
 }
@@ -274,21 +274,21 @@ fn decode_quantum(input: [u8; 4]) -> [u8; 3] {
         input[0] << 2
     ) | (
         input[1] >> 4 &
-        0b00000011
+        0b0000_0011
     );
 
     let d2 = (
         input[1] << 4
     ) | (
         input[2] >> 2 &
-        0b00001111
+        0b0000_1111
     );
 
     let d3 = (
         input[2] << 6
     ) | (
         input[3] &
-        0b00111111
+        0b0011_1111
     );
 
     [d1, d2, d3]
@@ -296,7 +296,7 @@ fn decode_quantum(input: [u8; 4]) -> [u8; 3] {
 
 #[rustfmt::skip]
 fn decode_partial_16(input: [u8; 3]) -> Result<[u8; 2], Error> {
-    if input[2] & 0b00000011 != 0 {
+    if input[2] & 0b0000_0011 != 0 {
         return Err(Error::OutOfBoundsCharacter);
     }
     
@@ -304,14 +304,14 @@ fn decode_partial_16(input: [u8; 3]) -> Result<[u8; 2], Error> {
         input[0] << 2
     ) | (
         input[1] >> 4 &
-        0b00000011
+        0b0000_0011
     );
 
     let d2 = (
         input[1] << 4
     ) | (
         input[2] >> 2 &
-        0b00001111
+        0b0000_1111
     );
 
     Ok([d1, d2])
@@ -319,7 +319,7 @@ fn decode_partial_16(input: [u8; 3]) -> Result<[u8; 2], Error> {
 
 #[rustfmt::skip]
 fn decode_partial_8(input: [u8; 2]) -> Result<u8, Error> {
-    if input[1] & 0b00001111 != 0 {
+    if input[1] & 0b0000_1111 != 0 {
         return Err(Error::OutOfBoundsCharacter);
     }
 

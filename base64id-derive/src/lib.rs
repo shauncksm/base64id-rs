@@ -45,7 +45,7 @@ const ERROR_INVALID_INNER_TYPE: &str =
 ///
 /// #### [`FromStr`](https://doc.rust-lang.org/core/str/trait.FromStr.html)
 ///
-/// FromStr is added to decode any string from base64url to the inner integer type, returning an [`Error`](https://docs.rs/base64id/latest/base64id/enum.Error.html) on failure.
+/// `FromStr` is added to decode any string from base64url to the inner integer type, returning an [`Error`](https://docs.rs/base64id/latest/base64id/enum.Error.html) on failure.
 ///
 /// #### [`TryFrom`](https://doc.rust-lang.org/core/convert/trait.TryFrom.html)
 ///
@@ -131,7 +131,7 @@ pub fn tuple_struct_into_base64id(input: TokenStream) -> TokenStream {
         _ => panic!("{ERROR_INVALID_INNER_TYPE}"),
     };
 
-    let is_signed = struct_inner_type_string.starts_with("i");
+    let is_signed = struct_inner_type_string.starts_with('i');
 
     let (
         encode_fn,
@@ -286,7 +286,7 @@ pub fn tuple_struct_into_base64id(input: TokenStream) -> TokenStream {
     implementation.into()
 }
 
-/// Add PartialOrd and Ord trait to struct.
+/// Add `PartialOrd` and `Ord` trait to struct.
 /// This applies a signed to unsigned integer byte conversion if the inner integer type is signed
 fn apply_ord_trait(
     ident: &proc_macro2::Ident,
@@ -357,11 +357,11 @@ fn evaluate_attributes(
             };
 
             if token_ident == "Serialize" {
-                apply_serialize_trait(&ident, implementation);
+                apply_serialize_trait(ident, implementation);
             }
 
             if token_ident == "Deserialize" {
-                apply_deserialize_trait(&ident, char_len, implementation);
+                apply_deserialize_trait(ident, char_len, implementation);
             }
         }
 

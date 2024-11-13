@@ -11,23 +11,21 @@
 //! ```
 //!
 //! ### Encoding
-//! You can convert signed or unsigned integers to a Base64Id struct as follows:
+//! You can convert signed or unsigned integers to a `Base64Id` struct as follows:
 //! ```rust
 //! use base64id::Base64Id;
 //!
 //! #[derive(Base64Id)]
 //! struct MyId(i64);
 //!
-//! fn main() {
-//!     let int: i64 = 1;
-//!     let id = MyId::from(int);
+//! let int: i64 = 1;
+//! let id = MyId::from(int);
 //!
-//!     println!("{id}"); // AAAAAAAAAAE
-//! }
+//! println!("{id}"); // AAAAAAAAAAE
 //! ```
 //!
 //! ### Decoding
-//! You can use `FromStr` and `From<{integer}>` to convert a `String` to a Base64Id struct and then into an `i64` as follows:
+//! You can use `FromStr` and `From<{integer}>` to convert a `String` to a `Base64Id` struct and then into an `i64` as follows:
 //! ```rust
 //! use base64id::{Base64Id, Error};
 //! use std::str::FromStr;

@@ -31,15 +31,13 @@ impl core::error::Error for Error {}
 
 impl fmt::Display for Error {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        use Error::*;
-
         match self {
-            InvalidLength => write!(f, "invalid length. number of characters was invalid"),
-            InvalidCharacter => write!(
+            Error::InvalidLength => write!(f, "invalid length. number of characters was invalid"),
+            Error::InvalidCharacter => write!(
                 f,
                 "invalid character(s). expected only base64url characters"
             ),
-            OutOfBoundsCharacter => {
+            Error::OutOfBoundsCharacter => {
                 write!(f, "invalid character. last character was out of bounds")
             }
         }
