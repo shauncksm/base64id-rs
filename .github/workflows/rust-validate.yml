@@ -26,13 +26,28 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    - name: Check
+      run: cargo check --release --workspace --verbose
     - name: Build
-      run: cargo build --verbose
-    - name: Build (All Features)
-      run: cargo build --verbose --all-features
+      run: cargo build --release --workspace --verbose
     - name: Tests
-      run: cargo test --verbose
-    - name: Tests (All Features)
-      run: cargo test --verbose --all-features
+      run: cargo test --release --workspace --verbose
     - name: Packaging Test
-      run: cargo package --verbose --all-features
+      run: cargo package --workspace --verbose
+
+  validate-all:
+    name: Build and Test (All Features)
+    runs-on: ubuntu-latest
+
+    needs: format
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Check
+      run: cargo check --release --workspace --verbose --all-features
+    - name: Build
+      run: cargo build --release --workspace --verbose --all-features
+    - name: Tests
+      run: cargo test --release --workspace --verbose --all-features
+    - name: Packaging Test
+      run: cargo package --workspace --verbose --all-features
