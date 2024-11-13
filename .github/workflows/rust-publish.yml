@@ -14,10 +14,20 @@ jobs:
     environment:
       name: crates.io
       url: https://crates.io/crates/base64id
+    
+    env:
+      CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
 
     steps:
     - uses: actions/checkout@v4
-    - name: Publish
-      env:
-        CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
+
+    - name: Publish Sub-Crate (base64id-core)
+      working-directory: ./base64id-core
+      run: cargo publish --verbose
+
+    - name: Publish Sub-Crate (base64id-derive)
+      working-directory: ./base64id-derive
+      run: cargo publish --verbose
+
+    - name: Publish Crate (base64id)
       run: cargo publish --verbose
