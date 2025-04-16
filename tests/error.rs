@@ -44,6 +44,8 @@ macro_rules! generate_error_test_suite {
     };
 }
 
+generate_error_test_suite!(i128, id128, "AAAAAAAAAAAAAAAAAAAAA=");
+
 generate_error_test_suite!(i64, id64, "AAAAAAAAAA=");
 
 generate_error_test_suite!(i32, id32, "AAAAA=");

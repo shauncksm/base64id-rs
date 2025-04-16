@@ -106,6 +106,11 @@ macro_rules! generate_derive_test_suite {
     };
 }
 
+#[rustfmt::skip]
+generate_derive_test_suite!(derive_128_i, MyIdi128, i128, 0i128, u128, 0u128, "AAAAAAAAAAAAAAAAAAAAAA");
+#[rustfmt::skip]
+generate_derive_test_suite!(derive_128_u, MyIdu128, u128, 0u128, i128, 0i128, "AAAAAAAAAAAAAAAAAAAAAA");
+
 generate_derive_test_suite!(derive_64_i, MyIdi64, i64, 0i64, u64, 0u64, "AAAAAAAAAAA");
 generate_derive_test_suite!(derive_64_u, MyIdu64, u64, 0u64, i64, 0i64, "AAAAAAAAAAA");
 

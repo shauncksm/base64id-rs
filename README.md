@@ -51,7 +51,7 @@ base64id = "0.4"
 For users of v0.3.x or less migrating to v0.4.0 or greater, please see the [migration guide](docs/MIGRATION.0.4.md).
 
 ## Usage
-You start by creating your own tuple struct with a single `i64`, `i32` or `i16`. Then apply the `Base64Id` derive macro to your struct.
+You start by creating your own tuple struct with a single `i64`, `i32`, `i16` or `i128`. Then apply the `Base64Id` derive macro to your struct.
 
 ```rust
 use base64id::Base64Id;
