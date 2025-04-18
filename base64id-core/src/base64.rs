@@ -12,7 +12,6 @@ use crate::Error;
 const ALPHABET_BASE64URL: &str = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
 const ALPHABET_BASE64URL_BYTES: &[u8] = ALPHABET_BASE64URL.as_bytes();
 
-#[must_use]
 fn decode_char(c: char) -> Result<u8, Error> {
     let idx = match c {
         'A' => 0,
@@ -152,19 +151,16 @@ fn encode_16(bytes: [u8; 2]) -> [char; 3] {
     product.map(|d| char::from(ALPHABET_BASE64URL_BYTES[usize::from(d)]))
 }
 
-#[must_use]
 pub fn decode_i64(input: [char; 11]) -> Result<i64, Error> {
     let bytes = decode_64(input)?;
     Ok(i64::from_be_bytes(bytes))
 }
 
-#[must_use]
 pub fn decode_u64(input: [char; 11]) -> Result<u64, Error> {
     let bytes = decode_64(input)?;
     Ok(u64::from_be_bytes(bytes))
 }
 
-#[must_use]
 #[rustfmt::skip]
 fn decode_64(input: [char; 11]) -> Result<[u8; 8], Error> {
     let mut c: [u8; 11] = [0; 11];
@@ -184,19 +180,16 @@ fn decode_64(input: [char; 11]) -> Result<[u8; 8], Error> {
     ])
 }
 
-#[must_use]
 pub fn decode_i32(input: [char; 6]) -> Result<i32, Error> {
     let bytes = decode_32(input)?;
     Ok(i32::from_be_bytes(bytes))
 }
 
-#[must_use]
 pub fn decode_u32(input: [char; 6]) -> Result<u32, Error> {
     let bytes = decode_32(input)?;
     Ok(u32::from_be_bytes(bytes))
 }
 
-#[must_use]
 #[rustfmt::skip]
 fn decode_32(input: [char; 6]) -> Result<[u8; 4], Error> {
     let mut c: [u8; 6] = [0; 6];
@@ -214,19 +207,16 @@ fn decode_32(input: [char; 6]) -> Result<[u8; 4], Error> {
     ])
 }
 
-#[must_use]
 pub fn decode_i16(input: [char; 3]) -> Result<i16, Error> {
     let bytes = decode_16(input)?;
     Ok(i16::from_be_bytes(bytes))
 }
 
-#[must_use]
 pub fn decode_u16(input: [char; 3]) -> Result<u16, Error> {
     let bytes = decode_16(input)?;
     Ok(u16::from_be_bytes(bytes))
 }
 
-#[must_use]
 fn decode_16(input: [char; 3]) -> Result<[u8; 2], Error> {
     let mut c: [u8; 3] = [0; 3];
 
@@ -317,7 +307,6 @@ fn decode_quantum(input: [u8; 4]) -> [u8; 3] {
     [d1, d2, d3]
 }
 
-#[must_use]
 #[rustfmt::skip]
 fn decode_partial_16(input: [u8; 3]) -> Result<[u8; 2], Error> {
     if input[2] & 0b0000_0011 != 0 {
@@ -341,7 +330,6 @@ fn decode_partial_16(input: [u8; 3]) -> Result<[u8; 2], Error> {
     Ok([d1, d2])
 }
 
-#[must_use]
 #[rustfmt::skip]
 fn decode_partial_8(input: [u8; 2]) -> Result<u8, Error> {
     if input[1] & 0b0000_1111 != 0 {
