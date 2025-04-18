@@ -10,7 +10,7 @@ use quote::quote;
 use syn::{Attribute, DeriveInput, Meta};
 
 const ERROR_INVALID_INNER_TYPE: &str =
-    "invalid type within tuple struct, expected i64, u64, i32, u32, i16 or u16";
+    "invalid type within tuple struct, expected i128, u128, i64, u64, i32, u32, i16 or u16";
 
 /// Create your own base64id tuple struct
 ///
@@ -52,6 +52,7 @@ const ERROR_INVALID_INNER_TYPE: &str =
 /// `TryFrom<[char; n]>` is added where `n` is the length of a given base64url string.
 /// This allows for converting a [`char`](https://doc.rust-lang.org/core/primitive.char.html) array of length `n` into your tuple struct.
 /// The value of `n` is:
+/// - 22 for 128 bit integers
 /// - 11 for 64 bit integers
 /// - 6 for 32 bit integers
 /// - 3 for 16 bit integers
@@ -125,6 +126,7 @@ pub fn tuple_struct_into_base64id(input: TokenStream) -> TokenStream {
     let struct_inner_type_string = struct_inner_type.to_string();
 
     let char_len = match struct_inner_type_string.as_str() {
+        "i128" | "u128" => 22,
         "i64" | "u64" => 11,
         "i32" | "u32" => 6,
         "i16" | "u16" => 3,
@@ -142,6 +144,24 @@ pub fn tuple_struct_into_base64id(input: TokenStream) -> TokenStream {
         int_min,
         int_max,
     ) = match struct_inner_type_string.as_str() {
+        "i128" => (
+            quote! {::base64id::base64::encode_i128},
+            quote! {::base64id::base64::decode_i128},
+            quote! {[char; #char_len]},
+            quote! {u128},
+            quote! {u128},
+            quote! {0},
+            quote! {-1},
+        ),
+        "u128" => (
+            quote! {::base64id::base64::encode_u128},
+            quote! {::base64id::base64::decode_u128},
+            quote! {[char; #char_len]},
+            quote! {u128},
+            quote! {i128},
+            quote! {0},
+            quote! {#struct_inner_type::MAX},
+        ),
         "i64" => (
             quote! {::base64id::base64::encode_i64},
             quote! {::base64id::base64::decode_i64},
@@ -409,7 +429,7 @@ fn apply_deserialize_trait(
 
     let last_char_range = match char_len {
         11 | 3 => "AEIMQUYcgkosw048",
-        6 => "AQgw",
+        6 | 22 => "AQgw",
         _ => panic!("unexpected character length {char_len}. cannot get last_char_range"),
     };
 
@@ -491,7 +511,7 @@ fn get_validated_struct_data(data: syn::Data) -> syn::Ident {
     };
 
     match item_type.to_string().as_str() {
-        "i64" | "i32" | "i16" | "u64" | "u32" | "u16" => item_type.clone(),
+        "i128" | "i64" | "i32" | "i16" | "u128" | "u64" | "u32" | "u16" => item_type.clone(),
         _ => panic!("{ERROR_INVALID_INNER_TYPE}"),
     }
 }

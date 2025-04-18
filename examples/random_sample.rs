@@ -11,6 +11,9 @@ use rand::random;
 use base64id::Base64Id;
 
 #[derive(Base64Id, Clone, Copy)]
+struct Id128(i128);
+
+#[derive(Base64Id, Clone, Copy)]
 struct Id64(i64);
 
 #[derive(Base64Id, Clone, Copy)]
@@ -50,7 +53,7 @@ fn main() {
                 println!("{id}  {i32:>15}  {u32:>11}");
             }
         }
-        _ => {
+        "64" => {
             println!("base64url    i64                   u64");
             println!("-----------  --------------------  --------------------");
 
@@ -62,5 +65,18 @@ fn main() {
                 println!("{id}  {i64:>20}  {u64:>20}");
             }
         }
+        "128" => {
+            println!("base64url               i128                                      u128");
+            println!("----------------------  ----------------------------------------  ---------------------------------------");
+
+            for _ in 0..10 {
+                let i128: i128 = random();
+                let id = Id128::from(i128);
+                let u128 = u128::from(id);
+
+                println!("{id}  {i128:>40}  {u128:>39}");
+            }
+        }
+        n => unimplemented!("{n}"),
     }
 }
