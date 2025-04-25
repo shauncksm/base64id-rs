@@ -7,6 +7,7 @@ pub enum Error {
     /// Returned when input data contains an invalid number of characters
     ///
     /// ## Expected Lengths
+    /// - `i128` or `u128`: 22 characters
     /// - `i64` or `u64`: 11 characters
     /// - `i32` or `u32`: 6 characters
     /// - `i16` or `u16`: 3 characters
@@ -20,7 +21,7 @@ pub enum Error {
     /// AEIMQUYcgkosw048
     /// ```
     ///
-    /// For `i32` and `u32` values, the last character must be one of the following:
+    /// For `i32`, `u32`, `i128` and `u128` values, the last character must be one of the following:
     /// ```txt
     /// AQgw
     /// ```
