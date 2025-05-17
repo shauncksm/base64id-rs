@@ -2,44 +2,43 @@
 
 ## Preamble
 
-In all versions including and prior to v0.3, base64id exposed a set of concrete types (`Id64`, `Id32` and `Id16`) which users would include in their project.
-These concrete types were what allowed library users to use 64, 32 and 16 bit integers in decimal or base64url form.
-
-The issue with these types was that they included a set of third party trait implementations on unstable crates.
-There was always a risk that third party updates could [break](https://github.com/shauncksm/base64id-rs/issues/9) functionality.
-See issue [#8](https://github.com/shauncksm/base64id-rs/issues/8) for further explaination.
+Version v0.4 included custom PartialOrd and Ord traits. If a user wished to supply their own such traits they would have been unable to due to conflicting trait impls.
 
 # Migration
 
-v0.4 removes these concrete types and instead exposes the `Base64Id` derive macro.
-This will apply base64id specific trait implementations to a tuple struct that you define.
-You can then apply rand, serde, sqlx trait implementations and any other behaviour to your struct as needed.
+v1.0 removes these custom traits completely.
+If your application made use of order traits with your base64id derived struct, you'll need to re-add the appropriate order traits back into your struct.
 
-## Before
+## Unsigned Structs
 
-Before you'd simply use one of the provided concrete types, for instance:
-
+If your base64id struct contains an unsigned integer type, then you can restore the original ordering behaviour through rusts built in derive macros.
 ```rust
-use base64id::Id64;
+#[derive(Base64Id, PartialOrd, Ord)]
+struct MyUnsignedId(u64);
 ```
 
-## After
+## Signed Structs
 
-To recreate the `Id64` type with all previously supported traits, replace the above `use` statement with the following struct definition:
+If your base64id struct contains a signed integer type, then you can restore the original ordering behaviour with the following trait impls (modify to use correct integer type as needed):
 
 ```rust
-use base64id::Base64Id;
-use sqlx::{Type, FromRow};
-use rand::{Rng, distributions::{Standard, Distribution}};
+use core::cmp::{PartialOrd, Ord, Ordering};
 
-#[derive(Base64Id, Debug, FromRow, Type)]
-#[base64id(Serialize, Deserialize)]
-#[sqlx(transparent)]
-struct Id64(i64);
+#[derive(Base64Id)]
+struct MySignedId(i64);
 
-impl Distribution<Id64> for Standard {
-    fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> Id64 {
-        Id64(rng.gen())
+impl PartialOrd for MySignedId {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
+impl Ord for #ident {
+    fn cmp(&self, other: &Self) -> Ordering {
+        let this = u64::from_be_bytes(self.0.to_be_bytes());
+        let other = u64::from_be_bytes(other.0.to_be_bytes());
+
+        this.cmp(&other)
     }
 }
 ```

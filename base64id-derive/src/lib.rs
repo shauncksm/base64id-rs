@@ -61,15 +61,6 @@ const ERROR_INVALID_INNER_TYPE: &str =
 ///
 /// These are standard impl's and have no special behaviour.
 ///
-/// #### [`PartialOrd`](https://doc.rust-lang.org/core/cmp/trait.PartialOrd.html), [`Ord`](https://doc.rust-lang.org/core/cmp/trait.Ord.html)
-///
-/// These traits are implemented with special behaviour where the inner type is a signed integer.
-///
-/// For unsigned integers the ordering behaviour is standard.
-/// For signed integers, the value is converted to big endian bytes, these bytes are then converted into an unsigned integer and order comparsion is done on this.
-///
-/// In other words, order comparions are based on the unsigned integer / binary representation of the integer.
-///
 /// #### [`From`](https://doc.rust-lang.org/core/convert/trait.From.html)
 ///
 /// Four `From` trait impl's are added.
@@ -112,11 +103,6 @@ const ERROR_INVALID_INNER_TYPE: &str =
 /// ```
 ///
 /// You can add neither, either or both traits as needed.
-///
-/// ## `MIN` / `MAX` Constants
-///
-/// In addition to the above trait implementations, `MIN` and `MAX` constants are added.
-/// These values are based on the inner integers unsigned / binary representation.
 #[proc_macro_derive(Base64Id, attributes(base64id))]
 pub fn tuple_struct_into_base64id(input: TokenStream) -> TokenStream {
     let ast: DeriveInput = syn::parse(input).expect("failed to parse token stream");
@@ -133,98 +119,60 @@ pub fn tuple_struct_into_base64id(input: TokenStream) -> TokenStream {
         _ => panic!("{ERROR_INVALID_INNER_TYPE}"),
     };
 
-    let is_signed = struct_inner_type_string.starts_with('i');
-
-    let (
-        encode_fn,
-        decode_fn,
-        char_array_type,
-        struct_inner_type_u,
-        struct_inner_type_alt,
-        int_min,
-        int_max,
-    ) = match struct_inner_type_string.as_str() {
-        "i128" => (
-            quote! {::base64id::base64::encode_i128},
-            quote! {::base64id::base64::decode_i128},
-            quote! {[char; #char_len]},
-            quote! {u128},
-            quote! {u128},
-            quote! {0},
-            quote! {-1},
-        ),
-        "u128" => (
-            quote! {::base64id::base64::encode_u128},
-            quote! {::base64id::base64::decode_u128},
-            quote! {[char; #char_len]},
-            quote! {u128},
-            quote! {i128},
-            quote! {0},
-            quote! {#struct_inner_type::MAX},
-        ),
-        "i64" => (
-            quote! {::base64id::base64::encode_i64},
-            quote! {::base64id::base64::decode_i64},
-            quote! {[char; #char_len]},
-            quote! {u64},
-            quote! {u64},
-            quote! {0},
-            quote! {-1},
-        ),
-        "u64" => (
-            quote! {::base64id::base64::encode_u64},
-            quote! {::base64id::base64::decode_u64},
-            quote! {[char; #char_len]},
-            quote! {u64},
-            quote! {i64},
-            quote! {0},
-            quote! {#struct_inner_type::MAX},
-        ),
-        "i32" => (
-            quote! {::base64id::base64::encode_i32},
-            quote! {::base64id::base64::decode_i32},
-            quote! {[char; #char_len]},
-            quote! {u32},
-            quote! {u32},
-            quote! {0},
-            quote! {-1},
-        ),
-        "u32" => (
-            quote! {::base64id::base64::encode_u32},
-            quote! {::base64id::base64::decode_u32},
-            quote! {[char; #char_len]},
-            quote! {u32},
-            quote! {i32},
-            quote! {0},
-            quote! {#struct_inner_type::MAX},
-        ),
-        "i16" => (
-            quote! {::base64id::base64::encode_i16},
-            quote! {::base64id::base64::decode_i16},
-            quote! {[char; #char_len]},
-            quote! {u16},
-            quote! {u16},
-            quote! {0},
-            quote! {-1},
-        ),
-        "u16" => (
-            quote! {::base64id::base64::encode_u16},
-            quote! {::base64id::base64::decode_u16},
-            quote! {[char; #char_len]},
-            quote! {u16},
-            quote! {i16},
-            quote! {0},
-            quote! {#struct_inner_type::MAX},
-        ),
-        _ => panic!("{ERROR_INVALID_INNER_TYPE}"),
-    };
+    let (encode_fn, decode_fn, char_array_type, struct_inner_type_alt) =
+        match struct_inner_type_string.as_str() {
+            "i128" => (
+                quote! {::base64id::base64::encode_i128},
+                quote! {::base64id::base64::decode_i128},
+                quote! {[char; #char_len]},
+                quote! {u128},
+            ),
+            "u128" => (
+                quote! {::base64id::base64::encode_u128},
+                quote! {::base64id::base64::decode_u128},
+                quote! {[char; #char_len]},
+                quote! {i128},
+            ),
+            "i64" => (
+                quote! {::base64id::base64::encode_i64},
+                quote! {::base64id::base64::decode_i64},
+                quote! {[char; #char_len]},
+                quote! {u64},
+            ),
+            "u64" => (
+                quote! {::base64id::base64::encode_u64},
+                quote! {::base64id::base64::decode_u64},
+                quote! {[char; #char_len]},
+                quote! {i64},
+            ),
+            "i32" => (
+                quote! {::base64id::base64::encode_i32},
+                quote! {::base64id::base64::decode_i32},
+                quote! {[char; #char_len]},
+                quote! {u32},
+            ),
+            "u32" => (
+                quote! {::base64id::base64::encode_u32},
+                quote! {::base64id::base64::decode_u32},
+                quote! {[char; #char_len]},
+                quote! {i32},
+            ),
+            "i16" => (
+                quote! {::base64id::base64::encode_i16},
+                quote! {::base64id::base64::decode_i16},
+                quote! {[char; #char_len]},
+                quote! {u16},
+            ),
+            "u16" => (
+                quote! {::base64id::base64::encode_u16},
+                quote! {::base64id::base64::decode_u16},
+                quote! {[char; #char_len]},
+                quote! {i16},
+            ),
+            _ => panic!("{ERROR_INVALID_INNER_TYPE}"),
+        };
 
     let mut implementation = quote! {
-        impl #ident {
-            const MIN: #ident = #ident(#int_min);
-            const MAX: #ident = #ident(#int_max);
-        }
-
         impl ::core::fmt::Display for #ident {
             fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
                 use ::core::fmt::Write;
@@ -299,52 +247,9 @@ pub fn tuple_struct_into_base64id(input: TokenStream) -> TokenStream {
         impl ::core::cmp::Eq for #ident {}
     };
 
-    apply_ord_trait(&ident, struct_inner_type_u, is_signed, &mut implementation);
-
     evaluate_attributes(&ident, ast.attrs, char_len, &mut implementation);
 
     implementation.into()
-}
-
-/// Add `PartialOrd` and `Ord` trait to struct.
-/// This applies a signed to unsigned integer byte conversion if the inner integer type is signed
-fn apply_ord_trait(
-    ident: &proc_macro2::Ident,
-    struct_inner_type_u: proc_macro2::TokenStream,
-    is_signed: bool,
-    implementation: &mut proc_macro2::TokenStream,
-) {
-    implementation.extend(quote! {
-        impl ::core::cmp::PartialOrd for #ident {
-            fn partial_cmp(&self, other: &Self) -> ::core::option::Option<::core::cmp::Ordering> {
-                Some(self.cmp(other))
-            }
-        }
-    });
-
-    if is_signed {
-        implementation.extend(quote! {
-            impl ::core::cmp::Ord for #ident {
-                fn cmp(&self, other: &Self) -> ::core::cmp::Ordering {
-                    let this = #struct_inner_type_u::from_be_bytes(self.0.to_be_bytes());
-                    let other = #struct_inner_type_u::from_be_bytes(other.0.to_be_bytes());
-
-                    this.cmp(&other)
-                }
-            }
-        });
-    } else {
-        implementation.extend(quote! {
-            impl ::core::cmp::Ord for #ident {
-                fn cmp(&self, other: &Self) -> ::core::cmp::Ordering {
-                    let this = self.0;
-                    let other = other.0;
-
-                    this.cmp(&other)
-                }
-            }
-        });
-    }
 }
 
 /// Determines if the base64id attribute is present

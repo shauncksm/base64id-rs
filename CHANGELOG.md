@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Broken import of base64id_core::base64 module
 
+### Removed
+- PartialOrd and Ord traits supplied by Base64Id derive macro
+- MIN and MAX constants; these are meaningless without a set ordering method
+
 ## [v0.4.0]
 ### Added
 - New `Base64Id` derive macro in new `base64id_derive` crate

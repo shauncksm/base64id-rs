@@ -46,29 +46,8 @@ macro_rules! generate_derive_test_suite {
             }
 
             #[test]
-            fn min_const() {
-                assert_eq!(
-                    $int_type::from($struct_type::MIN).to_be_bytes(),
-                    $int_type_alt::from($struct_type::MIN).to_be_bytes()
-                );
-            }
-
-            #[test]
-            fn max_const() {
-                assert_eq!(
-                    $int_type::from($struct_type::MAX).to_be_bytes(),
-                    $int_type_alt::from($struct_type::MAX).to_be_bytes()
-                );
-            }
-
-            #[test]
             fn partial_eq() {
                 assert_eq!($struct_type($int_value), $struct_type($int_value));
-            }
-
-            #[test]
-            fn min_max_ord() {
-                assert!($struct_type::MIN < $struct_type::MAX);
             }
 
             #[test]
